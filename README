@@ -1,0 +1,25 @@
+SylNotify - 
+=======================
+
+generate notification plug-in for Sylpheed
+
+Requirement
+--------------------------------------------------------------------------------
+
+Windows XP SP3
+Windows 7 SP1
+Sylpheed 3.1.2 or later
+
+Install
+--------------------------------------------------------------------------------
+
+1) copy sylnotify.dll to Sylpheed plugin directory.
+2) copy sylnotify.mo to lib/locale/ja/LC_MESSAGES directory.
+   
+Usage
+--------------------------------------------------------------------------------
+
+Notice
+--------------------------------------------------------------------------------
+
+This plugin is not stable.

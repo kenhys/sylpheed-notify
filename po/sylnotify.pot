@@ -1,0 +1,81 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-01-01 02:43+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: sylnotify.h:34
+msgid "SylNotify - notifier plug-in for Sylpheed"
+msgstr ""
+
+#: sylnotify.h:35
+msgid "SylNotify notifier plug-in for Sylpheed"
+msgstr ""
+
+#: sylnotify.c:67
+msgid "SylNotify notify support Plug-in"
+msgstr ""
+
+#: sylnotify.c:68
+msgid "Notify support Plug-in"
+msgstr ""
+
+#: sylnotify.c:71 sylnotify.c:280
+msgid "SylNotify Settings [SylNotify]"
+msgstr ""
+
+#: sylnotify.c:116 sylnotify.c:390
+msgid "SylNotify is enabled. Click the icon to disable plugin."
+msgstr ""
+
+#: sylnotify.c:332
+msgid "Enable plugin on startup."
+msgstr ""
+
+#: sylnotify.c:336
+msgid "General"
+msgstr ""
+
+#: sylnotify.c:346
+msgid "NTP (Snarl Network Protocol)"
+msgstr ""
+
+#: sylnotify.c:348
+msgid "GNTP (Growl Notification Transport Protocol)"
+msgstr ""
+
+#: sylnotify.c:350
+msgid "HeySnarl (command line tool)"
+msgstr ""
+
+#: sylnotify.c:357
+msgid "Notification Protocol:"
+msgstr ""
+
+#: sylnotify.c:384 sylnotify.c:393
+msgid "SylNotify"
+msgstr ""
+
+#: sylnotify.c:384
+msgid "SylNotify plugin is enabled."
+msgstr ""
+
+#: sylnotify.c:393
+msgid "SylNotify plugin is disabled."
+msgstr ""
+
+#: sylnotify.c:399
+msgid "SylNotify is disabled. Click the icon to enable plugin."
+msgstr ""
