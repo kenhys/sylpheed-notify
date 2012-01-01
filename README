@@ -1,14 +1,21 @@
 SylNotify - 
 =======================
 
-generate notification plug-in for Sylpheed
+this plugin demonstrates how to implement growl notification for Sylpheed
 
 Requirement
 --------------------------------------------------------------------------------
 
-Windows XP SP3
-Windows 7 SP1
-Sylpheed 3.1.2 or later
+* Windows XP SP3/Windows 7 SP1
+
+* Sylpheed 3.1.2 or later
+
+* Growl 2.0.8 or later
+  http://www.growlforwindows.com/gfw/default.aspx
+
+* growlnotify 
+  http://www.growlforwindows.com/gfw/help/growlnotify.aspx
+  http://www.growlforwindows.com/gfw/d.ashx?f=growlnotify.zip
 
 Install
 --------------------------------------------------------------------------------
@@ -19,7 +26,20 @@ Install
 Usage
 --------------------------------------------------------------------------------
 
+1) click sylnotify statusbar icon to enable plugin.
+2) setup sylnotify option [Tool]-[sylnotify]
+   you need to modify proper growlnotify file path
+
 Notice
 --------------------------------------------------------------------------------
 
-This plugin is not stable.
+This plugin is not stable and 
+generate notification when you receive new mail.
+So, you received 100 mail, then sylnotify generate 100 growl notification!
+
+TODO
+--------------------------------------------------------------------------------
+
+* support Snarl(SNP/GNTP/HeySnarl)
+* support Growl(GNTP)
+

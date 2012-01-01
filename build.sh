@@ -27,9 +27,9 @@ function compile ()
         ret=`cat .compile | gawk '{print $i+1}'`
         echo $ret | tee .compile
         echo "#define PRIVATE_BUILD \"build $ret\\0\"" > private_build.h
-        echo "#define NAME \"Sylsnarl\\0\"" >> private_build.h
+        echo "#define NAME \"SylNotify\\0\"" >> private_build.h
         echo "#define VERSION \"$MAJOR, $MINOR, $SUBMINOR, 0\\0\"" >> private_build.h
-        echo "#define NAMEVERSION \"Sylsnarl $MAJOR.$MINOR.$SUBMINOR\\0\"" >> private_build.h
+        echo "#define NAMEVERSION \"SylNotify $MAJOR.$MINOR.$SUBMINOR\\0\"" >> private_build.h
         echo "#define QVERSION \"$MAJOR,$MINOR,$SUBMINOR,0\"" >> private_build.h
     fi
     com="windres -i version.rc -o version.o"
