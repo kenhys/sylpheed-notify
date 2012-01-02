@@ -2,7 +2,7 @@
 SylNotify プラグイン
 ================================================================================
 
-このプラグインはSylpheedの新着メール通知をSnarlに対応させるためのプラグインです。
+このプラグインはSylpheedの新着メール通知をGrowlもしくはSnarlに対応させるためのプラグインです。
 
 動作環境
 --------------------------------------------------------------------------------
@@ -18,13 +18,22 @@ SylNotify プラグイン
   http://www.growlforwindows.com/gfw/help/growlnotify.aspx
   http://www.growlforwindows.com/gfw/d.ashx?f=growlnotify.zip
 
+* Snarl R2.5
+  https://sites.google.com/site/snarlapp/home
+  
+* Snarl_CMD.exe 1.0
+  http://tlhan-ghun.de/
+  http://tlhan-ghun.de/Projects/SnarlCommandLineTools/Snarl_CMD/
+  http://sourceforge.net/projects/mozillasnarls/files/Snarl_CMD/
+  
+Growl + growlnotifyもしくはSnarl + Snarl_CMD.exeで通知させることができます。
+
 インストール方法
 --------------------------------------------------------------------------------
 
 1) sylnotify.dllをSylpheedのプラグインディレクトリへとコピーします。
 
 2) sylnoitfy.moをロケールディレクトリへとコピーします。
-
 
 注: Sylpheedをインスーラによりセットアップした場合
 
@@ -36,7 +45,7 @@ C:\Documents and Settings\(ユーザアカウント)\Application Data\Sylpheed\plugins
 --------------------------------------------------------------------------------
 
 ステータスバーのsylnotifyのアイコンをクリックして有効にします。
-[ツール]-[sylnotify]からgrowlnotifyのフルパスを設定します。
+[ツール]-[sylnotify]からgrowlnotifyもしくはSnarl_CMD.exeのフルパスを設定します。
 
 注意事項
 --------------------------------------------------------------------------------

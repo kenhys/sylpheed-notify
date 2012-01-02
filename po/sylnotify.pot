@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-02 07:19+0900\n"
+"POT-Creation-Date: 2012-01-03 01:04+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,9 +31,9 @@ msgid ""
 "Copyright (C) 2011-2012 HAYASHI Kentaro <kenhys@gmail.com>\n"
 "sylnotify contains following resource.\n"
 "\n"
-"Silk icon set 1.3: Copyright (C) Mark James\n"
-"Licensed under a Creative Commons Attribution 2.5 License.\n"
-"http://www.famfamfam.com/lab/icons/silk/\n"
+"growl.xpm,growlx.xpm: converted from growl.ico.\n"
+"Licensed under New BSD.\n"
+"http://code.google.com/p/growl-for-windows/\n"
 "\n"
 msgstr ""
 
@@ -45,82 +45,86 @@ msgstr ""
 msgid "Notify support Plug-in"
 msgstr ""
 
-#: sylnotify.c:81 sylnotify.c:378
+#: sylnotify.c:81 sylnotify.c:409
 msgid "SylNotify Settings [SylNotify]"
 msgstr ""
 
-#: sylnotify.c:131 sylnotify.c:660
+#: sylnotify.c:131 sylnotify.c:752
 msgid "SylNotify is enabled. Click the icon to disable plugin."
 msgstr ""
 
-#: sylnotify.c:467
+#: sylnotify.c:138
+msgid "SylNotify is disalbed. Click the icon to enable plugin."
+msgstr ""
+
+#: sylnotify.c:516
 msgid "Startup Option"
 msgstr ""
 
-#: sylnotify.c:472
+#: sylnotify.c:521
 msgid "Enable plugin on startup."
 msgstr ""
 
-#: sylnotify.c:483
+#: sylnotify.c:532
 msgid "Application"
 msgstr ""
 
-#: sylnotify.c:487 sylnotify.c:608
+#: sylnotify.c:536 sylnotify.c:700
 msgid "Growl"
 msgstr ""
 
-#: sylnotify.c:488 sylnotify.c:548
+#: sylnotify.c:537 sylnotify.c:640
 msgid "Snarl"
 msgstr ""
 
-#: sylnotify.c:506
+#: sylnotify.c:554
 msgid "General"
 msgstr ""
 
-#: sylnotify.c:517
-msgid "NTP (Snarl Network Protocol)"
-msgstr ""
-
-#: sylnotify.c:519 sylnotify.c:571
-msgid "GNTP (Growl Notification Transport Protocol)"
-msgstr ""
-
-#: sylnotify.c:521
-msgid "HeySnarl (command line tool)"
-msgstr ""
-
-#: sylnotify.c:528
-msgid "Notification Protocol:"
-msgstr ""
-
-#: sylnotify.c:565
+#: sylnotify.c:568 sylnotify.c:657
 msgid "Notification Method"
 msgstr ""
 
 #: sylnotify.c:573
-msgid "growlnotify (Command line tool)"
+msgid "NTP (Snarl Network Protocol)"
 msgstr ""
 
-#: sylnotify.c:580
+#: sylnotify.c:575 sylnotify.c:663
+msgid "GNTP (Growl Notification Transport Protocol)"
+msgstr ""
+
+#: sylnotify.c:577
+msgid "HeySnarl (Command line tool)"
+msgstr ""
+
+#: sylnotify.c:579
+msgid "Snarl_CMD (Command line tool)"
+msgstr ""
+
+#: sylnotify.c:583 sylnotify.c:595 sylnotify.c:672
 msgid "Command Path:"
 msgstr ""
 
-#: sylnotify.c:625 sylnotify.c:654 sylnotify.c:663
+#: sylnotify.c:665
+msgid "growlnotify (Command line tool)"
+msgstr ""
+
+#: sylnotify.c:716 sylnotify.c:746 sylnotify.c:755
 msgid "SylNotify"
 msgstr ""
 
-#: sylnotify.c:644
+#: sylnotify.c:736
 msgid "About"
 msgstr ""
 
-#: sylnotify.c:654
+#: sylnotify.c:746
 msgid "SylNotify plugin is enabled."
 msgstr ""
 
-#: sylnotify.c:663
+#: sylnotify.c:755
 msgid "SylNotify plugin is disabled."
 msgstr ""
 
-#: sylnotify.c:669
+#: sylnotify.c:761
 msgid "SylNotify is disabled. Click the icon to enable plugin."
 msgstr ""

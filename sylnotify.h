@@ -53,19 +53,22 @@ struct _SylNotifyOption {
   gboolean growl_growlnotify_flg;
   gboolean growl_gntp_flg;
 
-  gboolean snarl_heysnarl_flg;
   gboolean snarl_ntp_flg;
   gboolean snarl_gntp_flg;
+  gboolean snarl_heysnarl_flg;
+  gboolean snarl_snarlcmd_flg;
   
   GtkWidget *window;
   GtkWidget *startup;
   GtkWidget *snarl;
   GtkWidget *growl;
 
-  GtkWidget *snarl_heysnarl;
   GtkWidget *snarl_ntp;
   GtkWidget *snarl_gntp;
+  GtkWidget *snarl_heysnarl;
   GtkWidget *snarl_heysnarl_path;
+  GtkWidget *snarl_snarlcmd;
+  GtkWidget *snarl_snarlcmd_path;
 
   GtkWidget *growl_gntp;
   GtkWidget *growl_growlnotify;
@@ -91,7 +94,7 @@ static GtkWidget *create_config_snarl_page(GtkWidget *notebook, GKeyFile *pkey);
 static GtkWidget *create_config_growl_page(GtkWidget *notebook, GKeyFile *pkey);
 static GtkWidget *create_config_about_page(GtkWidget *notebook, GKeyFile *pkey);
 
-static void growl_growlnotify_path_clicked(GtkWidget *widget, gpointer data);
+static void command_path_clicked(GtkWidget *widget, gpointer data);
 #define GET_RC_BOOLEAN(section, keyarg) g_key_file_get_boolean(g_opt.rcfile, section, keyarg, NULL)
 #define SET_RC_BOOLEAN(section, keyarg,valarg) g_key_file_set_boolean(g_opt.rcfile, section, keyarg, valarg)
 

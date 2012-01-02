@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-02 07:19+0900\n"
+"POT-Creation-Date: 2012-01-03 01:04+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: HAYASHI Kentaro <kenhys@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,7 +22,6 @@ msgid "SylNotify - notifier plug-in for Sylpheed"
 msgstr "SylNotify - 新着通知プラグイン for Sylpheed"
 
 #: sylnotify.h:37
-#, fuzzy
 msgid "notifier plug-in for Sylpheed"
 msgstr "新着通知プラグイン for Sylpheed"
 
@@ -33,14 +32,13 @@ msgid ""
 "Copyright (C) 2011-2012 HAYASHI Kentaro <kenhys@gmail.com>\n"
 "sylnotify contains following resource.\n"
 "\n"
-"Silk icon set 1.3: Copyright (C) Mark James\n"
-"Licensed under a Creative Commons Attribution 2.5 License.\n"
-"http://www.famfamfam.com/lab/icons/silk/\n"
+"growl.xpm,growlx.xpm: converted from growl.ico.\n"
+"Licensed under New BSD.\n"
+"http://code.google.com/p/growl-for-windows/\n"
 "\n"
 msgstr ""
 
 #: sylnotify.c:77
-#, fuzzy
 msgid "SylNotify notify support Plug-in"
 msgstr "SylNoitfy 新着通知プラグイン"
 
@@ -48,84 +46,93 @@ msgstr "SylNoitfy 新着通知プラグイン"
 msgid "Notify support Plug-in"
 msgstr "新着通知プラグイン"
 
-#: sylnotify.c:81 sylnotify.c:378
+#: sylnotify.c:81 sylnotify.c:409
 msgid "SylNotify Settings [SylNotify]"
 msgstr "新着通知設定 [sylnotify]"
 
-#: sylnotify.c:131 sylnotify.c:660
+#: sylnotify.c:131 sylnotify.c:752
 msgid "SylNotify is enabled. Click the icon to disable plugin."
 msgstr ""
 "SylNotityが有効になりました。無効にするにはアイコンをクリックしてください。"
 
-#: sylnotify.c:467
+#: sylnotify.c:138
+#, fuzzy
+msgid "SylNotify is disalbed. Click the icon to enable plugin."
+msgstr ""
+"SylNotifyが無効化されました。有効にするにはアイコンをクリックしてください。"
+
+#: sylnotify.c:516
 msgid "Startup Option"
 msgstr "起動時設定"
 
-#: sylnotify.c:472
+#: sylnotify.c:521
 msgid "Enable plugin on startup."
 msgstr "起動時にプラグインを有効化する"
 
-#: sylnotify.c:483
+#: sylnotify.c:532
 msgid "Application"
 msgstr "通知アプリケーション"
 
-#: sylnotify.c:487 sylnotify.c:608
+#: sylnotify.c:536 sylnotify.c:700
 msgid "Growl"
 msgstr ""
 
-#: sylnotify.c:488 sylnotify.c:548
+#: sylnotify.c:537 sylnotify.c:640
 msgid "Snarl"
 msgstr ""
 
-#: sylnotify.c:506
+#: sylnotify.c:554
 msgid "General"
 msgstr "設定"
 
-#: sylnotify.c:517
-msgid "NTP (Snarl Network Protocol)"
-msgstr ""
-
-#: sylnotify.c:519 sylnotify.c:571
-msgid "GNTP (Growl Notification Transport Protocol)"
-msgstr ""
-
-#: sylnotify.c:521
-msgid "HeySnarl (command line tool)"
-msgstr "HeySnarl (コマンドラインツール使用)"
-
-#: sylnotify.c:528
-msgid "Notification Protocol:"
-msgstr "新着通知方法"
-
-#: sylnotify.c:565
+#: sylnotify.c:568 sylnotify.c:657
 msgid "Notification Method"
 msgstr "新着通知方法"
 
 #: sylnotify.c:573
-msgid "growlnotify (Command line tool)"
-msgstr "growlnotify (コマンドラインツール使用)"
+msgid "NTP (Snarl Network Protocol)"
+msgstr ""
 
-#: sylnotify.c:580
+#: sylnotify.c:575 sylnotify.c:663
+msgid "GNTP (Growl Notification Transport Protocol)"
+msgstr ""
+
+#: sylnotify.c:577
+#, fuzzy
+msgid "HeySnarl (Command line tool)"
+msgstr "HeySnarl (コマンドラインツール使用)"
+
+#: sylnotify.c:579
+#, fuzzy
+msgid "Snarl_CMD (Command line tool)"
+msgstr "Snarl_CMD (コマンドラインツール使用)"
+
+#: sylnotify.c:583 sylnotify.c:595 sylnotify.c:672
 msgid "Command Path:"
 msgstr "コマンドパス:"
 
-#: sylnotify.c:625 sylnotify.c:654 sylnotify.c:663
+#: sylnotify.c:665
+msgid "growlnotify (Command line tool)"
+msgstr "growlnotify (コマンドラインツール使用)"
+
+#: sylnotify.c:716 sylnotify.c:746 sylnotify.c:755
 msgid "SylNotify"
 msgstr ""
 
-#: sylnotify.c:644
+#: sylnotify.c:736
 msgid "About"
 msgstr ""
 
-#: sylnotify.c:654
+#: sylnotify.c:746
 msgid "SylNotify plugin is enabled."
 msgstr "SylNotifyプラグインが有効になりました。"
 
-#: sylnotify.c:663
+#: sylnotify.c:755
 msgid "SylNotify plugin is disabled."
 msgstr "SylNotifyプラグインが無効化されました。"
 
-#: sylnotify.c:669
+#: sylnotify.c:761
 msgid "SylNotify is disabled. Click the icon to enable plugin."
 msgstr ""
 "SylNotifyが無効化されました。有効にするにはアイコンをクリックしてください。"
+

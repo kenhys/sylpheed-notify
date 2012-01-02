@@ -44,7 +44,7 @@
 
 static SylPluginInfo info = {
 	N_(PLUGIN_NAME),
-	"0.1.0",
+	"0.2.0",
 	"HAYASHI Kentaro",
 	N_(PLUGIN_DESC)
 };
@@ -120,10 +120,10 @@ void plugin_load(void)
   g_opt.rcfile = g_key_file_new();
 
   if (g_key_file_load_from_file(g_opt.rcfile, g_opt.rcpath, G_KEY_FILE_KEEP_COMMENTS, NULL)){
-    gboolean startup=GET_RC_BOOLEAN(SYLNOTIFY, "startup");
-    debug_print("startup:%s", startup ? "true" : "false");
+    g_opt.startup_flg = GET_RC_BOOLEAN(SYLNOTIFY, "startup");
+    debug_print("startup:%s", g_opt.startup_flg ? "true" : "false");
 
-    if (startup){
+    if (g_opt.startup_flg != FALSE){
       g_enable=TRUE;
       gtk_widget_hide(g_plugin_off);
       gtk_widget_show(g_plugin_on);
@@ -131,13 +131,28 @@ void plugin_load(void)
                            _("SylNotify is enabled. Click the icon to disable plugin."),
                            NULL);
     } else {
+      g_enable=FALSE;
+      gtk_widget_hide(g_plugin_on);
+      gtk_widget_show(g_plugin_off);
+      gtk_tooltips_set_tip(g_tooltip, g_onoff_switch,
+                           _("SylNotify is disalbed. Click the icon to enable plugin."),
+                           NULL);
     }
-      
+
+    g_opt.growl_flg=GET_RC_BOOLEAN(SYLNOTIFY, "growl");
+    debug_print("growl:%s", g_opt.startup ? "true" : "false");
+    g_opt.snarl_flg=GET_RC_BOOLEAN(SYLNOTIFY, "snarl");
+    debug_print("snarl:%s", g_opt.startup ? "true" : "false");
+    
   } else {
       /**/
       g_opt.startup_flg = FALSE;
-      g_opt.snarl_flg = FALSE;
+
       g_opt.growl_flg = TRUE;
+      g_opt.snarl_flg = FALSE;
+
+      g_opt.growl_growlnotify_flg = TRUE;
+      g_opt.snarl_snarlcmd_flg = TRUE;
   }
 }
 
@@ -160,25 +175,29 @@ gint plugin_interface_version(void)
 static void init_done_cb(GObject *obj, gpointer data)
 {
   debug_print("[DEBUG init_done_cb");
-  gchar *cmdline = g_strdup_printf("\"%s\" \"register?app-sig=app/Sylpheed&title=%s&icon=%s\"",
-                                   "C:\\Program Files (x86)\\full phat\\Snarl\\tools\\heysnarl.exe",
-                                   "Sylpheed",
-                                   "http://sylpheed.sraoss.jp/images/sylpheed.png"
-                                   );
-  gint ret = execute_command_line(cmdline, FALSE);
-  debug_print("ret:%d", ret);
-  switch (ret) {
-  case SNARL_ERROR_TIMED_OUT:
-    debug_print("[DEBUG] ret:%d timeout\n", ret);
-    break;
-  case SNARL_ERROR_FAILED:
-    debug_print("[DEBUG] ret:%d failed\n", ret);
-    break;
-  case SNARL_ERROR_NOT_RUNNING:
-    debug_print("[DEBUG] ret:%d not running\n", ret);
-    break;
-  default:
-    break;
+  if (g_opt.snarl_flg != FALSE) {
+    if (g_opt.snarl_heysnarl_flg != FALSE) {
+      gchar *cmdline = g_strdup_printf("\"%s\" \"register?app-sig=app/Sylpheed&title=%s&icon=%s\"",
+                                       "C:\\Program Files (x86)\\full phat\\Snarl\\tools\\heysnarl.exe",
+                                       "Sylpheed",
+                                       "http://sylpheed.sraoss.jp/images/sylpheed.png"
+                                       );
+      gint ret = execute_command_line(cmdline, FALSE);
+      debug_print("ret:%d", ret);
+      switch (ret) {
+      case SNARL_ERROR_TIMED_OUT:
+        debug_print("[DEBUG] ret:%d timeout\n", ret);
+        break;
+      case SNARL_ERROR_FAILED:
+        debug_print("[DEBUG] ret:%d failed\n", ret);
+        break;
+      case SNARL_ERROR_NOT_RUNNING:
+        debug_print("[DEBUG] ret:%d not running\n", ret);
+        break;
+      default:
+        break;
+      }
+    }
   }
 }
 static void app_exit_cb(GObject *obj, gpointer data)
@@ -219,6 +238,18 @@ static void prefs_ok_cb(GtkWidget *widget, gpointer data)
     SET_RC_BOOLEAN(SYLNOTIFY_SNARL, "heysnarl", flg);
     debug_print("use heysnarl:%s\n", flg ? "true" : "false");
 
+    flg = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(g_opt.snarl_snarlcmd));
+    SET_RC_BOOLEAN(SYLNOTIFY_SNARL, "snarlcmd", flg);
+    debug_print("use snarlcmd:%s\n", flg ? "true" : "false");
+
+    gchar *buf = gtk_entry_get_text(GTK_ENTRY(g_opt.snarl_heysnarl_path));
+    g_key_file_set_string (g_opt.rcfile, SYLNOTIFY_SNARL, "heysnarl_path", buf);
+    debug_print("use heysnarl path:%s\n", buf);
+
+    buf = gtk_entry_get_text(GTK_ENTRY(g_opt.snarl_snarlcmd_path));
+    g_key_file_set_string (g_opt.rcfile, SYLNOTIFY_SNARL, "snarlcmd_path", buf);
+    debug_print("use snarlcmd path:%s\n", buf);
+
     flg = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(g_opt.growl_gntp));
     SET_RC_BOOLEAN(SYLNOTIFY_GROWL, "gntp", flg);
     debug_print("use growl gntp:%s\n", flg ? "true" : "false");
@@ -227,7 +258,7 @@ static void prefs_ok_cb(GtkWidget *widget, gpointer data)
     SET_RC_BOOLEAN(SYLNOTIFY_GROWL, "growlnotify", flg);
     debug_print("use growlnotify:%s\n", flg ? "true" : "false");
 
-    gchar *buf = gtk_entry_get_text(GTK_ENTRY(g_opt.growl_growlnotify_path));
+    buf = gtk_entry_get_text(GTK_ENTRY(g_opt.growl_growlnotify_path));
     g_key_file_set_string (g_opt.rcfile, SYLNOTIFY_GROWL, "growlnotify_path", buf);
     debug_print("use growlnotify path:%s\n", buf);
 
@@ -424,6 +455,24 @@ static void exec_sylnotify_menu_cb(void)
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.snarl_heysnarl), TRUE);
       }
 
+      gchar *buf = g_key_file_get_string(g_opt.rcfile, SYLNOTIFY_SNARL, "heysnarl_path", NULL);
+      if (g_opt.snarl_heysnarl_flg != FALSE && buf != NULL){
+          debug_print("use heysnarl path:%s\n", buf);
+          gtk_entry_set_text(GTK_ENTRY(g_opt.snarl_heysnarl_path), buf);
+      }
+
+      g_opt.snarl_snarlcmd_flg = GET_RC_BOOLEAN(SYLNOTIFY_SNARL, "snarlcmd");
+      debug_print("use snarlcmd:%s\n", g_opt.snarl_snarlcmd_flg ? "true" : "false");
+      if (g_opt.snarl_snarlcmd_flg != FALSE){
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.snarl_snarlcmd), TRUE);
+      }
+
+      buf = g_key_file_get_string(g_opt.rcfile, SYLNOTIFY_SNARL, "snarlcmd_path", NULL);
+      if (g_opt.snarl_snarlcmd_flg != FALSE && buf != NULL){
+          debug_print("use snarl_cmd path:%s\n", buf);
+          gtk_entry_set_text(GTK_ENTRY(g_opt.snarl_snarlcmd_path), buf);
+      }
+
       g_opt.growl_gntp_flg = GET_RC_BOOLEAN(SYLNOTIFY_GROWL, "gntp");
       debug_print("use growl gntp:%s\n", g_opt.growl_gntp_flg ? "true" : "false");
       if (g_opt.growl_gntp_flg != FALSE){
@@ -436,7 +485,7 @@ static void exec_sylnotify_menu_cb(void)
           gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.growl_growlnotify), TRUE);
       }
 
-      gchar *buf = g_key_file_get_string(g_opt.rcfile, SYLNOTIFY_GROWL, "growlnotify_path", NULL);
+      buf = g_key_file_get_string(g_opt.rcfile, SYLNOTIFY_GROWL, "growlnotify_path", NULL);
       if (g_opt.growl_growlnotify_flg != FALSE && buf != NULL){
           debug_print("use growlnotify path:%s\n", buf);
           gtk_entry_set_text(GTK_ENTRY(g_opt.growl_growlnotify_path), buf);
@@ -499,9 +548,8 @@ static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
   gtk_box_pack_start(GTK_BOX(vbox), app_align, FALSE, FALSE, 0);
 
   /* disable snarl */
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.growl), TRUE);
-  gtk_widget_set_sensitive(GTK_WIDGET(g_opt.snarl), FALSE);
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.snarl), FALSE);
+  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.growl), g_opt.growl_flg);
+  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.snarl), g_opt.snarl_flg);
 
   GtkWidget *general_lbl = gtk_label_new(_("General"));
   gtk_notebook_append_page(GTK_NOTEBOOK(notebook), vbox, general_lbl);
@@ -521,13 +569,16 @@ static GtkWidget *create_config_snarl_page(GtkWidget *notebook, GKeyFile *pkey)
   GtkWidget *proto_frm_align = gtk_alignment_new(0, 0, 1, 1);
   gtk_alignment_set_padding(GTK_ALIGNMENT(proto_frm_align), ALIGN_TOP, ALIGN_BOTTOM, ALIGN_LEFT, ALIGN_RIGHT);
 
-  /* HeySnarl or NTP or GNTP */
+  /* HeySnarl or NTP or GNTP or HeySnarl or */
   g_opt.snarl_ntp = gtk_radio_button_new_with_label(NULL, _("NTP (Snarl Network Protocol)"));
   g_opt.snarl_gntp = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (g_opt.snarl_ntp),
                                                                   _("GNTP (Growl Notification Transport Protocol)"));
   g_opt.snarl_heysnarl = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON (g_opt.snarl_ntp),
-                                                         _("HeySnarl (command line tool)"));
+                                                         _("HeySnarl (Command line tool)"));
+  g_opt.snarl_snarlcmd = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON (g_opt.snarl_ntp),
+                                                         _("Snarl_CMD (Command line tool)"));
 
+  /* HeySnarl command */
   GtkWidget *hbox = gtk_hbox_new(FALSE, 0);
   GtkWidget *lbl = gtk_label_new(_("Command Path:"));
   g_opt.snarl_heysnarl_path = gtk_entry_new();
@@ -536,21 +587,40 @@ static GtkWidget *create_config_snarl_page(GtkWidget *notebook, GKeyFile *pkey)
   gtk_box_pack_start(GTK_BOX(hbox), g_opt.snarl_heysnarl_path, TRUE, TRUE, 0);
   gtk_box_pack_start(GTK_BOX(hbox), cmd_btn, FALSE, FALSE, 0);
 
+  g_signal_connect(GTK_BUTTON(cmd_btn), "clicked",
+                   G_CALLBACK(command_path_clicked), g_opt.snarl_heysnarl_path);
+
+  /* Snarl_CMD.exe */
+  GtkWidget *hbox2 = gtk_hbox_new(FALSE, 0);
+  lbl = gtk_label_new(_("Command Path:"));
+  g_opt.snarl_snarlcmd_path = gtk_entry_new();
+  cmd_btn = gtk_button_new_from_stock(GTK_STOCK_OPEN);
+  gtk_box_pack_start(GTK_BOX(hbox2), lbl, FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(hbox2), g_opt.snarl_snarlcmd_path, TRUE, TRUE, 0);
+  gtk_box_pack_start(GTK_BOX(hbox2), cmd_btn, FALSE, FALSE, 0);
+
+  g_signal_connect(GTK_BUTTON(cmd_btn), "clicked",
+                   G_CALLBACK(command_path_clicked), g_opt.snarl_snarlcmd_path);
+
   GtkWidget *vbox_cond = gtk_vbox_new(FALSE, 0);
     
   /* enable or disable control */
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.snarl_ntp), FALSE);
-  gtk_widget_set_sensitive(GTK_WIDGET(g_opt.snarl_gntp), FALSE);
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.snarl_heysnarl), TRUE);
+  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.snarl_gntp), FALSE);
+  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.snarl_heysnarl), FALSE);
+  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.snarl_snarlcmd), TRUE);
 
   /* currently does not support snarl */
   gtk_widget_set_sensitive(GTK_WIDGET(g_opt.snarl_ntp), FALSE);
+  gtk_widget_set_sensitive(GTK_WIDGET(g_opt.snarl_gntp), FALSE);
   gtk_widget_set_sensitive(GTK_WIDGET(g_opt.snarl_heysnarl), FALSE);
 
   gtk_box_pack_start(GTK_BOX(vbox_cond), g_opt.snarl_ntp, FALSE, FALSE, 0);
   gtk_box_pack_start(GTK_BOX(vbox_cond), g_opt.snarl_gntp, FALSE, FALSE, 0);
   gtk_box_pack_start(GTK_BOX(vbox_cond), g_opt.snarl_heysnarl, FALSE, FALSE, 0);
   gtk_box_pack_start(GTK_BOX(vbox_cond), hbox, FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(vbox_cond), g_opt.snarl_snarlcmd, FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(vbox_cond), hbox2, FALSE, FALSE, 0);
 
   gtk_widget_show_all(vbox_cond);
 
@@ -559,6 +629,7 @@ static GtkWidget *create_config_snarl_page(GtkWidget *notebook, GKeyFile *pkey)
 
   g_signal_connect(GTK_BUTTON(g_opt.snarl_gntp), "clicked",
                    G_CALLBACK(gntp_mail_cb), NULL);
+
 
   gtk_container_add(GTK_CONTAINER(proto_frm_align), vbox_cond);
   gtk_container_add(GTK_CONTAINER(proto_frm), proto_frm_align);
@@ -618,7 +689,7 @@ static GtkWidget *create_config_growl_page(GtkWidget *notebook, GKeyFile *pkey)
                    G_CALLBACK(gntp_mail_cb), NULL);
 
   g_signal_connect(GTK_BUTTON(cmd_btn), "clicked",
-                   G_CALLBACK(growl_growlnotify_path_clicked), g_opt.growl_growlnotify_path);
+                   G_CALLBACK(command_path_clicked), g_opt.growl_growlnotify_path);
 
   gtk_container_add(GTK_CONTAINER(proto_frm_align), vbox_cond);
   gtk_container_add(GTK_CONTAINER(proto_frm), proto_frm_align);
@@ -757,6 +828,18 @@ void exec_sylnotify_cb(GObject *obj, FolderItem *item, const gchar *file, guint 
       } else if (g_opt.snarl_heysnarl_flg != FALSE) {
           debug_print("[DEBUG] snarl heysnarl mode\n");
         /**/
+      } else if (g_opt.snarl_snarlcmd_flg != FALSE) {
+        debug_print("[DEBUG] snarl snarlcmd mode\n");
+        gchar *path = g_key_file_get_string(g_opt.rcfile, SYLNOTIFY_SNARL, "snarlcmd_path", NULL);
+        if (path != NULL) {
+          gchar *cmdline = g_strdup_printf("\"%s\" snShowMessage %d \"%s\" \"%s\" \"%s\"",
+                                           path,
+                                           5,
+                                           msginfo->from,
+                                           unmime_header(msginfo->subject),
+                                           "http://sylpheed.sraoss.jp/images/sylpheed.png");
+          ret = execute_command_line(cmdline, FALSE);
+        }
       }
     } else if (g_opt.growl_flg != FALSE) {
         if (g_opt.growl_growlnotify_flg != FALSE) {
@@ -785,7 +868,7 @@ void exec_sylnotify_cb(GObject *obj, FolderItem *item, const gchar *file, guint 
     }
 }
 
-static void growl_growlnotify_path_clicked(GtkWidget *widget, gpointer data)
+static void command_path_clicked(GtkWidget *widget, gpointer data)
 {
   GtkWidget *dialog = gtk_file_chooser_dialog_new(NULL, NULL, GTK_FILE_CHOOSER_ACTION_OPEN,
                                                   GTK_STOCK_OPEN,GTK_RESPONSE_ACCEPT,
@@ -794,7 +877,7 @@ static void growl_growlnotify_path_clicked(GtkWidget *widget, gpointer data)
   if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT){
     gchar *filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(dialog));
 
-    gtk_entry_set_text(GTK_ENTRY(g_opt.growl_growlnotify_path), filename);
+    gtk_entry_set_text(GTK_ENTRY(data), filename);
     g_free (filename);
   }
   gtk_widget_destroy (dialog);
