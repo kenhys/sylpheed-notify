@@ -44,7 +44,7 @@
 
 static SylPluginInfo info = {
 	N_(PLUGIN_NAME),
-	"0.2.0",
+	"0.2.1",
 	"HAYASHI Kentaro",
 	N_(PLUGIN_DESC)
 };
@@ -140,10 +140,26 @@ void plugin_load(void)
     }
 
     g_opt.growl_flg=GET_RC_BOOLEAN(SYLNOTIFY, "growl");
-    debug_print("growl:%s", g_opt.startup ? "true" : "false");
+    debug_print("use growl:%s\n", g_opt.growl_flg ? "true" : "false");
     g_opt.snarl_flg=GET_RC_BOOLEAN(SYLNOTIFY, "snarl");
-    debug_print("snarl:%s", g_opt.startup ? "true" : "false");
+    debug_print("use snarl:%s\n", g_opt.snarl_flg ? "true" : "false");
     
+    /* Growl */
+    g_opt.growl_gntp_flg=GET_RC_BOOLEAN(SYLNOTIFY_GROWL, "gntp");
+    debug_print("use gntp:%s\n", g_opt.growl_gntp_flg ? "true" : "false");
+    g_opt.growl_growlnotify_flg=GET_RC_BOOLEAN(SYLNOTIFY_GROWL, "growlnotify");
+    debug_print("use growlnotify:%s\n", g_opt.growl_growlnotify_flg ? "true" : "false");
+    
+    /* Snarl */
+    g_opt.snarl_snp_flg=GET_RC_BOOLEAN(SYLNOTIFY_SNARL, "snp");
+    debug_print("use snp:%s\n", g_opt.snarl_snp_flg ? "true" : "false");
+    g_opt.snarl_gntp_flg=GET_RC_BOOLEAN(SYLNOTIFY_SNARL, "gntp");
+    debug_print("use gntp:%s\n", g_opt.snarl_gntp_flg ? "true" : "false");
+    g_opt.snarl_heysnarl_flg=GET_RC_BOOLEAN(SYLNOTIFY_SNARL, "heysnarl");
+    debug_print("use heysnarl:%s\n", g_opt.snarl_heysnarl_flg ? "true" : "false");
+    g_opt.snarl_snarlcmd_flg=GET_RC_BOOLEAN(SYLNOTIFY_SNARL, "snarlcmd");
+    debug_print("use snarlcmd:%s\n", g_opt.snarl_snarlcmd_flg ? "true" : "false");
+
   } else {
       /**/
       g_opt.startup_flg = FALSE;
@@ -226,9 +242,9 @@ static void prefs_ok_cb(GtkWidget *widget, gpointer data)
     SET_RC_BOOLEAN(SYLNOTIFY, "growl", flg);
     debug_print("use growl:%s\n", flg ? "true" : "false");
 
-    flg = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(g_opt.snarl_ntp));
-    SET_RC_BOOLEAN(SYLNOTIFY_SNARL, "ntp", flg);
-    debug_print("use snarl ntp:%s\n", flg ? "true" : "false");
+    flg = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(g_opt.snarl_snp));
+    SET_RC_BOOLEAN(SYLNOTIFY_SNARL, "snp", flg);
+    debug_print("use snarl snp:%s\n", flg ? "true" : "false");
 
     flg = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(g_opt.snarl_gntp));
     SET_RC_BOOLEAN(SYLNOTIFY_SNARL, "gntp", flg);
@@ -329,7 +345,7 @@ static void prefs_test_cb(GtkWidget *widget, gpointer data)
 #endif
 }
 
-static void ntp_mail_cb( GtkButton *widget,
+static void snp_mail_cb( GtkButton *widget,
                      gpointer   data )
 {
   gtk_widget_set_sensitive(GTK_WIDGET(g_opt.snarl_gntp), FALSE);
@@ -338,7 +354,7 @@ static void ntp_mail_cb( GtkButton *widget,
 static void gntp_mail_cb( GtkButton *widget,
                           gpointer   data )
 {
-  gtk_widget_set_sensitive(GTK_WIDGET(g_opt.snarl_ntp), FALSE);
+  gtk_widget_set_sensitive(GTK_WIDGET(g_opt.snarl_snp), FALSE);
 }
 
 static void exec_sylnotify_menu_cb(void)
@@ -437,10 +453,10 @@ static void exec_sylnotify_menu_cb(void)
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.growl), TRUE);
       }
 
-      g_opt.snarl_ntp_flg = GET_RC_BOOLEAN(SYLNOTIFY_SNARL, "ntp");
-      debug_print("use ntp:%s\n", g_opt.snarl_ntp_flg ? "true" : "false");
-      if (g_opt.snarl_ntp_flg){
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.snarl_ntp), TRUE);
+      g_opt.snarl_snp_flg = GET_RC_BOOLEAN(SYLNOTIFY_SNARL, "snp");
+      debug_print("use snp:%s\n", g_opt.snarl_snp_flg ? "true" : "false");
+      if (g_opt.snarl_snp_flg){
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.snarl_snp), TRUE);
       }
 
       g_opt.snarl_gntp_flg = GET_RC_BOOLEAN(SYLNOTIFY_SNARL, "gntp");
@@ -570,12 +586,12 @@ static GtkWidget *create_config_snarl_page(GtkWidget *notebook, GKeyFile *pkey)
   gtk_alignment_set_padding(GTK_ALIGNMENT(proto_frm_align), ALIGN_TOP, ALIGN_BOTTOM, ALIGN_LEFT, ALIGN_RIGHT);
 
   /* HeySnarl or NTP or GNTP or HeySnarl or */
-  g_opt.snarl_ntp = gtk_radio_button_new_with_label(NULL, _("NTP (Snarl Network Protocol)"));
-  g_opt.snarl_gntp = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (g_opt.snarl_ntp),
+  g_opt.snarl_snp = gtk_radio_button_new_with_label(NULL, _("SNP (Snarl Network Protocol)"));
+  g_opt.snarl_gntp = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (g_opt.snarl_snp),
                                                                   _("GNTP (Growl Notification Transport Protocol)"));
-  g_opt.snarl_heysnarl = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON (g_opt.snarl_ntp),
+  g_opt.snarl_heysnarl = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON (g_opt.snarl_snp),
                                                          _("HeySnarl (Command line tool)"));
-  g_opt.snarl_snarlcmd = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON (g_opt.snarl_ntp),
+  g_opt.snarl_snarlcmd = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON (g_opt.snarl_snp),
                                                          _("Snarl_CMD (Command line tool)"));
 
   /* HeySnarl command */
@@ -605,17 +621,17 @@ static GtkWidget *create_config_snarl_page(GtkWidget *notebook, GKeyFile *pkey)
   GtkWidget *vbox_cond = gtk_vbox_new(FALSE, 0);
     
   /* enable or disable control */
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.snarl_ntp), FALSE);
+  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.snarl_snp), FALSE);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.snarl_gntp), FALSE);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.snarl_heysnarl), FALSE);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.snarl_snarlcmd), TRUE);
 
   /* currently does not support snarl */
-  gtk_widget_set_sensitive(GTK_WIDGET(g_opt.snarl_ntp), FALSE);
+  gtk_widget_set_sensitive(GTK_WIDGET(g_opt.snarl_snp), FALSE);
   gtk_widget_set_sensitive(GTK_WIDGET(g_opt.snarl_gntp), FALSE);
   gtk_widget_set_sensitive(GTK_WIDGET(g_opt.snarl_heysnarl), FALSE);
 
-  gtk_box_pack_start(GTK_BOX(vbox_cond), g_opt.snarl_ntp, FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(vbox_cond), g_opt.snarl_snp, FALSE, FALSE, 0);
   gtk_box_pack_start(GTK_BOX(vbox_cond), g_opt.snarl_gntp, FALSE, FALSE, 0);
   gtk_box_pack_start(GTK_BOX(vbox_cond), g_opt.snarl_heysnarl, FALSE, FALSE, 0);
   gtk_box_pack_start(GTK_BOX(vbox_cond), hbox, FALSE, FALSE, 0);
@@ -624,8 +640,8 @@ static GtkWidget *create_config_snarl_page(GtkWidget *notebook, GKeyFile *pkey)
 
   gtk_widget_show_all(vbox_cond);
 
-  g_signal_connect(GTK_BUTTON(g_opt.snarl_ntp), "clicked",
-                   G_CALLBACK(ntp_mail_cb), NULL);
+  g_signal_connect(GTK_BUTTON(g_opt.snarl_snp), "clicked",
+                   G_CALLBACK(snp_mail_cb), NULL);
 
   g_signal_connect(GTK_BUTTON(g_opt.snarl_gntp), "clicked",
                    G_CALLBACK(gntp_mail_cb), NULL);
@@ -683,7 +699,7 @@ static GtkWidget *create_config_growl_page(GtkWidget *notebook, GKeyFile *pkey)
   gtk_box_pack_start(GTK_BOX(vbox_cond), hbox, FALSE, FALSE, 0);
 
   g_signal_connect(GTK_BUTTON(g_opt.growl_gntp), "clicked",
-                   G_CALLBACK(ntp_mail_cb), NULL);
+                   G_CALLBACK(snp_mail_cb), NULL);
 
   g_signal_connect(GTK_BUTTON(g_opt.growl_growlnotify), "clicked",
                    G_CALLBACK(gntp_mail_cb), NULL);
@@ -793,7 +809,6 @@ void exec_sylnotify_cb(GObject *obj, FolderItem *item, const gchar *file, guint 
     debug_print("[DEBUG] tmp_flags:%08x \n", msginfo->flags.tmp_flags);
 
     g_key_file_load_from_file(g_opt.rcfile, g_opt.rcpath, G_KEY_FILE_KEEP_COMMENTS, NULL);
-    gboolean ntp= GET_RC_BOOLEAN(SYLNOTIFY_SNARL, "ntp");
 
 #ifdef DEBUG
     debug_print("[DEBUG] item->path:%s\n", item->path);
@@ -801,8 +816,8 @@ void exec_sylnotify_cb(GObject *obj, FolderItem *item, const gchar *file, guint 
 
     gint ret = -1;
     if (g_opt.snarl_flg != FALSE) {
-      if (g_opt.snarl_ntp_flg != FALSE) {
-          debug_print("[DEBUG] snarl ntp mode\n");
+      if (g_opt.snarl_snp_flg != FALSE) {
+          debug_print("[DEBUG] snarl snp mode\n");
         gint sock = fd_connect_inet(SYLSNARL_PORT);
         debug_print("[DEBUG] sock:%d\n", sock);
         if (sock < 0) {

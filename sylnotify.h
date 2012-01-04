@@ -53,7 +53,7 @@ struct _SylNotifyOption {
   gboolean growl_growlnotify_flg;
   gboolean growl_gntp_flg;
 
-  gboolean snarl_ntp_flg;
+  gboolean snarl_snp_flg;
   gboolean snarl_gntp_flg;
   gboolean snarl_heysnarl_flg;
   gboolean snarl_snarlcmd_flg;
@@ -63,7 +63,7 @@ struct _SylNotifyOption {
   GtkWidget *snarl;
   GtkWidget *growl;
 
-  GtkWidget *snarl_ntp;
+  GtkWidget *snarl_snp;
   GtkWidget *snarl_gntp;
   GtkWidget *snarl_heysnarl;
   GtkWidget *snarl_heysnarl_path;
