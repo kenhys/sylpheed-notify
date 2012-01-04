@@ -16,7 +16,7 @@ DEBUG=0
 
 MAJOR=0
 MINOR=2
-SUBMINOR=0
+SUBMINOR=1
 
 function compile ()
 {

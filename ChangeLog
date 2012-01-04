@@ -1,3 +1,8 @@
+2012-01-05 HAYASHI Kentaro <kenhys@gmail.com>
+	
+	* vesion 0.2.1
+	  fix bug loading sylnotifyrc in startup process. reported by James.
+
 2012-01-03 HAYASHI Kentaro <kenhys@gmail.com>
 	
 	* vesion 0.2.0
