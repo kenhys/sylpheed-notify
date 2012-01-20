@@ -48,6 +48,8 @@ generate notification when you receive new mail.
 So, you received 100 mail, then sylnotify generate 100 growl/snarl notification!
 you may dislike this behavior.
 
+IMAP4 is not supported.
+
 TODO
 --------------------------------------------------------------------------------
 
