@@ -35,8 +35,8 @@
 #include "alertpanel.h"
 #include "prefs_common.h"
 #include "foldersel.h"
-#include "growl.xpm"
-#include "growlx.xpm"
+#include "../res/growl.xpm"
+#include "../res/growlx.xpm"
 #include "sylnotify.h"
 
 #include <glib.h>

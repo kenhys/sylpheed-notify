@@ -1,8 +1,7 @@
 
 NAME=sylnotify
-TARGET=$NAME.dll
-OBJS="$NAME.o"
-OBJS="$NAME.o version.o"
+TARGET=src/$NAME.dll
+OBJS="src/$NAME.o src/version.o"
 PKG=sylpheed-$NAME
 LIBSYLPH=./lib/libsylph-0-1.a
 LIBSYLPHEED=./lib/libsylpheed-plugin-0-1.a
@@ -14,29 +13,32 @@ INC=" -I. -I../../ -I../../libsylph -I../../src -I/mingw/local `pkg-config --cfl
 DEF=" -DHAVE_CONFIG_H -DUNICODE -D_UNICODE -DRELEASE_3_1"
 DEBUG=0
 
+DCOMPILE=src/.compile
+PBUILDH=src/private_build.h
+
 MAJOR=0
-MINOR=2
-SUBMINOR=1
+MINOR=3
+SUBMINOR=0
 
 function compile ()
 {
-    if [ ! -f "private_build.h" ]; then
-        echo "1" > .compile
-        echo "#define PRIVATE_BUILD 1" > private_build.h
+    if [ ! -f "$PBUILDH" ]; then
+        echo "1" > $DCOMPILE
+        echo "#define PRIVATE_BUILD 1" > $PBUILDH
     else
-        ret=`cat .compile | gawk '{print $i+1}'`
-        echo $ret | tee .compile
-        echo "#define PRIVATE_BUILD \"build $ret\\0\"" > private_build.h
-        echo "#define NAME \"SylNotify\\0\"" >> private_build.h
-        echo "#define VERSION \"$MAJOR, $MINOR, $SUBMINOR, 0\\0\"" >> private_build.h
-        echo "#define NAMEVERSION \"SylNotify $MAJOR.$MINOR.$SUBMINOR\\0\"" >> private_build.h
-        echo "#define QVERSION \"$MAJOR,$MINOR,$SUBMINOR,0\"" >> private_build.h
+        ret=`cat $DCOMPILE | gawk '{print $i+1}'`
+        echo $ret | tee $DCOMPILE
+        echo "#define PRIVATE_BUILD \"build $ret\\0\"" > $PBUILDH
+        echo "#define NAME \"SylNotify\\0\"" >> $PBUILDH
+        echo "#define VERSION \"$MAJOR, $MINOR, $SUBMINOR, 0\\0\"" >> $PBUILDH
+        echo "#define NAMEVERSION \"SylNotify $MAJOR.$MINOR.$SUBMINOR\\0\"" >> $PBUILDH
+        echo "#define QVERSION \"$MAJOR,$MINOR,$SUBMINOR,0\"" >> $PBUILDH
     fi
-    com="windres -i version.rc -o version.o"
+    com="windres -i res/version.rc -o src/version.o"
     echo $com
     eval $com
 
-    com="gcc -Wall -c $DEF $INC $NAME.c"
+    com="gcc -Wall -c -o src/$NAME.o $DEF $INC src/$NAME.c"
     echo $com
     eval $com
     if [ $? != 0 ]; then
@@ -49,6 +51,7 @@ function compile ()
     if [ $? != 0 ]; then
         echo "done"
     else
+        SYLPLUGINDIR=../../src/.libs/plugins
         if [ -d "$SYLPLUGINDIR" ]; then
             com="cp $TARGET \"$SYLPLUGINDIR/$NAME.dll\""
             echo $com
