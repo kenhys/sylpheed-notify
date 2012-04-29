@@ -21,6 +21,7 @@
 #include "defs.h"
 
 #include <glib.h>
+#include <glib/gprintf.h>
 #include <gtk/gtk.h>
 
 #include <stdio.h>
@@ -44,7 +45,7 @@
 
 static SylPluginInfo info = {
 	N_(PLUGIN_NAME),
-	"0.2.1",
+	"0.3.0",
 	"HAYASHI Kentaro",
 	N_(PLUGIN_DESC)
 };
@@ -85,6 +86,8 @@ void plugin_load(void)
   g_signal_connect(syl_app_get(), "app-exit", G_CALLBACK(app_exit_cb), NULL);
   g_signal_connect(syl_app_get(), "app-force-exit", G_CALLBACK(app_force_exit_cb), NULL);
 
+  syl_plugin_signal_connect("inc-mail-start", G_CALLBACK(inc_start_cb), NULL);
+  syl_plugin_signal_connect("inc-mail-finished", G_CALLBACK(inc_finished_cb), NULL);
 
   GtkWidget *mainwin = syl_plugin_main_window_get();
   GtkWidget *statusbar = syl_plugin_main_window_get_statusbar();
@@ -113,6 +116,7 @@ void plugin_load(void)
 
   gtk_widget_show_all(g_onoff_switch);
   gtk_widget_hide(g_plugin_on);
+
   info.name = g_strdup(_(PLUGIN_NAME));
   info.description = g_strdup(_(PLUGIN_DESC));
 
@@ -143,6 +147,23 @@ void plugin_load(void)
     debug_print("use growl:%s\n", g_opt.growl_flg ? "true" : "false");
     g_opt.snarl_flg=GET_RC_BOOLEAN(SYLNOTIFY, "snarl");
     debug_print("use snarl:%s\n", g_opt.snarl_flg ? "true" : "false");
+    
+    gchar *pattern = g_key_file_get_string(g_opt.rcfile, SYLNOTIFY, "pattern", NULL);
+    if (pattern != NULL) {
+      if (strcmp(pattern, "summary") == 0) {
+        g_opt.pattern_summary_flg = TRUE;
+        g_opt.pattern_all_flg = FALSE;
+      } else if (strcmp(pattern, "all") == 0) {
+        g_opt.pattern_summary_flg = FALSE;
+        g_opt.pattern_all_flg = TRUE;
+      } else {
+        g_opt.pattern_summary_flg = TRUE;
+        g_opt.pattern_all_flg = FALSE;
+      }
+    } else {
+      g_opt.pattern_summary_flg = TRUE;
+      g_opt.pattern_all_flg = FALSE;
+    }
     
     /* Growl */
     g_opt.growl_gntp_flg=GET_RC_BOOLEAN(SYLNOTIFY_GROWL, "gntp");
@@ -184,8 +205,8 @@ SylPluginInfo *plugin_info(void)
 
 gint plugin_interface_version(void)
 {
-    /* sylpheed 3.1.0 or later */
-    return 0x0107;
+    /* sylpheed 3.2 or later since r3005 */
+    return 0x0109;
 }
 
 static void init_done_cb(GObject *obj, gpointer data)
@@ -241,6 +262,18 @@ static void prefs_ok_cb(GtkWidget *widget, gpointer data)
     flg = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(g_opt.growl));
     SET_RC_BOOLEAN(SYLNOTIFY, "growl", flg);
     debug_print("use growl:%s\n", flg ? "true" : "false");
+
+    flg = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(g_opt.pattern_summary));
+    if (flg != FALSE) {
+      g_key_file_set_string (g_opt.rcfile, SYLNOTIFY, "pattern", "summary");
+      debug_print("use pattern:summary\n");
+    }
+
+    flg = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(g_opt.pattern_all));
+    if (flg != FALSE) {
+      g_key_file_set_string (g_opt.rcfile, SYLNOTIFY, "pattern", "all");
+      debug_print("use pattern:all\n");
+    }
 
     flg = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(g_opt.snarl_snp));
     SET_RC_BOOLEAN(SYLNOTIFY_SNARL, "snp", flg);
@@ -560,12 +593,35 @@ static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
   gtk_container_add(GTK_CONTAINER(app_frm), app_frm_align);
   gtk_container_add(GTK_CONTAINER(app_align), app_frm);
 
-  gtk_box_pack_start(GTK_BOX(vbox), startup_align, FALSE, FALSE, 0);
-  gtk_box_pack_start(GTK_BOX(vbox), app_align, FALSE, FALSE, 0);
-
   /* disable snarl */
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.growl), g_opt.growl_flg);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.snarl), g_opt.snarl_flg);
+
+  /* Notification */
+  GtkWidget *pattern_align = gtk_alignment_new(0, 0, 1, 1);
+  gtk_alignment_set_padding(GTK_ALIGNMENT(pattern_align), ALIGN_TOP, ALIGN_BOTTOM, ALIGN_LEFT, ALIGN_RIGHT);
+  GtkWidget *pattern_frm = gtk_frame_new(_("Notification"));
+  GtkWidget *pattern_frm_align = gtk_alignment_new(0, 0, 1, 1);
+  gtk_alignment_set_padding(GTK_ALIGNMENT(pattern_frm_align), ALIGN_TOP, ALIGN_BOTTOM, ALIGN_LEFT, ALIGN_RIGHT);
+
+  g_opt.pattern_summary = gtk_radio_button_new_with_label(NULL, _("Summary only (when receiving mail and finished)"));
+  g_opt.pattern_all = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON (g_opt.pattern_summary),
+                                                                  _("All (1 notification per new mail)"));
+  GtkWidget *pattern_lbl = gtk_label_new(_("Note: IMAP4 is not supported yet."));
+
+  GtkWidget *vbox_pattern = gtk_vbox_new(TRUE, BOX_SPACE);
+  gtk_box_pack_start(GTK_BOX(vbox_pattern), g_opt.pattern_summary, FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(vbox_pattern), g_opt.pattern_all, FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(vbox_pattern), pattern_lbl, FALSE, FALSE, 0);
+
+  gtk_container_add(GTK_CONTAINER(pattern_frm_align), vbox_pattern);
+  gtk_container_add(GTK_CONTAINER(pattern_frm), pattern_frm_align);
+  gtk_container_add(GTK_CONTAINER(pattern_align), pattern_frm);
+
+  /**/
+  gtk_box_pack_start(GTK_BOX(vbox), startup_align, FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(vbox), app_align, FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(vbox), pattern_align, TRUE, TRUE, 0);
 
   GtkWidget *general_lbl = gtk_label_new(_("General"));
   gtk_notebook_append_page(GTK_NOTEBOOK(notebook), vbox, general_lbl);
@@ -786,14 +842,24 @@ void exec_sylnotify_cb(GObject *obj, FolderItem *item, const gchar *file, guint 
         return;
     }
     if (item->stype != F_NORMAL && item->stype != F_INBOX){
-        debug_print("[DEBUG] not F_NORMAL and F_INBOX\n");
-        return;
+      debug_print("[DEBUG] not F_NORMAL and F_INBOX %d\n", item->stype);
+      if (item->folder) {
+        if (item->folder->klass) {
+          debug_print("[DEBUG] item->name:%s FolderType:%d %d\n", item->name, item->folder->klass->type);
+        }
+      }
+      return;
     }
 
     PrefsCommon *prefs_common = prefs_common_get();
     if (prefs_common->online_mode != TRUE){
         debug_print("[DEBUG] not online\n");
         return;
+    }
+
+    if (g_opt.pattern_all_flg != TRUE || g_opt.pattern_summary_flg != FALSE) {
+      debug_print("[DEBUG] notify summary only.\n");
+      return;
     }
     
     PrefsAccount *ac = (PrefsAccount*)account_get_default();
@@ -896,4 +962,105 @@ static void command_path_clicked(GtkWidget *widget, gpointer data)
     g_free (filename);
   }
   gtk_widget_destroy (dialog);
+}
+
+static void inc_start_cb(GObject *obj, PrefsAccount *ac)
+{
+#if 1
+  if (ac)
+    g_print("test: receive start: account: %s\n", ac->account_name);
+  else
+    g_print("test: receive start: all accounts\n");
+#else
+  gint ret;
+  if (g_opt.snarl_flg != FALSE) {
+    if (g_opt.snarl_snarlcmd_flg != FALSE) {
+      debug_print("[DEBUG] snarl snarlcmd mode\n");
+      gchar *path = g_key_file_get_string(g_opt.rcfile, SYLNOTIFY_SNARL, "snarlcmd_path", NULL);
+      if (path != NULL) {
+        gchar *cmdline = g_strdup_printf("\"%s\" snShowMessage %d \"%s\" \"%s\" \"%s\"",
+                                         path,
+                                         5,
+                                         ac ? ac->account_name : "All",
+                                         _("receive start"),
+                                         "http://sylpheed.sraoss.jp/images/sylpheed.png");
+        ret = execute_command_line(cmdline, FALSE);
+      }
+    } 
+  } else if (g_opt.growl_flg != FALSE) {
+    if (g_opt.growl_growlnotify_flg != FALSE) {
+      gchar *path = g_key_file_get_string(g_opt.rcfile, SYLNOTIFY_GROWL, "growlnotify_path", NULL);
+      if (path != NULL) {
+        gchar *cmdline = g_strdup_printf("\"%s\" /a:%s /ai:%s /r:\"%s\" \"%s\"",
+                                         path,
+                                         "Sylpheed",
+                                         "http://sylpheed.sraoss.jp/images/sylpheed.png",
+                                         "New Mail",
+                                         "dummy"
+                                         );
+        ret = execute_command_line(cmdline, FALSE);
+        if (ret >= 0) {
+          cmdline = g_strdup_printf("\"%s\" /a:%s /n:\"%s\" /t:\"%s\" \"%s\"",
+                                    path,
+                                    "Sylpheed",
+                                    "New Mail",
+                                    ac ? ac->account_name : "All",
+                                    _("receive start")
+                                    );
+          ret = execute_command_line(cmdline, FALSE);
+        }
+      }
+    }
+  }
+#endif
+}
+
+static void inc_finished_cb(GObject *obj, gint new_messages)
+{
+  g_print("test: received %d new messages\n", new_messages);
+#if 0
+  gint ret = 0;
+  if (g_opt.snarl_flg != FALSE) {
+    if (g_opt.snarl_snarlcmd_flg != FALSE) {
+      debug_print("[DEBUG] snarl snarlcmd mode\n");
+      gchar *path = g_key_file_get_string(g_opt.rcfile, SYLNOTIFY_SNARL, "snarlcmd_path", NULL);
+      if (path != NULL) {
+        gchar *cmdline = g_strdup_printf("\"%s\" snShowMessage %d \"%s\" \"%s\" \"%s\"",
+                                         path,
+                                         5,
+                                         _("receive finished"),
+                                         g_sprintf("%d new messages", new_messages),
+                                         "http://sylpheed.sraoss.jp/images/sylpheed.png");
+        ret = execute_command_line(cmdline, FALSE);
+        g_free(cmdline);
+      }
+    } 
+  } else if (g_opt.growl_flg != FALSE) {
+    if (g_opt.growl_growlnotify_flg != FALSE) {
+      gchar *path = g_key_file_get_string(g_opt.rcfile, SYLNOTIFY_GROWL, "growlnotify_path", NULL);
+      if (path != NULL) {
+        gchar *cmdline = g_strdup_printf("\"%s\" /a:%s /ai:%s /r:\"%s\" \"%s\"",
+                                         path,
+                                         "Sylpheed",
+                                         "http://sylpheed.sraoss.jp/images/sylpheed.png",
+                                         "New Mail",
+                                         "dummy"
+                                         );
+        ret = execute_command_line(cmdline, FALSE);
+        g_free(cmdline);
+        if (ret >= 0) {
+          cmdline = g_strdup_printf("\"%s\" /a:%s /n:\"%s\" /t:\"%s\" \"%s\"",
+                                    path,
+                                    "Sylpheed",
+                                    "New Mail",
+                                    _("receive finished"),
+                                    g_sprintf("%d new messages", new_messages)
+                                    );
+          ret = execute_command_line(cmdline, FALSE);
+          g_free(cmdline);
+        }
+      }
+    }
+  }
+#endif
 }

@@ -58,10 +58,15 @@ struct _SylNotifyOption {
   gboolean snarl_heysnarl_flg;
   gboolean snarl_snarlcmd_flg;
   
+  gboolean pattern_summary_flg;
+  gboolean pattern_all_flg;
+
   GtkWidget *window;
   GtkWidget *startup;
   GtkWidget *snarl;
   GtkWidget *growl;
+  GtkWidget *pattern_summary;
+  GtkWidget *pattern_all;
 
   GtkWidget *snarl_snp;
   GtkWidget *snarl_gntp;
@@ -95,6 +100,9 @@ static GtkWidget *create_config_growl_page(GtkWidget *notebook, GKeyFile *pkey);
 static GtkWidget *create_config_about_page(GtkWidget *notebook, GKeyFile *pkey);
 
 static void command_path_clicked(GtkWidget *widget, gpointer data);
+static void inc_start_cb(GObject *obj, PrefsAccount *ac);
+static void inc_finished_cb(GObject *obj, gint new_messages);
+
 #define GET_RC_BOOLEAN(section, keyarg) g_key_file_get_boolean(g_opt.rcfile, section, keyarg, NULL)
 #define SET_RC_BOOLEAN(section, keyarg,valarg) g_key_file_set_boolean(g_opt.rcfile, section, keyarg, valarg)
 
@@ -126,5 +134,6 @@ static void command_path_clicked(GtkWidget *widget, gpointer data);
 #define SNARL_ERROR_AUTH_FAILURE -1
 #define SNARL_ERROR_DISCARDED -1
 #define SNARL_ERROR_NOT_SUBSCRIBED -1
+
 
 #endif /* __SYLNOTIFY_H__ */
