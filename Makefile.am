@@ -2,8 +2,8 @@ libdir = $(plugindir)
 
 lib_LTLIBRARIES = sylnotify.la
 
-sylsnarl_la_SOURCES = sylnotify.c version.rc
-sylsnarl_la_LDFLAGS = -module -no-undefined -avoid-version
+sylnotify_la_SOURCES = src/sylnotify.c src/sylnotify.h
+sylnotify_la_LDFLAGS = -module -no-undefined -avoid-version
 
 INCLUDES = \
 	$(GTK_CFLAGS) \
