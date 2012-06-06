@@ -1,0 +1,14 @@
+News of sylnotify
+
+* 0.2.1 (2012-01-05)
+
+  * fix bug loading sylnotifyrc in startup process. reported by James.
+
+* 0.2.0 (2012-01-03)
+
+  * support Snarl by Snarl_CMD.exe
+
+* 0.1.0 (2012-01-02)
+
+  * first test release.
+
