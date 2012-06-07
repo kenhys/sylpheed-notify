@@ -2,7 +2,7 @@ libdir = $(plugindir)
 
 lib_LTLIBRARIES = sylnotify.la
 
-sylnotify_la_SOURCES = src/sylnotify.c src/sylnotify.h
+sylnotify_la_SOURCES = sylnotify.c sylnotify.h
 sylnotify_la_LDFLAGS = -module -no-undefined -avoid-version
 
 INCLUDES = \
