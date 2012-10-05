@@ -13,7 +13,7 @@ INCLUDES = \
 	-I$(top_srcdir) \
 	-I$(top_srcdir)/libsylph \
 	-I$(top_srcdir)/src \
-	-I$(sylpf_srcdir)/src
+	-I$(sylpf_srcdir)
 
 sylsnarl_la_LIBADD = \
 	$(GTK_LIBS) \
