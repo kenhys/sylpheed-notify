@@ -24,6 +24,9 @@
 #include <glib/gi18n-lib.h>
 #include <locale.h>
 
+#define SYLPF_ID "sylnotify"
+#define SYLPF_OPTION sylnotify_option
+
 #define SYLNOTIFY "sylnotify"
 #define SYLNOTIFY_SNARL "snarl"
 #define SYLNOTIFY_GROWL "growl"
