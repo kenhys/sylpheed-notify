@@ -43,6 +43,8 @@
 #include <glib/gi18n-lib.h>
 #include <locale.h>
 
+#include "sylpf_utility.h"
+
 static SylPluginInfo info = {
 	N_(PLUGIN_NAME),
 	"0.3.0",
