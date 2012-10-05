@@ -27,6 +27,8 @@
 #define SYLPF_ID "sylnotify"
 #define SYLPF_OPTION sylnotify_option
 
+#define SYLPF_FUNC(arg) sylnotify ## _ ## arg
+
 #define SYLNOTIFY "sylnotify"
 #define SYLNOTIFY_SNARL "snarl"
 #define SYLNOTIFY_GROWL "growl"
