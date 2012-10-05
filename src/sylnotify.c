@@ -46,10 +46,10 @@
 #include "sylpf_utility.h"
 
 static SylPluginInfo info = {
-	N_(PLUGIN_NAME),
-	"0.3.0",
-	"HAYASHI Kentaro",
-	N_(PLUGIN_DESC)
+  N_(PLUGIN_NAME),
+  "0.3.0",
+  "HAYASHI Kentaro",
+  N_(PLUGIN_DESC)
 };
 
 static gchar* g_copyright = N_("SylNotify is distributed under GPL license.\n"
