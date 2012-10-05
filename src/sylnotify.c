@@ -843,116 +843,116 @@ static void exec_sylnotify_onoff_cb(void)
 
 void exec_sylnotify_cb(GObject *obj, FolderItem *item, const gchar *file, guint num)
 {
-    if (g_enable!=TRUE){
-        debug_print("[DEBUG] disabled sylnotify plugin\n");
-        return;
-    }
-    if (item->stype != F_NORMAL && item->stype != F_INBOX){
-      debug_print("[DEBUG] not F_NORMAL and F_INBOX %d\n", item->stype);
-      if (item->folder) {
-        if (item->folder->klass) {
-          debug_print("[DEBUG] item->name:%s FolderType:%d %d\n", item->name, item->folder->klass->type);
-        }
+  if (g_enable!=TRUE){
+    debug_print("[DEBUG] disabled sylnotify plugin\n");
+    return;
+  }
+  if (item->stype != F_NORMAL && item->stype != F_INBOX){
+    debug_print("[DEBUG] not F_NORMAL and F_INBOX %d\n", item->stype);
+    if (item->folder) {
+      if (item->folder->klass) {
+        debug_print("[DEBUG] item->name:%s FolderType:%d %d\n", item->name, item->folder->klass->type);
       }
-      return;
     }
+    return;
+  }
 
-    PrefsCommon *prefs_common = prefs_common_get();
-    if (prefs_common->online_mode != TRUE){
-        debug_print("[DEBUG] not online\n");
-        return;
-    }
+  PrefsCommon *prefs_common = prefs_common_get();
+  if (prefs_common->online_mode != TRUE){
+    debug_print("[DEBUG] not online\n");
+    return;
+  }
 
-    if (g_opt.pattern_all_flg != TRUE || g_opt.pattern_summary_flg != FALSE) {
-      debug_print("[DEBUG] notify summary only.\n");
-      return;
-    }
+  if (g_opt.pattern_all_flg != TRUE || g_opt.pattern_summary_flg != FALSE) {
+    debug_print("[DEBUG] notify summary only.\n");
+    return;
+  }
     
-    PrefsAccount *ac = (PrefsAccount*)account_get_default();
-    g_return_if_fail(ac != NULL);
+  PrefsAccount *ac = (PrefsAccount*)account_get_default();
+  g_return_if_fail(ac != NULL);
 
-    /* check item->path for filter */
-    g_print("%s\n", item->name);
-    g_print("%s\n", item->path);
+  /* check item->path for filter */
+  g_print("%s\n", item->name);
+  g_print("%s\n", item->path);
 
-    MsgInfo *msginfo = folder_item_get_msginfo(item, num);
-    debug_print("[DEBUG] flags:%08x UNREAD:%08x NEW:%08x MARKED:%08x ", msginfo->flags, MSG_UNREAD, MSG_NEW, MSG_MARKED);
-    debug_print("[DEBUG] perm_flags:%08x \n", msginfo->flags.perm_flags);
-    debug_print("[DEBUG] tmp_flags:%08x \n", msginfo->flags.tmp_flags);
+  MsgInfo *msginfo = folder_item_get_msginfo(item, num);
+  debug_print("[DEBUG] flags:%08x UNREAD:%08x NEW:%08x MARKED:%08x ", msginfo->flags, MSG_UNREAD, MSG_NEW, MSG_MARKED);
+  debug_print("[DEBUG] perm_flags:%08x \n", msginfo->flags.perm_flags);
+  debug_print("[DEBUG] tmp_flags:%08x \n", msginfo->flags.tmp_flags);
 
-    g_key_file_load_from_file(g_opt.rcfile, g_opt.rcpath, G_KEY_FILE_KEEP_COMMENTS, NULL);
+  g_key_file_load_from_file(g_opt.rcfile, g_opt.rcpath, G_KEY_FILE_KEEP_COMMENTS, NULL);
 
 #ifdef DEBUG
-    debug_print("[DEBUG] item->path:%s\n", item->path);
+  debug_print("[DEBUG] item->path:%s\n", item->path);
 #endif
 
-    gint ret = -1;
-    if (g_opt.snarl_flg != FALSE) {
-      if (g_opt.snarl_snp_flg != FALSE) {
-          debug_print("[DEBUG] snarl snp mode\n");
-        gint sock = fd_connect_inet(SYLSNARL_PORT);
-        debug_print("[DEBUG] sock:%d\n", sock);
-        if (sock < 0) {
-          debug_print("[DEBUG] sock error:%d\n", sock);
-          return;
-        }
-    
-        gchar *buf = g_strdup_printf("%s\r\n%s\r\n%s&title=%s&text=Date:%s\\nFrom:%s\\nTo:%s\\nSubject:%s\r\nEND\r\n",
-                                     "SNP/3.0",
-                                     "register?app-sig=app/Sylpheed&title=Sylpheed",
-                                     "notify?app-sig=app/Sylpheed",
-                                     conv_unmime_header(msginfo->subject, "UTF-8"),
-                                     msginfo->date,
-                                     msginfo->from,
-                                     msginfo->to,
-                                     conv_unmime_header(msginfo->subject, "UTF-8"));
-        debug_print("[DEBUG] msg:%s\n", buf);
-        fd_write_all(sock, buf, strlen(buf));
-        g_free(buf);
-        fd_close(sock);
-      } else if (g_opt.snarl_gntp_flg != FALSE) {
-          debug_print("[DEBUG] snarl gntp mode\n");
-      } else if (g_opt.snarl_heysnarl_flg != FALSE) {
-          debug_print("[DEBUG] snarl heysnarl mode\n");
-        /**/
-      } else if (g_opt.snarl_snarlcmd_flg != FALSE) {
-        debug_print("[DEBUG] snarl snarlcmd mode\n");
-        gchar *path = g_key_file_get_string(g_opt.rcfile, SYLNOTIFY_SNARL, "snarlcmd_path", NULL);
-        if (path != NULL) {
-          gchar *cmdline = g_strdup_printf("\"%s\" snShowMessage %d \"%s\" \"%s\" \"%s\"",
-                                           path,
-                                           5,
-                                           msginfo->from,
-                                           unmime_header(msginfo->subject),
-                                           "http://sylpheed.sraoss.jp/images/sylpheed.png");
-          ret = execute_command_line(cmdline, FALSE);
-        }
+  gint ret = -1;
+  if (g_opt.snarl_flg != FALSE) {
+    if (g_opt.snarl_snp_flg != FALSE) {
+      debug_print("[DEBUG] snarl snp mode\n");
+      gint sock = fd_connect_inet(SYLSNARL_PORT);
+      debug_print("[DEBUG] sock:%d\n", sock);
+      if (sock < 0) {
+        debug_print("[DEBUG] sock error:%d\n", sock);
+        return;
       }
-    } else if (g_opt.growl_flg != FALSE) {
-        if (g_opt.growl_growlnotify_flg != FALSE) {
-            gchar *path = g_key_file_get_string(g_opt.rcfile, SYLNOTIFY_GROWL, "growlnotify_path", NULL);
-            if (path != NULL) {
-                gchar *cmdline = g_strdup_printf("\"%s\" /a:%s /ai:%s /r:\"%s\" \"%s\"",
-                                                 path,
-                                                 "Sylpheed",
-                                                 "http://sylpheed.sraoss.jp/images/sylpheed.png",
-                                                 "New Mail",
-                                                 "dummy"
-                                                 );
-                ret = execute_command_line(cmdline, FALSE);
-                cmdline = g_strdup_printf("\"%s\" /a:%s /n:\"%s\" /t:\"%s\" \"%s\"",
-                                          path,
-                                          "Sylpheed",
-                                          "New Mail",
-                                          msginfo->from,
-                                          msginfo->subject
-                                          );
-                ret = execute_command_line(cmdline, FALSE);
-            }
-        }
-    } else {
-      /* nop */
+    
+      gchar *buf = g_strdup_printf("%s\r\n%s\r\n%s&title=%s&text=Date:%s\\nFrom:%s\\nTo:%s\\nSubject:%s\r\nEND\r\n",
+                                   "SNP/3.0",
+                                   "register?app-sig=app/Sylpheed&title=Sylpheed",
+                                   "notify?app-sig=app/Sylpheed",
+                                   conv_unmime_header(msginfo->subject, "UTF-8"),
+                                   msginfo->date,
+                                   msginfo->from,
+                                   msginfo->to,
+                                   conv_unmime_header(msginfo->subject, "UTF-8"));
+      debug_print("[DEBUG] msg:%s\n", buf);
+      fd_write_all(sock, buf, strlen(buf));
+      g_free(buf);
+      fd_close(sock);
+    } else if (g_opt.snarl_gntp_flg != FALSE) {
+      debug_print("[DEBUG] snarl gntp mode\n");
+    } else if (g_opt.snarl_heysnarl_flg != FALSE) {
+      debug_print("[DEBUG] snarl heysnarl mode\n");
+      /**/
+    } else if (g_opt.snarl_snarlcmd_flg != FALSE) {
+      debug_print("[DEBUG] snarl snarlcmd mode\n");
+      gchar *path = g_key_file_get_string(g_opt.rcfile, SYLNOTIFY_SNARL, "snarlcmd_path", NULL);
+      if (path != NULL) {
+        gchar *cmdline = g_strdup_printf("\"%s\" snShowMessage %d \"%s\" \"%s\" \"%s\"",
+                                         path,
+                                         5,
+                                         msginfo->from,
+                                         unmime_header(msginfo->subject),
+                                         "http://sylpheed.sraoss.jp/images/sylpheed.png");
+        ret = execute_command_line(cmdline, FALSE);
+      }
     }
+  } else if (g_opt.growl_flg != FALSE) {
+    if (g_opt.growl_growlnotify_flg != FALSE) {
+      gchar *path = g_key_file_get_string(g_opt.rcfile, SYLNOTIFY_GROWL, "growlnotify_path", NULL);
+      if (path != NULL) {
+        gchar *cmdline = g_strdup_printf("\"%s\" /a:%s /ai:%s /r:\"%s\" \"%s\"",
+                                         path,
+                                         "Sylpheed",
+                                         "http://sylpheed.sraoss.jp/images/sylpheed.png",
+                                         "New Mail",
+                                         "dummy"
+                                         );
+        ret = execute_command_line(cmdline, FALSE);
+        cmdline = g_strdup_printf("\"%s\" /a:%s /n:\"%s\" /t:\"%s\" \"%s\"",
+                                  path,
+                                  "Sylpheed",
+                                  "New Mail",
+                                  msginfo->from,
+                                  msginfo->subject
+                                  );
+        ret = execute_command_line(cmdline, FALSE);
+      }
+    }
+  } else {
+    /* nop */
+  }
 }
 
 static void command_path_clicked(GtkWidget *widget, gpointer data)
