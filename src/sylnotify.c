@@ -420,10 +420,12 @@ static void exec_sylnotify_menu_cb(void)
   GtkWidget *notebook = gtk_notebook_new();
   /* main tab */
   create_config_main_page(notebook, g_opt.rcfile);
+#ifdef G_OS_WIN32
   /* Growl option tab */
   create_config_growl_page(notebook, g_opt.rcfile);
   /* Snarl option tab */
   create_config_snarl_page(notebook, g_opt.rcfile);
+#endif
   /* about, copyright tab */
   create_config_about_page(notebook, g_opt.rcfile);
 
@@ -632,6 +634,7 @@ static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
 
 }
 
+#ifdef G_OS_WIN32
 static GtkWidget *create_config_snarl_page(GtkWidget *notebook, GKeyFile *pkey)
 {
   GtkWidget *vbox = gtk_vbox_new(FALSE, 6);
@@ -776,6 +779,7 @@ static GtkWidget *create_config_growl_page(GtkWidget *notebook, GKeyFile *pkey)
   gtk_widget_show_all(notebook);
   return NULL;
 }
+#endif
 
 /* about, copyright tab */
 static GtkWidget *create_config_about_page(GtkWidget *notebook, GKeyFile *pkey)
