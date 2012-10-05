@@ -50,6 +50,13 @@ struct _SylNotifyOption {
   /* rcfile */
   GKeyFile *rcfile;
 
+  gboolean plugin_enabled;
+
+  GtkWidget *plugin_on;
+  GtkWidget *plugin_off;
+  GtkWidget *plugin_switch;
+  GtkTooltips *plugin_tooltip;
+
   gboolean startup_flg;
 
   gboolean snarl_flg;
