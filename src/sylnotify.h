@@ -57,21 +57,21 @@ struct _SylNotifyOption {
   GtkWidget *plugin_switch;
   GtkTooltips *plugin_tooltip;
 
-  gboolean startup_flg;
+  gboolean startup_flag;
 
-  gboolean snarl_flg;
-  gboolean growl_flg;
+  gboolean snarl_flag;
+  gboolean growl_flag;
 
-  gboolean growl_growlnotify_flg;
-  gboolean growl_gntp_flg;
+  gboolean growl_growlnotify_flag;
+  gboolean growl_gntp_flag;
 
-  gboolean snarl_snp_flg;
-  gboolean snarl_gntp_flg;
-  gboolean snarl_heysnarl_flg;
-  gboolean snarl_snarlcmd_flg;
+  gboolean snarl_snp_flag;
+  gboolean snarl_gntp_flag;
+  gboolean snarl_heysnarl_flag;
+  gboolean snarl_snarlcmd_flag;
   
-  gboolean pattern_summary_flg;
-  gboolean pattern_all_flg;
+  gboolean pattern_summary_flag;
+  gboolean pattern_all_flag;
 
   GtkWidget *window;
   GtkWidget *startup;
