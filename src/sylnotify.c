@@ -1023,6 +1023,9 @@ static void inc_start_cb(GObject *obj, PrefsAccount *ac)
 
 static void inc_finished_cb(GObject *obj, gint new_messages)
 {
+#define SYLPF_FUNC_NAME "inc_finished_cb"
+  SYLPF_START_FUNC;
+
   g_print("test: received %d new messages\n", new_messages);
 #if 0
   gint ret = 0;
@@ -1068,5 +1071,7 @@ static void inc_finished_cb(GObject *obj, gint new_messages)
       }
     }
   }
+  SYLPF_END_FUNC;
+#undef SYLPF_FUNC_NAME
 #endif
 }
