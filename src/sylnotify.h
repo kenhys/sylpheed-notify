@@ -123,8 +123,8 @@ static void command_path_clicked(GtkWidget *widget, gpointer data);
 static void inc_start_cb(GObject *obj, PrefsAccount *ac);
 static void inc_finished_cb(GObject *obj, gint new_messages);
 
-#define GET_RC_BOOLEAN(section, keyarg) g_key_file_get_boolean(g_opt.rcfile, section, keyarg, NULL)
-#define SET_RC_BOOLEAN(section, keyarg,valarg) g_key_file_set_boolean(g_opt.rcfile, section, keyarg, valarg)
+#define GET_RC_BOOLEAN(section, keyarg) g_key_file_get_boolean(SYLPF_OPTION.rcfile, section, keyarg, NULL)
+#define SET_RC_BOOLEAN(section, keyarg,valarg) g_key_file_set_boolean(SYLPF_OPTION.rcfile, section, keyarg, valarg)
 
 #define ALIGN_TOP 3
 #define ALIGN_BOTTOM 3

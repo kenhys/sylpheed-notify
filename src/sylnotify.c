@@ -78,7 +78,7 @@ static GtkWidget *g_plugin_off = NULL;
 static GtkWidget *g_onoff_switch = NULL;
 static GtkTooltips *g_tooltip = NULL;
 
-static SylNotifyOption g_opt;
+static SylNotifyOption SYLPF_OPTION;
 
 void plugin_load(void)
 {
@@ -129,14 +129,14 @@ void plugin_load(void)
   info.name = g_strdup(_(PLUGIN_NAME));
   info.description = g_strdup(_(PLUGIN_DESC));
 
-  g_opt.rcpath = g_strconcat(get_rc_dir(), G_DIR_SEPARATOR_S, SYLNOTIFYRC, NULL);
-  g_opt.rcfile = g_key_file_new();
+  SYLPF_OPTION.rcpath = g_strconcat(get_rc_dir(), G_DIR_SEPARATOR_S, SYLNOTIFYRC, NULL);
+  SYLPF_OPTION.rcfile = g_key_file_new();
 
-  if (g_key_file_load_from_file(g_opt.rcfile, g_opt.rcpath, G_KEY_FILE_KEEP_COMMENTS, NULL)){
-    g_opt.startup_flag = GET_RC_BOOLEAN(SYLNOTIFY, "startup");
-    debug_print("startup:%s", g_opt.startup_flag ? "true" : "false");
+  if (g_key_file_load_from_file(SYLPF_OPTION.rcfile, SYLPF_OPTION.rcpath, G_KEY_FILE_KEEP_COMMENTS, NULL)){
+    SYLPF_OPTION.startup_flag = GET_RC_BOOLEAN(SYLNOTIFY, "startup");
+    debug_print("startup:%s", SYLPF_OPTION.startup_flag ? "true" : "false");
 
-    if (g_opt.startup_flag != FALSE){
+    if (SYLPF_OPTION.startup_flag != FALSE){
       g_enable=TRUE;
       gtk_widget_hide(g_plugin_off);
       gtk_widget_show(g_plugin_on);
@@ -152,59 +152,59 @@ void plugin_load(void)
                            NULL);
     }
 
-    g_opt.growl_flag=GET_RC_BOOLEAN(SYLNOTIFY, "growl");
-    debug_print("use growl:%s\n", g_opt.growl_flag ? "true" : "false");
-    g_opt.snarl_flag=GET_RC_BOOLEAN(SYLNOTIFY, "snarl");
-    debug_print("use snarl:%s\n", g_opt.snarl_flag ? "true" : "false");
+    SYLPF_OPTION.growl_flag=GET_RC_BOOLEAN(SYLNOTIFY, "growl");
+    debug_print("use growl:%s\n", SYLPF_OPTION.growl_flag ? "true" : "false");
+    SYLPF_OPTION.snarl_flag=GET_RC_BOOLEAN(SYLNOTIFY, "snarl");
+    debug_print("use snarl:%s\n", SYLPF_OPTION.snarl_flag ? "true" : "false");
     
-    gchar *pattern = g_key_file_get_string(g_opt.rcfile, SYLNOTIFY, "pattern", NULL);
+    gchar *pattern = g_key_file_get_string(SYLPF_OPTION.rcfile, SYLNOTIFY, "pattern", NULL);
     if (pattern != NULL) {
       if (strcmp(pattern, "summary") == 0) {
-        g_opt.pattern_summary_flag = TRUE;
-        g_opt.pattern_all_flag = FALSE;
+        SYLPF_OPTION.pattern_summary_flag = TRUE;
+        SYLPF_OPTION.pattern_all_flag = FALSE;
       } else if (strcmp(pattern, "all") == 0) {
-        g_opt.pattern_summary_flag = FALSE;
-        g_opt.pattern_all_flag = TRUE;
+        SYLPF_OPTION.pattern_summary_flag = FALSE;
+        SYLPF_OPTION.pattern_all_flag = TRUE;
       } else {
-        g_opt.pattern_summary_flag = TRUE;
-        g_opt.pattern_all_flag = FALSE;
+        SYLPF_OPTION.pattern_summary_flag = TRUE;
+        SYLPF_OPTION.pattern_all_flag = FALSE;
       }
     } else {
-      g_opt.pattern_summary_flag = TRUE;
-      g_opt.pattern_all_flag = FALSE;
+      SYLPF_OPTION.pattern_summary_flag = TRUE;
+      SYLPF_OPTION.pattern_all_flag = FALSE;
     }
     
     /* Growl */
-    g_opt.growl_gntp_flag=GET_RC_BOOLEAN(SYLNOTIFY_GROWL, "gntp");
-    debug_print("use gntp:%s\n", g_opt.growl_gntp_flag ? "true" : "false");
-    g_opt.growl_growlnotify_flag=GET_RC_BOOLEAN(SYLNOTIFY_GROWL, "growlnotify");
-    debug_print("use growlnotify:%s\n", g_opt.growl_growlnotify_flag ? "true" : "false");
+    SYLPF_OPTION.growl_gntp_flag=GET_RC_BOOLEAN(SYLNOTIFY_GROWL, "gntp");
+    debug_print("use gntp:%s\n", SYLPF_OPTION.growl_gntp_flag ? "true" : "false");
+    SYLPF_OPTION.growl_growlnotify_flag=GET_RC_BOOLEAN(SYLNOTIFY_GROWL, "growlnotify");
+    debug_print("use growlnotify:%s\n", SYLPF_OPTION.growl_growlnotify_flag ? "true" : "false");
     
     /* Snarl */
-    g_opt.snarl_snp_flag=GET_RC_BOOLEAN(SYLNOTIFY_SNARL, "snp");
-    debug_print("use snp:%s\n", g_opt.snarl_snp_flag ? "true" : "false");
-    g_opt.snarl_gntp_flag=GET_RC_BOOLEAN(SYLNOTIFY_SNARL, "gntp");
-    debug_print("use gntp:%s\n", g_opt.snarl_gntp_flag ? "true" : "false");
-    g_opt.snarl_heysnarl_flag=GET_RC_BOOLEAN(SYLNOTIFY_SNARL, "heysnarl");
-    debug_print("use heysnarl:%s\n", g_opt.snarl_heysnarl_flag ? "true" : "false");
-    g_opt.snarl_snarlcmd_flag=GET_RC_BOOLEAN(SYLNOTIFY_SNARL, "snarlcmd");
-    debug_print("use snarlcmd:%s\n", g_opt.snarl_snarlcmd_flag ? "true" : "false");
+    SYLPF_OPTION.snarl_snp_flag=GET_RC_BOOLEAN(SYLNOTIFY_SNARL, "snp");
+    debug_print("use snp:%s\n", SYLPF_OPTION.snarl_snp_flag ? "true" : "false");
+    SYLPF_OPTION.snarl_gntp_flag=GET_RC_BOOLEAN(SYLNOTIFY_SNARL, "gntp");
+    debug_print("use gntp:%s\n", SYLPF_OPTION.snarl_gntp_flag ? "true" : "false");
+    SYLPF_OPTION.snarl_heysnarl_flag=GET_RC_BOOLEAN(SYLNOTIFY_SNARL, "heysnarl");
+    debug_print("use heysnarl:%s\n", SYLPF_OPTION.snarl_heysnarl_flag ? "true" : "false");
+    SYLPF_OPTION.snarl_snarlcmd_flag=GET_RC_BOOLEAN(SYLNOTIFY_SNARL, "snarlcmd");
+    debug_print("use snarlcmd:%s\n", SYLPF_OPTION.snarl_snarlcmd_flag ? "true" : "false");
 
   } else {
       /**/
-      g_opt.startup_flag = FALSE;
+      SYLPF_OPTION.startup_flag = FALSE;
 
-      g_opt.growl_flag = TRUE;
-      g_opt.snarl_flag = FALSE;
+      SYLPF_OPTION.growl_flag = TRUE;
+      SYLPF_OPTION.snarl_flag = FALSE;
 
-      g_opt.growl_growlnotify_flag = TRUE;
-      g_opt.snarl_snarlcmd_flag = TRUE;
+      SYLPF_OPTION.growl_growlnotify_flag = TRUE;
+      SYLPF_OPTION.snarl_snarlcmd_flag = TRUE;
   }
 }
 
 void plugin_unload(void)
 {
-  g_free(g_opt.rcpath);
+  g_free(SYLPF_OPTION.rcpath);
 }
 
 SylPluginInfo *plugin_info(void)
@@ -221,8 +221,8 @@ gint plugin_interface_version(void)
 static void init_done_cb(GObject *obj, gpointer data)
 {
   debug_print("[DEBUG init_done_cb");
-  if (g_opt.snarl_flag != FALSE) {
-    if (g_opt.snarl_heysnarl_flag != FALSE) {
+  if (SYLPF_OPTION.snarl_flag != FALSE) {
+    if (SYLPF_OPTION.snarl_heysnarl_flag != FALSE) {
       gchar *cmdline = g_strdup_printf("\"%s\" \"register?app-sig=app/Sylpheed&title=%s&icon=%s\"",
                                        "C:\\Program Files (x86)\\full phat\\Snarl\\tools\\heysnarl.exe",
                                        "Sylpheed",
@@ -258,71 +258,71 @@ static void app_force_exit_cb(GObject *obj, gpointer data)
  */
 static void prefs_ok_cb(GtkWidget *widget, gpointer data)
 {
-    g_key_file_load_from_file(g_opt.rcfile, g_opt.rcpath, G_KEY_FILE_KEEP_COMMENTS, NULL);
+    g_key_file_load_from_file(SYLPF_OPTION.rcfile, SYLPF_OPTION.rcpath, G_KEY_FILE_KEEP_COMMENTS, NULL);
 
-    gboolean flg = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(g_opt.startup));
+    gboolean flg = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(SYLPF_OPTION.startup));
     SET_RC_BOOLEAN(SYLNOTIFY, "startup", flg);
     debug_print("startup:%s\n", flg ? "true" : "false");
 
-    flg = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(g_opt.snarl));
+    flg = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(SYLPF_OPTION.snarl));
     SET_RC_BOOLEAN(SYLNOTIFY, "snarl", flg);
     debug_print("use snarl:%s\n", flg ? "true" : "false");
 
-    flg = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(g_opt.growl));
+    flg = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(SYLPF_OPTION.growl));
     SET_RC_BOOLEAN(SYLNOTIFY, "growl", flg);
     debug_print("use growl:%s\n", flg ? "true" : "false");
 
-    flg = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(g_opt.pattern_summary));
+    flg = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(SYLPF_OPTION.pattern_summary));
     if (flg != FALSE) {
-      g_key_file_set_string (g_opt.rcfile, SYLNOTIFY, "pattern", "summary");
+      g_key_file_set_string (SYLPF_OPTION.rcfile, SYLNOTIFY, "pattern", "summary");
       debug_print("use pattern:summary\n");
     }
 
-    flg = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(g_opt.pattern_all));
+    flg = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(SYLPF_OPTION.pattern_all));
     if (flg != FALSE) {
-      g_key_file_set_string (g_opt.rcfile, SYLNOTIFY, "pattern", "all");
+      g_key_file_set_string (SYLPF_OPTION.rcfile, SYLNOTIFY, "pattern", "all");
       debug_print("use pattern:all\n");
     }
 
-    flg = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(g_opt.snarl_snp));
+    flg = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(SYLPF_OPTION.snarl_snp));
     SET_RC_BOOLEAN(SYLNOTIFY_SNARL, "snp", flg);
     debug_print("use snarl snp:%s\n", flg ? "true" : "false");
 
-    flg = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(g_opt.snarl_gntp));
+    flg = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(SYLPF_OPTION.snarl_gntp));
     SET_RC_BOOLEAN(SYLNOTIFY_SNARL, "gntp", flg);
     debug_print("use snarl gntp:%s\n", flg ? "true" : "false");
 
-    flg = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(g_opt.snarl_heysnarl));
+    flg = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(SYLPF_OPTION.snarl_heysnarl));
     SET_RC_BOOLEAN(SYLNOTIFY_SNARL, "heysnarl", flg);
     debug_print("use heysnarl:%s\n", flg ? "true" : "false");
 
-    flg = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(g_opt.snarl_snarlcmd));
+    flg = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(SYLPF_OPTION.snarl_snarlcmd));
     SET_RC_BOOLEAN(SYLNOTIFY_SNARL, "snarlcmd", flg);
     debug_print("use snarlcmd:%s\n", flg ? "true" : "false");
 
-    gchar *buf = gtk_entry_get_text(GTK_ENTRY(g_opt.snarl_heysnarl_path));
-    g_key_file_set_string (g_opt.rcfile, SYLNOTIFY_SNARL, "heysnarl_path", buf);
+    gchar *buf = gtk_entry_get_text(GTK_ENTRY(SYLPF_OPTION.snarl_heysnarl_path));
+    g_key_file_set_string (SYLPF_OPTION.rcfile, SYLNOTIFY_SNARL, "heysnarl_path", buf);
     debug_print("use heysnarl path:%s\n", buf);
 
-    buf = gtk_entry_get_text(GTK_ENTRY(g_opt.snarl_snarlcmd_path));
-    g_key_file_set_string (g_opt.rcfile, SYLNOTIFY_SNARL, "snarlcmd_path", buf);
+    buf = gtk_entry_get_text(GTK_ENTRY(SYLPF_OPTION.snarl_snarlcmd_path));
+    g_key_file_set_string (SYLPF_OPTION.rcfile, SYLNOTIFY_SNARL, "snarlcmd_path", buf);
     debug_print("use snarlcmd path:%s\n", buf);
 
-    flg = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(g_opt.growl_gntp));
+    flg = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(SYLPF_OPTION.growl_gntp));
     SET_RC_BOOLEAN(SYLNOTIFY_GROWL, "gntp", flg);
     debug_print("use growl gntp:%s\n", flg ? "true" : "false");
 
-    flg = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(g_opt.growl_growlnotify));
+    flg = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(SYLPF_OPTION.growl_growlnotify));
     SET_RC_BOOLEAN(SYLNOTIFY_GROWL, "growlnotify", flg);
     debug_print("use growlnotify:%s\n", flg ? "true" : "false");
 
-    buf = gtk_entry_get_text(GTK_ENTRY(g_opt.growl_growlnotify_path));
-    g_key_file_set_string (g_opt.rcfile, SYLNOTIFY_GROWL, "growlnotify_path", buf);
+    buf = gtk_entry_get_text(GTK_ENTRY(SYLPF_OPTION.growl_growlnotify_path));
+    g_key_file_set_string (SYLPF_OPTION.rcfile, SYLNOTIFY_GROWL, "growlnotify_path", buf);
     debug_print("use growlnotify path:%s\n", buf);
 
     gsize sz;
-    buf=g_key_file_to_data(g_opt.rcfile, &sz, NULL);
-    g_file_set_contents(g_opt.rcpath, buf, sz, NULL);
+    buf=g_key_file_to_data(SYLPF_OPTION.rcfile, &sz, NULL);
+    g_file_set_contents(SYLPF_OPTION.rcpath, buf, sz, NULL);
     
     gtk_widget_destroy(GTK_WIDGET(data));
 }
@@ -348,9 +348,9 @@ static void prefs_test_cb(GtkWidget *widget, gpointer data)
 #endif
 
 #if DEBUG
-    g_opt.growl_growlnotify_flag = TRUE;
+    SYLPF_OPTION.growl_growlnotify_flag = TRUE;
     gint ret;
-    if (g_opt.growl_growlnotify_flag != FALSE) {
+    if (SYLPF_OPTION.growl_growlnotify_flag != FALSE) {
       gchar *cmdline = g_strdup_printf("\"%s\" /a:%s /ai:%s /r:\"%s\" \"%s\"",
                                        "C:\\WinApp\\growlnotify\\growlnotify.exe",
                                        "Sylpheed",
@@ -368,7 +368,7 @@ static void prefs_test_cb(GtkWidget *widget, gpointer data)
                                 );
       gint ret = execute_command_line(cmdline, FALSE);
     }
-    if (g_opt.snarl_heysnarl_flag != FALSE) {
+    if (SYLPF_OPTION.snarl_heysnarl_flag != FALSE) {
       gchar *cmdline = g_strdup_printf("\"%s\" \"register?app-sig=app/Sylpheed&title=%s&icon=%s\"",
                                        "C:\\Program Files (x86)\\full phat\\Snarl\\tools\\heysnarl.exe",
                                        "Sylpheed",
@@ -390,13 +390,13 @@ static void prefs_test_cb(GtkWidget *widget, gpointer data)
 static void snp_mail_cb( GtkButton *widget,
                      gpointer   data )
 {
-  gtk_widget_set_sensitive(GTK_WIDGET(g_opt.snarl_gntp), FALSE);
+  gtk_widget_set_sensitive(GTK_WIDGET(SYLPF_OPTION.snarl_gntp), FALSE);
 }
 
 static void gntp_mail_cb( GtkButton *widget,
                           gpointer   data )
 {
-  gtk_widget_set_sensitive(GTK_WIDGET(g_opt.snarl_snp), FALSE);
+  gtk_widget_set_sensitive(GTK_WIDGET(SYLPF_OPTION.snarl_snp), FALSE);
 }
 
 static void exec_sylnotify_menu_cb(void)
@@ -426,15 +426,15 @@ static void exec_sylnotify_menu_cb(void)
   /* notebook */ 
   GtkWidget *notebook = gtk_notebook_new();
   /* main tab */
-  create_config_main_page(notebook, g_opt.rcfile);
+  create_config_main_page(notebook, SYLPF_OPTION.rcfile);
 #ifdef G_OS_WIN32
   /* Growl option tab */
-  create_config_growl_page(notebook, g_opt.rcfile);
+  create_config_growl_page(notebook, SYLPF_OPTION.rcfile);
   /* Snarl option tab */
-  create_config_snarl_page(notebook, g_opt.rcfile);
+  create_config_snarl_page(notebook, SYLPF_OPTION.rcfile);
 #endif
   /* about, copyright tab */
-  create_config_about_page(notebook, g_opt.rcfile);
+  create_config_about_page(notebook, SYLPF_OPTION.rcfile);
 
   gtk_widget_show(notebook);
   gtk_box_pack_start(GTK_BOX(vbox), notebook, TRUE, TRUE, 0);
@@ -478,81 +478,81 @@ static void exec_sylnotify_menu_cb(void)
 #endif
     
   /* load settings */
-  if (g_key_file_load_from_file(g_opt.rcfile, g_opt.rcpath, G_KEY_FILE_KEEP_COMMENTS, NULL)){
-    g_opt.startup_flag = GET_RC_BOOLEAN(SYLNOTIFY, "startup");
-    debug_print("startup:%s\n", g_opt.startup_flag ? "true" : "false");
-    if (g_opt.startup_flag){
-      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.startup), TRUE);
+  if (g_key_file_load_from_file(SYLPF_OPTION.rcfile, SYLPF_OPTION.rcpath, G_KEY_FILE_KEEP_COMMENTS, NULL)){
+    SYLPF_OPTION.startup_flag = GET_RC_BOOLEAN(SYLNOTIFY, "startup");
+    debug_print("startup:%s\n", SYLPF_OPTION.startup_flag ? "true" : "false");
+    if (SYLPF_OPTION.startup_flag){
+      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(SYLPF_OPTION.startup), TRUE);
     }
 
-    g_opt.snarl_flag = GET_RC_BOOLEAN(SYLNOTIFY, "snarl");
-    debug_print("use snarl:%s\n", g_opt.snarl_flag ? "true" : "false");
-    if (g_opt.snarl_flag != FALSE){
-      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.snarl), TRUE);
+    SYLPF_OPTION.snarl_flag = GET_RC_BOOLEAN(SYLNOTIFY, "snarl");
+    debug_print("use snarl:%s\n", SYLPF_OPTION.snarl_flag ? "true" : "false");
+    if (SYLPF_OPTION.snarl_flag != FALSE){
+      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(SYLPF_OPTION.snarl), TRUE);
     }
 
-    g_opt.growl_flag = GET_RC_BOOLEAN(SYLNOTIFY, "growl");
-    debug_print("use growl:%s\n", g_opt.growl_flag ? "true" : "false");
-    if (g_opt.growl_flag != FALSE){
-      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.growl), TRUE);
+    SYLPF_OPTION.growl_flag = GET_RC_BOOLEAN(SYLNOTIFY, "growl");
+    debug_print("use growl:%s\n", SYLPF_OPTION.growl_flag ? "true" : "false");
+    if (SYLPF_OPTION.growl_flag != FALSE){
+      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(SYLPF_OPTION.growl), TRUE);
     }
 
-    g_opt.snarl_snp_flag = GET_RC_BOOLEAN(SYLNOTIFY_SNARL, "snp");
-    debug_print("use snp:%s\n", g_opt.snarl_snp_flag ? "true" : "false");
-    if (g_opt.snarl_snp_flag){
-      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.snarl_snp), TRUE);
+    SYLPF_OPTION.snarl_snp_flag = GET_RC_BOOLEAN(SYLNOTIFY_SNARL, "snp");
+    debug_print("use snp:%s\n", SYLPF_OPTION.snarl_snp_flag ? "true" : "false");
+    if (SYLPF_OPTION.snarl_snp_flag){
+      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(SYLPF_OPTION.snarl_snp), TRUE);
     }
 
-    g_opt.snarl_gntp_flag = GET_RC_BOOLEAN(SYLNOTIFY_SNARL, "gntp");
-    debug_print("use gntp:%s\n", g_opt.snarl_gntp_flag ? "true" : "false");
-    if (g_opt.snarl_gntp_flag){
-      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.snarl_gntp), TRUE);
+    SYLPF_OPTION.snarl_gntp_flag = GET_RC_BOOLEAN(SYLNOTIFY_SNARL, "gntp");
+    debug_print("use gntp:%s\n", SYLPF_OPTION.snarl_gntp_flag ? "true" : "false");
+    if (SYLPF_OPTION.snarl_gntp_flag){
+      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(SYLPF_OPTION.snarl_gntp), TRUE);
     }
 
-    g_opt.snarl_heysnarl_flag = GET_RC_BOOLEAN(SYLNOTIFY_SNARL, "heysnarl");
-    debug_print("use heysnarl:%s\n", g_opt.snarl_heysnarl_flag ? "true" : "false");
-    if (g_opt.snarl_heysnarl_flag != FALSE){
-      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.snarl_heysnarl), TRUE);
+    SYLPF_OPTION.snarl_heysnarl_flag = GET_RC_BOOLEAN(SYLNOTIFY_SNARL, "heysnarl");
+    debug_print("use heysnarl:%s\n", SYLPF_OPTION.snarl_heysnarl_flag ? "true" : "false");
+    if (SYLPF_OPTION.snarl_heysnarl_flag != FALSE){
+      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(SYLPF_OPTION.snarl_heysnarl), TRUE);
     }
 
-    gchar *buf = g_key_file_get_string(g_opt.rcfile, SYLNOTIFY_SNARL, "heysnarl_path", NULL);
-    if (g_opt.snarl_heysnarl_flag != FALSE && buf != NULL){
+    gchar *buf = g_key_file_get_string(SYLPF_OPTION.rcfile, SYLNOTIFY_SNARL, "heysnarl_path", NULL);
+    if (SYLPF_OPTION.snarl_heysnarl_flag != FALSE && buf != NULL){
       debug_print("use heysnarl path:%s\n", buf);
-      gtk_entry_set_text(GTK_ENTRY(g_opt.snarl_heysnarl_path), buf);
+      gtk_entry_set_text(GTK_ENTRY(SYLPF_OPTION.snarl_heysnarl_path), buf);
     }
 
-    g_opt.snarl_snarlcmd_flag = GET_RC_BOOLEAN(SYLNOTIFY_SNARL, "snarlcmd");
-    debug_print("use snarlcmd:%s\n", g_opt.snarl_snarlcmd_flag ? "true" : "false");
-    if (g_opt.snarl_snarlcmd_flag != FALSE){
-      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.snarl_snarlcmd), TRUE);
+    SYLPF_OPTION.snarl_snarlcmd_flag = GET_RC_BOOLEAN(SYLNOTIFY_SNARL, "snarlcmd");
+    debug_print("use snarlcmd:%s\n", SYLPF_OPTION.snarl_snarlcmd_flag ? "true" : "false");
+    if (SYLPF_OPTION.snarl_snarlcmd_flag != FALSE){
+      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(SYLPF_OPTION.snarl_snarlcmd), TRUE);
     }
 
-    buf = g_key_file_get_string(g_opt.rcfile, SYLNOTIFY_SNARL, "snarlcmd_path", NULL);
-    if (g_opt.snarl_snarlcmd_flag != FALSE && buf != NULL){
+    buf = g_key_file_get_string(SYLPF_OPTION.rcfile, SYLNOTIFY_SNARL, "snarlcmd_path", NULL);
+    if (SYLPF_OPTION.snarl_snarlcmd_flag != FALSE && buf != NULL){
       debug_print("use snarl_cmd path:%s\n", buf);
-      gtk_entry_set_text(GTK_ENTRY(g_opt.snarl_snarlcmd_path), buf);
+      gtk_entry_set_text(GTK_ENTRY(SYLPF_OPTION.snarl_snarlcmd_path), buf);
     }
 
-    g_opt.growl_gntp_flag = GET_RC_BOOLEAN(SYLNOTIFY_GROWL, "gntp");
-    debug_print("use growl gntp:%s\n", g_opt.growl_gntp_flag ? "true" : "false");
-    if (g_opt.growl_gntp_flag != FALSE){
-      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.growl_gntp), TRUE);
+    SYLPF_OPTION.growl_gntp_flag = GET_RC_BOOLEAN(SYLNOTIFY_GROWL, "gntp");
+    debug_print("use growl gntp:%s\n", SYLPF_OPTION.growl_gntp_flag ? "true" : "false");
+    if (SYLPF_OPTION.growl_gntp_flag != FALSE){
+      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(SYLPF_OPTION.growl_gntp), TRUE);
     }
 
-    g_opt.growl_growlnotify_flag = GET_RC_BOOLEAN(SYLNOTIFY_GROWL, "growlnotify");
-    debug_print("use growlnotify:%s\n", g_opt.growl_growlnotify_flag ? "true" : "false");
-    if (g_opt.growl_growlnotify_flag != FALSE){
-      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.growl_growlnotify), TRUE);
+    SYLPF_OPTION.growl_growlnotify_flag = GET_RC_BOOLEAN(SYLNOTIFY_GROWL, "growlnotify");
+    debug_print("use growlnotify:%s\n", SYLPF_OPTION.growl_growlnotify_flag ? "true" : "false");
+    if (SYLPF_OPTION.growl_growlnotify_flag != FALSE){
+      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(SYLPF_OPTION.growl_growlnotify), TRUE);
     }
 
-    buf = g_key_file_get_string(g_opt.rcfile, SYLNOTIFY_GROWL, "growlnotify_path", NULL);
-    if (g_opt.growl_growlnotify_flag != FALSE && buf != NULL){
+    buf = g_key_file_get_string(SYLPF_OPTION.rcfile, SYLNOTIFY_GROWL, "growlnotify_path", NULL);
+    if (SYLPF_OPTION.growl_growlnotify_flag != FALSE && buf != NULL){
       debug_print("use growlnotify path:%s\n", buf);
-      gtk_entry_set_text(GTK_ENTRY(g_opt.growl_growlnotify_path), buf);
+      gtk_entry_set_text(GTK_ENTRY(SYLPF_OPTION.growl_growlnotify_path), buf);
     }
   }else{
     /* default settings */
-    g_opt.startup_flag = FALSE;
+    SYLPF_OPTION.startup_flag = FALSE;
   }
  
   gtk_widget_show(window);
@@ -578,12 +578,12 @@ static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
   gtk_alignment_set_padding(GTK_ALIGNMENT(startup_frm_align), ALIGN_TOP, ALIGN_BOTTOM, ALIGN_LEFT, ALIGN_RIGHT);
 
 
-  g_opt.startup = gtk_check_button_new_with_label(_("Enable plugin on startup."));
-  gtk_container_add(GTK_CONTAINER(startup_frm_align), g_opt.startup);
+  SYLPF_OPTION.startup = gtk_check_button_new_with_label(_("Enable plugin on startup."));
+  gtk_container_add(GTK_CONTAINER(startup_frm_align), SYLPF_OPTION.startup);
   gtk_container_add(GTK_CONTAINER(startup_frm), startup_frm_align);
   gtk_container_add(GTK_CONTAINER(startup_align), startup_frm);
 
-  gtk_widget_show(g_opt.startup);
+  gtk_widget_show(SYLPF_OPTION.startup);
 
   /* Application */
   GtkWidget *app_align = gtk_alignment_new(0, 0, 1, 1);
@@ -593,20 +593,20 @@ static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
   GtkWidget *app_frm_align = gtk_alignment_new(0, 0, 1, 1);
   gtk_alignment_set_padding(GTK_ALIGNMENT(app_frm_align), ALIGN_TOP, ALIGN_BOTTOM, ALIGN_LEFT, ALIGN_RIGHT);
 
-  g_opt.growl = gtk_radio_button_new_with_label(NULL, _("Growl"));
-  g_opt.snarl = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON (g_opt.growl), _("Snarl"));
+  SYLPF_OPTION.growl = gtk_radio_button_new_with_label(NULL, _("Growl"));
+  SYLPF_OPTION.snarl = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON (SYLPF_OPTION.growl), _("Snarl"));
 
   GtkWidget *vbox_app = gtk_vbox_new(FALSE, BOX_SPACE);
-  gtk_box_pack_start(GTK_BOX(vbox_app), g_opt.growl, FALSE, FALSE, 0);
-  gtk_box_pack_start(GTK_BOX(vbox_app), g_opt.snarl, FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(vbox_app), SYLPF_OPTION.growl, FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(vbox_app), SYLPF_OPTION.snarl, FALSE, FALSE, 0);
 
   gtk_container_add(GTK_CONTAINER(app_frm_align), vbox_app);
   gtk_container_add(GTK_CONTAINER(app_frm), app_frm_align);
   gtk_container_add(GTK_CONTAINER(app_align), app_frm);
 
   /* disable snarl */
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.growl), g_opt.growl_flag);
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.snarl), g_opt.snarl_flag);
+  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(SYLPF_OPTION.growl), SYLPF_OPTION.growl_flag);
+  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(SYLPF_OPTION.snarl), SYLPF_OPTION.snarl_flag);
 
   /* Notification */
   GtkWidget *pattern_align = gtk_alignment_new(0, 0, 1, 1);
@@ -615,14 +615,14 @@ static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
   GtkWidget *pattern_frm_align = gtk_alignment_new(0, 0, 1, 1);
   gtk_alignment_set_padding(GTK_ALIGNMENT(pattern_frm_align), ALIGN_TOP, ALIGN_BOTTOM, ALIGN_LEFT, ALIGN_RIGHT);
 
-  g_opt.pattern_summary = gtk_radio_button_new_with_label(NULL, _("Summary only (when receiving mail and finished)"));
-  g_opt.pattern_all = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON (g_opt.pattern_summary),
+  SYLPF_OPTION.pattern_summary = gtk_radio_button_new_with_label(NULL, _("Summary only (when receiving mail and finished)"));
+  SYLPF_OPTION.pattern_all = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON (SYLPF_OPTION.pattern_summary),
                                                                   _("All (1 notification per new mail)"));
   GtkWidget *pattern_lbl = gtk_label_new(_("Note: IMAP4 is not supported yet."));
 
   GtkWidget *vbox_pattern = gtk_vbox_new(TRUE, BOX_SPACE);
-  gtk_box_pack_start(GTK_BOX(vbox_pattern), g_opt.pattern_summary, FALSE, FALSE, 0);
-  gtk_box_pack_start(GTK_BOX(vbox_pattern), g_opt.pattern_all, FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(vbox_pattern), SYLPF_OPTION.pattern_summary, FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(vbox_pattern), SYLPF_OPTION.pattern_all, FALSE, FALSE, 0);
   gtk_box_pack_start(GTK_BOX(vbox_pattern), pattern_lbl, FALSE, FALSE, 0);
 
   gtk_container_add(GTK_CONTAINER(pattern_frm_align), vbox_pattern);
@@ -654,64 +654,64 @@ static GtkWidget *create_config_snarl_page(GtkWidget *notebook, GKeyFile *pkey)
   gtk_alignment_set_padding(GTK_ALIGNMENT(proto_frm_align), ALIGN_TOP, ALIGN_BOTTOM, ALIGN_LEFT, ALIGN_RIGHT);
 
   /* HeySnarl or NTP or GNTP or HeySnarl or */
-  g_opt.snarl_snp = gtk_radio_button_new_with_label(NULL, _("SNP (Snarl Network Protocol)"));
-  g_opt.snarl_gntp = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (g_opt.snarl_snp),
+  SYLPF_OPTION.snarl_snp = gtk_radio_button_new_with_label(NULL, _("SNP (Snarl Network Protocol)"));
+  SYLPF_OPTION.snarl_gntp = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (SYLPF_OPTION.snarl_snp),
                                                                   _("GNTP (Growl Notification Transport Protocol)"));
-  g_opt.snarl_heysnarl = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON (g_opt.snarl_snp),
+  SYLPF_OPTION.snarl_heysnarl = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON (SYLPF_OPTION.snarl_snp),
                                                          _("HeySnarl (Command line tool)"));
-  g_opt.snarl_snarlcmd = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON (g_opt.snarl_snp),
+  SYLPF_OPTION.snarl_snarlcmd = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON (SYLPF_OPTION.snarl_snp),
                                                          _("Snarl_CMD (Command line tool)"));
 
   /* HeySnarl command */
   GtkWidget *hbox = gtk_hbox_new(FALSE, 0);
   GtkWidget *lbl = gtk_label_new(_("Command Path:"));
-  g_opt.snarl_heysnarl_path = gtk_entry_new();
+  SYLPF_OPTION.snarl_heysnarl_path = gtk_entry_new();
   GtkWidget *cmd_btn = gtk_button_new_from_stock(GTK_STOCK_OPEN);
   gtk_box_pack_start(GTK_BOX(hbox), lbl, FALSE, FALSE, 0);
-  gtk_box_pack_start(GTK_BOX(hbox), g_opt.snarl_heysnarl_path, TRUE, TRUE, 0);
+  gtk_box_pack_start(GTK_BOX(hbox), SYLPF_OPTION.snarl_heysnarl_path, TRUE, TRUE, 0);
   gtk_box_pack_start(GTK_BOX(hbox), cmd_btn, FALSE, FALSE, 0);
 
   g_signal_connect(GTK_BUTTON(cmd_btn), "clicked",
-                   G_CALLBACK(command_path_clicked), g_opt.snarl_heysnarl_path);
+                   G_CALLBACK(command_path_clicked), SYLPF_OPTION.snarl_heysnarl_path);
 
   /* Snarl_CMD.exe */
   GtkWidget *hbox2 = gtk_hbox_new(FALSE, 0);
   lbl = gtk_label_new(_("Command Path:"));
-  g_opt.snarl_snarlcmd_path = gtk_entry_new();
+  SYLPF_OPTION.snarl_snarlcmd_path = gtk_entry_new();
   cmd_btn = gtk_button_new_from_stock(GTK_STOCK_OPEN);
   gtk_box_pack_start(GTK_BOX(hbox2), lbl, FALSE, FALSE, 0);
-  gtk_box_pack_start(GTK_BOX(hbox2), g_opt.snarl_snarlcmd_path, TRUE, TRUE, 0);
+  gtk_box_pack_start(GTK_BOX(hbox2), SYLPF_OPTION.snarl_snarlcmd_path, TRUE, TRUE, 0);
   gtk_box_pack_start(GTK_BOX(hbox2), cmd_btn, FALSE, FALSE, 0);
 
   g_signal_connect(GTK_BUTTON(cmd_btn), "clicked",
-                   G_CALLBACK(command_path_clicked), g_opt.snarl_snarlcmd_path);
+                   G_CALLBACK(command_path_clicked), SYLPF_OPTION.snarl_snarlcmd_path);
 
   GtkWidget *vbox_cond = gtk_vbox_new(FALSE, 0);
     
   /* enable or disable control */
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.snarl_snp), FALSE);
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.snarl_gntp), FALSE);
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.snarl_heysnarl), FALSE);
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.snarl_snarlcmd), TRUE);
+  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(SYLPF_OPTION.snarl_snp), FALSE);
+  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(SYLPF_OPTION.snarl_gntp), FALSE);
+  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(SYLPF_OPTION.snarl_heysnarl), FALSE);
+  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(SYLPF_OPTION.snarl_snarlcmd), TRUE);
 
   /* currently does not support snarl */
-  gtk_widget_set_sensitive(GTK_WIDGET(g_opt.snarl_snp), FALSE);
-  gtk_widget_set_sensitive(GTK_WIDGET(g_opt.snarl_gntp), FALSE);
-  gtk_widget_set_sensitive(GTK_WIDGET(g_opt.snarl_heysnarl), FALSE);
+  gtk_widget_set_sensitive(GTK_WIDGET(SYLPF_OPTION.snarl_snp), FALSE);
+  gtk_widget_set_sensitive(GTK_WIDGET(SYLPF_OPTION.snarl_gntp), FALSE);
+  gtk_widget_set_sensitive(GTK_WIDGET(SYLPF_OPTION.snarl_heysnarl), FALSE);
 
-  gtk_box_pack_start(GTK_BOX(vbox_cond), g_opt.snarl_snp, FALSE, FALSE, 0);
-  gtk_box_pack_start(GTK_BOX(vbox_cond), g_opt.snarl_gntp, FALSE, FALSE, 0);
-  gtk_box_pack_start(GTK_BOX(vbox_cond), g_opt.snarl_heysnarl, FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(vbox_cond), SYLPF_OPTION.snarl_snp, FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(vbox_cond), SYLPF_OPTION.snarl_gntp, FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(vbox_cond), SYLPF_OPTION.snarl_heysnarl, FALSE, FALSE, 0);
   gtk_box_pack_start(GTK_BOX(vbox_cond), hbox, FALSE, FALSE, 0);
-  gtk_box_pack_start(GTK_BOX(vbox_cond), g_opt.snarl_snarlcmd, FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(vbox_cond), SYLPF_OPTION.snarl_snarlcmd, FALSE, FALSE, 0);
   gtk_box_pack_start(GTK_BOX(vbox_cond), hbox2, FALSE, FALSE, 0);
 
   gtk_widget_show_all(vbox_cond);
 
-  g_signal_connect(GTK_BUTTON(g_opt.snarl_snp), "clicked",
+  g_signal_connect(GTK_BUTTON(SYLPF_OPTION.snarl_snp), "clicked",
                    G_CALLBACK(snp_mail_cb), NULL);
 
-  g_signal_connect(GTK_BUTTON(g_opt.snarl_gntp), "clicked",
+  g_signal_connect(GTK_BUTTON(SYLPF_OPTION.snarl_gntp), "clicked",
                    G_CALLBACK(gntp_mail_cb), NULL);
 
 
@@ -744,36 +744,36 @@ static GtkWidget *create_config_growl_page(GtkWidget *notebook, GKeyFile *pkey)
 
 
   /* GNTP or growlnotify */
-  g_opt.growl_gntp = gtk_radio_button_new_with_label(NULL, _("GNTP (Growl Notification Transport Protocol)"));
-  g_opt.growl_growlnotify = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (g_opt.growl_gntp),
+  SYLPF_OPTION.growl_gntp = gtk_radio_button_new_with_label(NULL, _("GNTP (Growl Notification Transport Protocol)"));
+  SYLPF_OPTION.growl_growlnotify = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (SYLPF_OPTION.growl_gntp),
                                                                   _("growlnotify (Command line tool)"));
 
   /* disable gntp and enable growlnotify */
-  gtk_widget_set_sensitive(GTK_WIDGET(g_opt.growl_gntp), FALSE);
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.growl_growlnotify), TRUE);
+  gtk_widget_set_sensitive(GTK_WIDGET(SYLPF_OPTION.growl_gntp), FALSE);
+  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(SYLPF_OPTION.growl_growlnotify), TRUE);
 
   GtkWidget *hbox = gtk_hbox_new(FALSE, 0);
   GtkWidget *lbl = gtk_label_new(_("Command Path:"));
-  g_opt.growl_growlnotify_path = gtk_entry_new();
+  SYLPF_OPTION.growl_growlnotify_path = gtk_entry_new();
   GtkWidget *cmd_btn = gtk_button_new_from_stock(GTK_STOCK_OPEN);
   gtk_box_pack_start(GTK_BOX(hbox), lbl, FALSE, FALSE, 0);
-  gtk_box_pack_start(GTK_BOX(hbox), g_opt.growl_growlnotify_path, TRUE, TRUE, 0);
+  gtk_box_pack_start(GTK_BOX(hbox), SYLPF_OPTION.growl_growlnotify_path, TRUE, TRUE, 0);
   gtk_box_pack_start(GTK_BOX(hbox), cmd_btn, FALSE, FALSE, 0);
 
   GtkWidget *vbox_cond = gtk_vbox_new(FALSE, 0);
     
-  gtk_box_pack_start(GTK_BOX(vbox_cond), g_opt.growl_gntp, FALSE, FALSE, 0);
-  gtk_box_pack_start(GTK_BOX(vbox_cond), g_opt.growl_growlnotify, FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(vbox_cond), SYLPF_OPTION.growl_gntp, FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(vbox_cond), SYLPF_OPTION.growl_growlnotify, FALSE, FALSE, 0);
   gtk_box_pack_start(GTK_BOX(vbox_cond), hbox, FALSE, FALSE, 0);
 
-  g_signal_connect(GTK_BUTTON(g_opt.growl_gntp), "clicked",
+  g_signal_connect(GTK_BUTTON(SYLPF_OPTION.growl_gntp), "clicked",
                    G_CALLBACK(snp_mail_cb), NULL);
 
-  g_signal_connect(GTK_BUTTON(g_opt.growl_growlnotify), "clicked",
+  g_signal_connect(GTK_BUTTON(SYLPF_OPTION.growl_growlnotify), "clicked",
                    G_CALLBACK(gntp_mail_cb), NULL);
 
   g_signal_connect(GTK_BUTTON(cmd_btn), "clicked",
-                   G_CALLBACK(command_path_clicked), g_opt.growl_growlnotify_path);
+                   G_CALLBACK(command_path_clicked), SYLPF_OPTION.growl_growlnotify_path);
 
   gtk_container_add(GTK_CONTAINER(proto_frm_align), vbox_cond);
   gtk_container_add(GTK_CONTAINER(proto_frm), proto_frm_align);
@@ -870,7 +870,7 @@ void exec_sylnotify_cb(GObject *obj, FolderItem *item, const gchar *file, guint 
     return;
   }
 
-  if (g_opt.pattern_all_flag != TRUE || g_opt.pattern_summary_flag != FALSE) {
+  if (SYLPF_OPTION.pattern_all_flag != TRUE || SYLPF_OPTION.pattern_summary_flag != FALSE) {
     debug_print("[DEBUG] notify summary only.\n");
     return;
   }
@@ -887,15 +887,15 @@ void exec_sylnotify_cb(GObject *obj, FolderItem *item, const gchar *file, guint 
   debug_print("[DEBUG] perm_flags:%08x \n", msginfo->flags.perm_flags);
   debug_print("[DEBUG] tmp_flags:%08x \n", msginfo->flags.tmp_flags);
 
-  g_key_file_load_from_file(g_opt.rcfile, g_opt.rcpath, G_KEY_FILE_KEEP_COMMENTS, NULL);
+  g_key_file_load_from_file(SYLPF_OPTION.rcfile, SYLPF_OPTION.rcpath, G_KEY_FILE_KEEP_COMMENTS, NULL);
 
 #ifdef DEBUG
   debug_print("[DEBUG] item->path:%s\n", item->path);
 #endif
 
   gint ret = -1;
-  if (g_opt.snarl_flag != FALSE) {
-    if (g_opt.snarl_snp_flag != FALSE) {
+  if (SYLPF_OPTION.snarl_flag != FALSE) {
+    if (SYLPF_OPTION.snarl_snp_flag != FALSE) {
       debug_print("[DEBUG] snarl snp mode\n");
       gint sock = fd_connect_inet(SYLSNARL_PORT);
       debug_print("[DEBUG] sock:%d\n", sock);
@@ -917,14 +917,14 @@ void exec_sylnotify_cb(GObject *obj, FolderItem *item, const gchar *file, guint 
       fd_write_all(sock, buf, strlen(buf));
       g_free(buf);
       fd_close(sock);
-    } else if (g_opt.snarl_gntp_flag != FALSE) {
+    } else if (SYLPF_OPTION.snarl_gntp_flag != FALSE) {
       debug_print("[DEBUG] snarl gntp mode\n");
-    } else if (g_opt.snarl_heysnarl_flag != FALSE) {
+    } else if (SYLPF_OPTION.snarl_heysnarl_flag != FALSE) {
       debug_print("[DEBUG] snarl heysnarl mode\n");
       /**/
-    } else if (g_opt.snarl_snarlcmd_flag != FALSE) {
+    } else if (SYLPF_OPTION.snarl_snarlcmd_flag != FALSE) {
       debug_print("[DEBUG] snarl snarlcmd mode\n");
-      gchar *path = g_key_file_get_string(g_opt.rcfile, SYLNOTIFY_SNARL, "snarlcmd_path", NULL);
+      gchar *path = g_key_file_get_string(SYLPF_OPTION.rcfile, SYLNOTIFY_SNARL, "snarlcmd_path", NULL);
       if (path != NULL) {
         gchar *cmdline = g_strdup_printf("\"%s\" snShowMessage %d \"%s\" \"%s\" \"%s\"",
                                          path,
@@ -935,9 +935,9 @@ void exec_sylnotify_cb(GObject *obj, FolderItem *item, const gchar *file, guint 
         ret = execute_command_line(cmdline, FALSE);
       }
     }
-  } else if (g_opt.growl_flag != FALSE) {
-    if (g_opt.growl_growlnotify_flag != FALSE) {
-      gchar *path = g_key_file_get_string(g_opt.rcfile, SYLNOTIFY_GROWL, "growlnotify_path", NULL);
+  } else if (SYLPF_OPTION.growl_flag != FALSE) {
+    if (SYLPF_OPTION.growl_growlnotify_flag != FALSE) {
+      gchar *path = g_key_file_get_string(SYLPF_OPTION.rcfile, SYLNOTIFY_GROWL, "growlnotify_path", NULL);
       if (path != NULL) {
         gchar *cmdline = g_strdup_printf("\"%s\" /a:%s /ai:%s /r:\"%s\" \"%s\"",
                                          path,
@@ -986,10 +986,10 @@ static void inc_start_cb(GObject *obj, PrefsAccount *ac)
     g_print("test: receive start: all accounts\n");
 #else
   gint ret;
-  if (g_opt.snarl_flag != FALSE) {
-    if (g_opt.snarl_snarlcmd_flag != FALSE) {
+  if (SYLPF_OPTION.snarl_flag != FALSE) {
+    if (SYLPF_OPTION.snarl_snarlcmd_flag != FALSE) {
       debug_print("[DEBUG] snarl snarlcmd mode\n");
-      gchar *path = g_key_file_get_string(g_opt.rcfile, SYLNOTIFY_SNARL, "snarlcmd_path", NULL);
+      gchar *path = g_key_file_get_string(SYLPF_OPTION.rcfile, SYLNOTIFY_SNARL, "snarlcmd_path", NULL);
       if (path != NULL) {
         gchar *cmdline = g_strdup_printf("\"%s\" snShowMessage %d \"%s\" \"%s\" \"%s\"",
                                          path,
@@ -1000,9 +1000,9 @@ static void inc_start_cb(GObject *obj, PrefsAccount *ac)
         ret = execute_command_line(cmdline, FALSE);
       }
     } 
-  } else if (g_opt.growl_flag != FALSE) {
-    if (g_opt.growl_growlnotify_flag != FALSE) {
-      gchar *path = g_key_file_get_string(g_opt.rcfile, SYLNOTIFY_GROWL, "growlnotify_path", NULL);
+  } else if (SYLPF_OPTION.growl_flag != FALSE) {
+    if (SYLPF_OPTION.growl_growlnotify_flag != FALSE) {
+      gchar *path = g_key_file_get_string(SYLPF_OPTION.rcfile, SYLNOTIFY_GROWL, "growlnotify_path", NULL);
       if (path != NULL) {
         gchar *cmdline = g_strdup_printf("\"%s\" /a:%s /ai:%s /r:\"%s\" \"%s\"",
                                          path,
@@ -1036,10 +1036,10 @@ static void inc_finished_cb(GObject *obj, gint new_messages)
   g_print("test: received %d new messages\n", new_messages);
 #if 0
   gint ret = 0;
-  if (g_opt.snarl_flag != FALSE) {
-    if (g_opt.snarl_snarlcmd_flag != FALSE) {
+  if (SYLPF_OPTION.snarl_flag != FALSE) {
+    if (SYLPF_OPTION.snarl_snarlcmd_flag != FALSE) {
       debug_print("[DEBUG] snarl snarlcmd mode\n");
-      gchar *path = g_key_file_get_string(g_opt.rcfile, SYLNOTIFY_SNARL, "snarlcmd_path", NULL);
+      gchar *path = g_key_file_get_string(SYLPF_OPTION.rcfile, SYLNOTIFY_SNARL, "snarlcmd_path", NULL);
       if (path != NULL) {
         gchar *cmdline = g_strdup_printf("\"%s\" snShowMessage %d \"%s\" \"%s\" \"%s\"",
                                          path,
@@ -1051,9 +1051,9 @@ static void inc_finished_cb(GObject *obj, gint new_messages)
         g_free(cmdline);
       }
     } 
-  } else if (g_opt.growl_flag != FALSE) {
-    if (g_opt.growl_growlnotify_flag != FALSE) {
-      gchar *path = g_key_file_get_string(g_opt.rcfile, SYLNOTIFY_GROWL, "growlnotify_path", NULL);
+  } else if (SYLPF_OPTION.growl_flag != FALSE) {
+    if (SYLPF_OPTION.growl_growlnotify_flag != FALSE) {
+      gchar *path = g_key_file_get_string(SYLPF_OPTION.rcfile, SYLNOTIFY_GROWL, "growlnotify_path", NULL);
       if (path != NULL) {
         gchar *cmdline = g_strdup_printf("\"%s\" /a:%s /ai:%s /r:\"%s\" \"%s\"",
                                          path,
