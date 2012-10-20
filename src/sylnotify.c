@@ -82,6 +82,10 @@ static SylNotifyOption SYLPF_OPTION;
 
 void plugin_load(void)
 {
+  GtkWidget *mainwin, *statusbar, *plugin_box;
+  GtkWidget *on_pixbuf, *off_pixbuf;
+  gchar *pattern;
+
 #define SYLPF_FUNC_NAME "plugin_load"
   SYLPF_START_FUNC;
 
@@ -101,14 +105,14 @@ void plugin_load(void)
   syl_plugin_signal_connect("inc-mail-start", G_CALLBACK(inc_start_cb), NULL);
   syl_plugin_signal_connect("inc-mail-finished", G_CALLBACK(inc_finished_cb), NULL);
 
-  GtkWidget *mainwin = syl_plugin_main_window_get();
-  GtkWidget *statusbar = syl_plugin_main_window_get_statusbar();
-  GtkWidget *plugin_box = gtk_hbox_new(FALSE, 0);
+  mainwin = syl_plugin_main_window_get();
+  statusbar = syl_plugin_main_window_get_statusbar();
+  plugin_box = gtk_hbox_new(FALSE, 0);
 
-  GdkPixbuf* on_pixbuf = gdk_pixbuf_new_from_xpm_data((const char**)growl);
+  on_pixbuf = gdk_pixbuf_new_from_xpm_data((const char**)growl);
   g_plugin_on=gtk_image_new_from_pixbuf(on_pixbuf);
     
-  GdkPixbuf* off_pixbuf = gdk_pixbuf_new_from_xpm_data((const char**)growlx);
+  off_pixbuf = gdk_pixbuf_new_from_xpm_data((const char**)growlx);
   g_plugin_off=gtk_image_new_from_pixbuf(off_pixbuf);
 
   gtk_box_pack_start(GTK_BOX(plugin_box), g_plugin_on, FALSE, FALSE, 0);
@@ -160,7 +164,7 @@ void plugin_load(void)
     SYLPF_OPTION.snarl_flag=GET_RC_BOOLEAN(SYLNOTIFY, "snarl");
     debug_print("use snarl:%s\n", SYLPF_OPTION.snarl_flag ? "true" : "false");
     
-    gchar *pattern = g_key_file_get_string(SYLPF_OPTION.rcfile, SYLNOTIFY, "pattern", NULL);
+    pattern = g_key_file_get_string(SYLPF_OPTION.rcfile, SYLNOTIFY, "pattern", NULL);
     if (pattern != NULL) {
       if (strcmp(pattern, "summary") == 0) {
         SYLPF_OPTION.pattern_summary_flag = TRUE;
@@ -231,17 +235,21 @@ gint plugin_interface_version(void)
 
 static void init_done_cb(GObject *obj, gpointer data)
 {
+  gchar *cmdline;
+  gint ret;
+
 #define SYLPF_FUNC_NAME "plugin_unload"
   SYLPF_END_FUNC;
+
   debug_print("[DEBUG init_done_cb");
   if (SYLPF_OPTION.snarl_flag != FALSE) {
     if (SYLPF_OPTION.snarl_heysnarl_flag != FALSE) {
-      gchar *cmdline = g_strdup_printf("\"%s\" \"register?app-sig=app/Sylpheed&title=%s&icon=%s\"",
+      cmdline = g_strdup_printf("\"%s\" \"register?app-sig=app/Sylpheed&title=%s&icon=%s\"",
                                        "C:\\Program Files (x86)\\full phat\\Snarl\\tools\\heysnarl.exe",
                                        "Sylpheed",
                                        "http://sylpheed.sraoss.jp/images/sylpheed.png"
                                        );
-      gint ret = execute_command_line(cmdline, FALSE);
+      ret = execute_command_line(cmdline, FALSE);
       debug_print("ret:%d", ret);
       switch (ret) {
       case SNARL_ERROR_TIMED_OUT:
@@ -273,11 +281,15 @@ static void app_force_exit_cb(GObject *obj, gpointer data)
  */
 static void prefs_ok_cb(GtkWidget *widget, gpointer data)
 {
+  gboolean flg;
+  gchar *buf;
+  gsize sz;
+
 #define SYLPF_FUNC_NAME "plugin_unload"
   SYLPF_END_FUNC;
     g_key_file_load_from_file(SYLPF_OPTION.rcfile, SYLPF_OPTION.rcpath, G_KEY_FILE_KEEP_COMMENTS, NULL);
 
-    gboolean flg = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(SYLPF_OPTION.startup));
+    flg = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(SYLPF_OPTION.startup));
     SET_RC_BOOLEAN(SYLNOTIFY, "startup", flg);
     debug_print("startup:%s\n", flg ? "true" : "false");
 
@@ -317,7 +329,7 @@ static void prefs_ok_cb(GtkWidget *widget, gpointer data)
     SET_RC_BOOLEAN(SYLNOTIFY_SNARL, "snarlcmd", flg);
     debug_print("use snarlcmd:%s\n", flg ? "true" : "false");
 
-    gchar *buf = gtk_entry_get_text(GTK_ENTRY(SYLPF_OPTION.snarl_heysnarl_path));
+    buf = gtk_entry_get_text(GTK_ENTRY(SYLPF_OPTION.snarl_heysnarl_path));
     g_key_file_set_string (SYLPF_OPTION.rcfile, SYLNOTIFY_SNARL, "heysnarl_path", buf);
     debug_print("use heysnarl path:%s\n", buf);
 
@@ -337,7 +349,6 @@ static void prefs_ok_cb(GtkWidget *widget, gpointer data)
     g_key_file_set_string (SYLPF_OPTION.rcfile, SYLNOTIFY_GROWL, "growlnotify_path", buf);
     debug_print("use growlnotify path:%s\n", buf);
 
-    gsize sz;
     buf=g_key_file_to_data(SYLPF_OPTION.rcfile, &sz, NULL);
     g_file_set_contents(SYLPF_OPTION.rcpath, buf, sz, NULL);
     
@@ -357,6 +368,9 @@ static void prefs_cancel_cb(GtkWidget *widget, gpointer data)
 }
 static void prefs_test_cb(GtkWidget *widget, gpointer data)
 {
+  gint ret;
+  gchar *cmdline;
+
 #define SYLPF_FUNC_NAME "plugin_load"
   SYLPF_START_FUNC;
 #if 0
@@ -376,9 +390,8 @@ static void prefs_test_cb(GtkWidget *widget, gpointer data)
 
 #if DEBUG
     SYLPF_OPTION.growl_growlnotify_flag = TRUE;
-    gint ret;
     if (SYLPF_OPTION.growl_growlnotify_flag != FALSE) {
-      gchar *cmdline = g_strdup_printf("\"%s\" /a:%s /ai:%s /r:\"%s\" \"%s\"",
+      cmdline = g_strdup_printf("\"%s\" /a:%s /ai:%s /r:\"%s\" \"%s\"",
                                        "C:\\WinApp\\growlnotify\\growlnotify.exe",
                                        "Sylpheed",
                                        "http://sylpheed.sraoss.jp/images/sylpheed.png",
@@ -393,17 +406,17 @@ static void prefs_test_cb(GtkWidget *widget, gpointer data)
                                 "件名",
                                 "本文"
                                 );
-      gint ret = execute_command_line(cmdline, FALSE);
+      ret = execute_command_line(cmdline, FALSE);
     }
     if (SYLPF_OPTION.snarl_heysnarl_flag != FALSE) {
-      gchar *cmdline = g_strdup_printf("\"%s\" \"register?app-sig=app/Sylpheed&title=%s&icon=%s\"",
+      cmdline = g_strdup_printf("\"%s\" \"register?app-sig=app/Sylpheed&title=%s&icon=%s\"",
                                        "C:\\Program Files (x86)\\full phat\\Snarl\\tools\\heysnarl.exe",
                                        "Sylpheed",
                                        "http://sylpheed.sraoss.jp/images/sylpheed.png"
                                        );
-      gint ret = execute_command_line(cmdline, FALSE);
+      ret = execute_command_line(cmdline, FALSE);
       if (ret >= 0) {
-        gchar *cmdline = g_strdup_printf("\"%s\" \"notify?app-sig=app/Sylpheed&title=%s&text=%s\"",
+        cmdline = g_strdup_printf("\"%s\" \"notify?app-sig=app/Sylpheed&title=%s&text=%s\"",
                                          "C:\\Program Files (x86)\\full phat\\Snarl\\tools\\heysnarl.exe",
                                          "subject",
                                          /*"http://sylpheed.sraoss.jp/images/sylpheed.png",*/
@@ -448,6 +461,9 @@ static void exec_sylnotify_menu_cb(void)
   GtkWidget *confirm_area;
   GtkWidget *ok_btn;
   GtkWidget *cancel_btn;
+  GtkWidget *notebook;
+  gchar *buf;
+
 #if DEBUG
   GtkWidget *test_btn;
 #endif
@@ -468,7 +484,7 @@ static void exec_sylnotify_menu_cb(void)
   gtk_container_add(GTK_CONTAINER(window), vbox);
 
   /* notebook */ 
-  GtkWidget *notebook = gtk_notebook_new();
+  notebook = gtk_notebook_new();
   /* main tab */
   create_config_main_page(notebook, SYLPF_OPTION.rcfile);
 #ifdef G_OS_WIN32
@@ -559,7 +575,7 @@ static void exec_sylnotify_menu_cb(void)
       gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(SYLPF_OPTION.snarl_heysnarl), TRUE);
     }
 
-    gchar *buf = g_key_file_get_string(SYLPF_OPTION.rcfile, SYLNOTIFY_SNARL, "heysnarl_path", NULL);
+    buf = g_key_file_get_string(SYLPF_OPTION.rcfile, SYLNOTIFY_SNARL, "heysnarl_path", NULL);
     if (SYLPF_OPTION.snarl_heysnarl_flag != FALSE && buf != NULL){
       debug_print("use heysnarl path:%s\n", buf);
       gtk_entry_set_text(GTK_ENTRY(SYLPF_OPTION.snarl_heysnarl_path), buf);
@@ -607,6 +623,8 @@ static void exec_sylnotify_menu_cb(void)
 
 static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
 {
+  GtkWidget *vbox, *startup_align, *startup_frm, *startup_frm_align;
+
 #define SYLPF_FUNC_NAME "plugin_load"
   SYLPF_START_FUNC;
 
@@ -617,14 +635,14 @@ static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
   /* startup */
   if (pkey!=NULL){
   }
-  GtkWidget *vbox = gtk_vbox_new(FALSE, 0);
+  vbox = gtk_vbox_new(FALSE, 0);
 
   /**/
-  GtkWidget *startup_align = gtk_alignment_new(0, 0, 1, 1);
+  startup_align = gtk_alignment_new(0, 0, 1, 1);
   gtk_alignment_set_padding(GTK_ALIGNMENT(startup_align), ALIGN_TOP, ALIGN_BOTTOM, ALIGN_LEFT, ALIGN_RIGHT);
 
-  GtkWidget *startup_frm = gtk_frame_new(_("Startup Option"));
-  GtkWidget *startup_frm_align = gtk_alignment_new(0, 0, 1, 1);
+  startup_frm = gtk_frame_new(_("Startup Option"));
+  startup_frm_align = gtk_alignment_new(0, 0, 1, 1);
   gtk_alignment_set_padding(GTK_ALIGNMENT(startup_frm_align), ALIGN_TOP, ALIGN_BOTTOM, ALIGN_LEFT, ALIGN_RIGHT);
 
 
