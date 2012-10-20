@@ -123,7 +123,7 @@ static void command_path_clicked(GtkWidget *widget, gpointer data);
 static void inc_start_cb(GObject *obj, PrefsAccount *ac);
 static void inc_finished_cb(GObject *obj, gint new_messages);
 
-static gint send_notifycation_by_growlnotify(GKeyFile *rcfile,
+static gint send_notification_by_growlnotify(GKeyFile *rcfile,
                                              gchar *from,
                                              gchar *subject);
 static gint send_notification_by_snarl(GKeyFile *rcfile,
