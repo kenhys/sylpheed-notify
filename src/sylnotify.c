@@ -1064,21 +1064,25 @@ void exec_sylnotify_cb(GObject *obj, FolderItem *item, const gchar *file, guint 
 
 static void command_path_clicked(GtkWidget *widget, gpointer data)
 {
+  GtkWidget *dialog;
+  gchar *filename;
+
 #define SYLPF_FUNC_NAME "plugin_load"
   SYLPF_START_FUNC;
 
-  GtkWidget *dialog = gtk_file_chooser_dialog_new(NULL, NULL,
-                                                  GTK_FILE_CHOOSER_ACTION_OPEN,
-                                                  GTK_STOCK_OPEN,GTK_RESPONSE_ACCEPT,
-                                                  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                                                  NULL);
+  dialog = gtk_file_chooser_dialog_new(NULL, NULL,
+                                       GTK_FILE_CHOOSER_ACTION_OPEN,
+                                       GTK_STOCK_OPEN,GTK_RESPONSE_ACCEPT,
+                                       GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                                       NULL);
   if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT) {
-    gchar *filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(dialog));
-
-    gtk_entry_set_text(GTK_ENTRY(data), filename);
-    g_free (filename);
+    filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+    if (filename) {
+      gtk_entry_set_text(GTK_ENTRY(data), filename);
+      g_free(filename);
+    }
   }
-  gtk_widget_destroy (dialog);
+  gtk_widget_destroy(dialog);
 
   SYLPF_END_FUNC;
 #undef SYLPF_FUNC_NAME
