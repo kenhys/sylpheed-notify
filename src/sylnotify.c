@@ -1098,40 +1098,13 @@ static void inc_start_cb(GObject *obj, PrefsAccount *ac)
   if (SYLPF_OPTION.snarl_flag != FALSE) {
     if (SYLPF_OPTION.snarl_snarlcmd_flag != FALSE) {
       debug_print("[DEBUG] snarl snarlcmd mode\n");
-      gchar *path = g_key_file_get_string(SYLPF_OPTION.rcfile, SYLNOTIFY_SNARL, "snarlcmd_path", NULL);
-      if (path != NULL) {
-        gchar *cmdline = g_strdup_printf("\"%s\" snShowMessage %d \"%s\" \"%s\" \"%s\"",
-                                         path,
-                                         5,
-                                         ac ? ac->account_name : "All",
-                                         _("receive start"),
-                                         "http://sylpheed.sraoss.jp/images/sylpheed.png");
-        ret = execute_command_line(cmdline, FALSE);
-      }
+      send_notification_by_snarl(SYLPF_OPTION.rcfile,
+                                 ac ? ac->account_name : "All",
+                                 _("receive start"));
     } 
   } else if (SYLPF_OPTION.growl_flag != FALSE) {
     if (SYLPF_OPTION.growl_growlnotify_flag != FALSE) {
-      gchar *path = g_key_file_get_string(SYLPF_OPTION.rcfile, SYLNOTIFY_GROWL, "growlnotify_path", NULL);
-      if (path != NULL) {
-        gchar *cmdline = g_strdup_printf("\"%s\" /a:%s /ai:%s /r:\"%s\" \"%s\"",
-                                         path,
-                                         "Sylpheed",
-                                         "http://sylpheed.sraoss.jp/images/sylpheed.png",
-                                         "New Mail",
-                                         "dummy"
-                                         );
-        ret = execute_command_line(cmdline, FALSE);
-        if (ret >= 0) {
-          cmdline = g_strdup_printf("\"%s\" /a:%s /n:\"%s\" /t:\"%s\" \"%s\"",
-                                    path,
-                                    "Sylpheed",
-                                    "New Mail",
-                                    ac ? ac->account_name : "All",
-                                    _("receive start")
-                                    );
-          ret = execute_command_line(cmdline, FALSE);
-        }
-      }
+      send_notification_by_growlnotify(SYLPF_OPTION.rcfile,
     }
   }
 #endif
