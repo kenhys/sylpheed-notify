@@ -1212,13 +1212,17 @@ static gint send_notifycation_by_growlnotify(GKeyFile *rcfile,
                               "New Mail",
                               "dummy");
     ret = execute_command_line(cmdline, FALSE);
-    cmdline = g_strdup_printf("\"%s\" /a:%s /n:\"%s\" /t:\"%s\" \"%s\"",
-                              path,
-                              "Sylpheed",
-                              "New Mail",
-                              from,
-                              subject);
-    ret = execute_command_line(cmdline, FALSE);
+    g_free(cmdline);
+    if (ret >= 0) {
+      cmdline = g_strdup_printf("\"%s\" /a:%s /n:\"%s\" /t:\"%s\" \"%s\"",
+                                path,
+                                "Sylpheed",
+                                "New Mail",
+                                from,
+                                subject);
+      ret = execute_command_line(cmdline, FALSE);
+      g_free(cmdline);
+    }
   }
   return ret;
 }
