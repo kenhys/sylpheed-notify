@@ -1168,7 +1168,6 @@ static void inc_finished_cb(GObject *obj, gint new_messages)
                                        _("receive finished"),
                                        g_sprintf("%d new messages", new_messages));
       
-      }
     }
   }
   SYLPF_END_FUNC;
