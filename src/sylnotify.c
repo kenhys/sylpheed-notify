@@ -1164,28 +1164,10 @@ static void inc_finished_cb(GObject *obj, gint new_messages)
     } 
   } else if (SYLPF_OPTION.growl_flag != FALSE) {
     if (SYLPF_OPTION.growl_growlnotify_flag != FALSE) {
-      gchar *path = g_key_file_get_string(SYLPF_OPTION.rcfile, SYLNOTIFY_GROWL, "growlnotify_path", NULL);
-      if (path != NULL) {
-        gchar *cmdline = g_strdup_printf("\"%s\" /a:%s /ai:%s /r:\"%s\" \"%s\"",
-                                         path,
-                                         "Sylpheed",
-                                         "http://sylpheed.sraoss.jp/images/sylpheed.png",
-                                         "New Mail",
-                                         "dummy"
-                                         );
-        ret = execute_command_line(cmdline, FALSE);
-        g_free(cmdline);
-        if (ret >= 0) {
-          cmdline = g_strdup_printf("\"%s\" /a:%s /n:\"%s\" /t:\"%s\" \"%s\"",
-                                    path,
-                                    "Sylpheed",
-                                    "New Mail",
-                                    _("receive finished"),
-                                    g_sprintf("%d new messages", new_messages)
-                                    );
-          ret = execute_command_line(cmdline, FALSE);
-          g_free(cmdline);
-        }
+      send_notifycation_by_growlnotify(SYLPF_OPTION.rcfile,
+                                       _("receive finished"),
+                                       g_sprintf("%d new messages", new_messages));
+      
       }
     }
   }
