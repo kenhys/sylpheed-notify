@@ -1067,11 +1067,12 @@ static void command_path_clicked(GtkWidget *widget, gpointer data)
 #define SYLPF_FUNC_NAME "plugin_load"
   SYLPF_START_FUNC;
 
-  GtkWidget *dialog = gtk_file_chooser_dialog_new(NULL, NULL, GTK_FILE_CHOOSER_ACTION_OPEN,
+  GtkWidget *dialog = gtk_file_chooser_dialog_new(NULL, NULL,
+                                                  GTK_FILE_CHOOSER_ACTION_OPEN,
                                                   GTK_STOCK_OPEN,GTK_RESPONSE_ACCEPT,
                                                   GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                                                   NULL);
-  if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT){
+  if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT) {
     gchar *filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(dialog));
 
     gtk_entry_set_text(GTK_ENTRY(data), filename);
