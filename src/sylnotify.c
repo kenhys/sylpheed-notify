@@ -224,13 +224,13 @@ void plugin_unload(void)
 
 SylPluginInfo *plugin_info(void)
 {
-	return &info;
+  return &info;
 }
 
 gint plugin_interface_version(void)
 {
-    /* sylpheed 3.2 or later since r3005 */
-    return 0x0109;
+  /* sylpheed 3.2 or later since r3005 */
+  return 0x0109;
 }
 
 static void init_done_cb(GObject *obj, gpointer data)
@@ -919,25 +919,27 @@ static void exec_sylnotify_onoff_cb(void)
 #define SYLPF_FUNC_NAME "plugin_unload"
   SYLPF_END_FUNC;
 
-    if (g_enable != TRUE){
-        syl_plugin_alertpanel_message(_("SylNotify"), _("SylNotify plugin is enabled."), ALERT_NOTICE);
-        g_enable=TRUE;
-        gtk_widget_hide(g_plugin_off);
-        gtk_widget_show(g_plugin_on);
-        gtk_tooltips_set_tip
-			(g_tooltip, g_onoff_switch,
-			 _("SylNotify is enabled. Click the icon to disable plugin."),
-			 NULL);
-    }else{
-        syl_plugin_alertpanel_message(_("SylNotify"), _("SylNotify plugin is disabled."), ALERT_NOTICE);
-        g_enable=FALSE;
-        gtk_widget_hide(g_plugin_on);
-        gtk_widget_show(g_plugin_off);
-        gtk_tooltips_set_tip
-			(g_tooltip, g_onoff_switch,
-			 _("SylNotify is disabled. Click the icon to enable plugin."),
-			 NULL);
-    }
+  if (g_enable != TRUE) {
+    syl_plugin_alertpanel_message(_("SylNotify"),
+                                  _("SylNotify plugin is enabled."),
+                                  ALERT_NOTICE);
+    g_enable=TRUE;
+    gtk_widget_hide(g_plugin_off);
+    gtk_widget_show(g_plugin_on);
+    gtk_tooltips_set_tip(g_tooltip, g_onoff_switch,
+                         _("SylNotify is enabled. Click the icon to disable plugin."),
+                         NULL);
+  } else {
+    syl_plugin_alertpanel_message(_("SylNotify"),
+                                  _("SylNotify plugin is disabled."),
+                                  ALERT_NOTICE);
+    g_enable=FALSE;
+    gtk_widget_hide(g_plugin_on);
+    gtk_widget_show(g_plugin_off);
+    gtk_tooltips_set_tip(g_tooltip, g_onoff_switch,
+                         _("SylNotify is disabled. Click the icon to enable plugin."),
+                         NULL);
+  }
 
   SYLPF_END_FUNC;
 #undef SYLPF_FUNC_NAME
