@@ -14,7 +14,7 @@ INCLUDES = \
 	-I$(sylpheed_build_dir)/src \
 	-I$(sylpf_srcdir)
 
-sylsnarl_la_LIBADD = \
+sylnotify_la_LIBADD = \
 	$(GTK_LIBS) \
 	$(sylpheed_build_dir)/src/libsylpheed-plugin-0.la \
 	$(sylpheed_build_dir)/libsylph/libsylph-0.la
