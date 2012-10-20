@@ -126,10 +126,10 @@ void plugin_load(void)
   g_opt.rcfile = g_key_file_new();
 
   if (g_key_file_load_from_file(g_opt.rcfile, g_opt.rcpath, G_KEY_FILE_KEEP_COMMENTS, NULL)){
-    g_opt.startup_flg = GET_RC_BOOLEAN(SYLNOTIFY, "startup");
-    debug_print("startup:%s", g_opt.startup_flg ? "true" : "false");
+    g_opt.startup_flag = GET_RC_BOOLEAN(SYLNOTIFY, "startup");
+    debug_print("startup:%s", g_opt.startup_flag ? "true" : "false");
 
-    if (g_opt.startup_flg != FALSE){
+    if (g_opt.startup_flag != FALSE){
       g_enable=TRUE;
       gtk_widget_hide(g_plugin_off);
       gtk_widget_show(g_plugin_on);
@@ -145,53 +145,53 @@ void plugin_load(void)
                            NULL);
     }
 
-    g_opt.growl_flg=GET_RC_BOOLEAN(SYLNOTIFY, "growl");
-    debug_print("use growl:%s\n", g_opt.growl_flg ? "true" : "false");
-    g_opt.snarl_flg=GET_RC_BOOLEAN(SYLNOTIFY, "snarl");
-    debug_print("use snarl:%s\n", g_opt.snarl_flg ? "true" : "false");
+    g_opt.growl_flag=GET_RC_BOOLEAN(SYLNOTIFY, "growl");
+    debug_print("use growl:%s\n", g_opt.growl_flag ? "true" : "false");
+    g_opt.snarl_flag=GET_RC_BOOLEAN(SYLNOTIFY, "snarl");
+    debug_print("use snarl:%s\n", g_opt.snarl_flag ? "true" : "false");
     
     gchar *pattern = g_key_file_get_string(g_opt.rcfile, SYLNOTIFY, "pattern", NULL);
     if (pattern != NULL) {
       if (strcmp(pattern, "summary") == 0) {
-        g_opt.pattern_summary_flg = TRUE;
-        g_opt.pattern_all_flg = FALSE;
+        g_opt.pattern_summary_flag = TRUE;
+        g_opt.pattern_all_flag = FALSE;
       } else if (strcmp(pattern, "all") == 0) {
-        g_opt.pattern_summary_flg = FALSE;
-        g_opt.pattern_all_flg = TRUE;
+        g_opt.pattern_summary_flag = FALSE;
+        g_opt.pattern_all_flag = TRUE;
       } else {
-        g_opt.pattern_summary_flg = TRUE;
-        g_opt.pattern_all_flg = FALSE;
+        g_opt.pattern_summary_flag = TRUE;
+        g_opt.pattern_all_flag = FALSE;
       }
     } else {
-      g_opt.pattern_summary_flg = TRUE;
-      g_opt.pattern_all_flg = FALSE;
+      g_opt.pattern_summary_flag = TRUE;
+      g_opt.pattern_all_flag = FALSE;
     }
     
     /* Growl */
-    g_opt.growl_gntp_flg=GET_RC_BOOLEAN(SYLNOTIFY_GROWL, "gntp");
-    debug_print("use gntp:%s\n", g_opt.growl_gntp_flg ? "true" : "false");
-    g_opt.growl_growlnotify_flg=GET_RC_BOOLEAN(SYLNOTIFY_GROWL, "growlnotify");
-    debug_print("use growlnotify:%s\n", g_opt.growl_growlnotify_flg ? "true" : "false");
+    g_opt.growl_gntp_flag=GET_RC_BOOLEAN(SYLNOTIFY_GROWL, "gntp");
+    debug_print("use gntp:%s\n", g_opt.growl_gntp_flag ? "true" : "false");
+    g_opt.growl_growlnotify_flag=GET_RC_BOOLEAN(SYLNOTIFY_GROWL, "growlnotify");
+    debug_print("use growlnotify:%s\n", g_opt.growl_growlnotify_flag ? "true" : "false");
     
     /* Snarl */
-    g_opt.snarl_snp_flg=GET_RC_BOOLEAN(SYLNOTIFY_SNARL, "snp");
-    debug_print("use snp:%s\n", g_opt.snarl_snp_flg ? "true" : "false");
-    g_opt.snarl_gntp_flg=GET_RC_BOOLEAN(SYLNOTIFY_SNARL, "gntp");
-    debug_print("use gntp:%s\n", g_opt.snarl_gntp_flg ? "true" : "false");
-    g_opt.snarl_heysnarl_flg=GET_RC_BOOLEAN(SYLNOTIFY_SNARL, "heysnarl");
-    debug_print("use heysnarl:%s\n", g_opt.snarl_heysnarl_flg ? "true" : "false");
-    g_opt.snarl_snarlcmd_flg=GET_RC_BOOLEAN(SYLNOTIFY_SNARL, "snarlcmd");
-    debug_print("use snarlcmd:%s\n", g_opt.snarl_snarlcmd_flg ? "true" : "false");
+    g_opt.snarl_snp_flag=GET_RC_BOOLEAN(SYLNOTIFY_SNARL, "snp");
+    debug_print("use snp:%s\n", g_opt.snarl_snp_flag ? "true" : "false");
+    g_opt.snarl_gntp_flag=GET_RC_BOOLEAN(SYLNOTIFY_SNARL, "gntp");
+    debug_print("use gntp:%s\n", g_opt.snarl_gntp_flag ? "true" : "false");
+    g_opt.snarl_heysnarl_flag=GET_RC_BOOLEAN(SYLNOTIFY_SNARL, "heysnarl");
+    debug_print("use heysnarl:%s\n", g_opt.snarl_heysnarl_flag ? "true" : "false");
+    g_opt.snarl_snarlcmd_flag=GET_RC_BOOLEAN(SYLNOTIFY_SNARL, "snarlcmd");
+    debug_print("use snarlcmd:%s\n", g_opt.snarl_snarlcmd_flag ? "true" : "false");
 
   } else {
       /**/
-      g_opt.startup_flg = FALSE;
+      g_opt.startup_flag = FALSE;
 
-      g_opt.growl_flg = TRUE;
-      g_opt.snarl_flg = FALSE;
+      g_opt.growl_flag = TRUE;
+      g_opt.snarl_flag = FALSE;
 
-      g_opt.growl_growlnotify_flg = TRUE;
-      g_opt.snarl_snarlcmd_flg = TRUE;
+      g_opt.growl_growlnotify_flag = TRUE;
+      g_opt.snarl_snarlcmd_flag = TRUE;
   }
 }
 
@@ -214,8 +214,8 @@ gint plugin_interface_version(void)
 static void init_done_cb(GObject *obj, gpointer data)
 {
   debug_print("[DEBUG init_done_cb");
-  if (g_opt.snarl_flg != FALSE) {
-    if (g_opt.snarl_heysnarl_flg != FALSE) {
+  if (g_opt.snarl_flag != FALSE) {
+    if (g_opt.snarl_heysnarl_flag != FALSE) {
       gchar *cmdline = g_strdup_printf("\"%s\" \"register?app-sig=app/Sylpheed&title=%s&icon=%s\"",
                                        "C:\\Program Files (x86)\\full phat\\Snarl\\tools\\heysnarl.exe",
                                        "Sylpheed",
@@ -341,9 +341,9 @@ static void prefs_test_cb(GtkWidget *widget, gpointer data)
 #endif
 
 #if DEBUG
-    g_opt.growl_growlnotify_flg = TRUE;
+    g_opt.growl_growlnotify_flag = TRUE;
     gint ret;
-    if (g_opt.growl_growlnotify_flg != FALSE) {
+    if (g_opt.growl_growlnotify_flag != FALSE) {
       gchar *cmdline = g_strdup_printf("\"%s\" /a:%s /ai:%s /r:\"%s\" \"%s\"",
                                        "C:\\WinApp\\growlnotify\\growlnotify.exe",
                                        "Sylpheed",
@@ -361,7 +361,7 @@ static void prefs_test_cb(GtkWidget *widget, gpointer data)
                                 );
       gint ret = execute_command_line(cmdline, FALSE);
     }
-    if (g_opt.snarl_heysnarl_flg != FALSE) {
+    if (g_opt.snarl_heysnarl_flag != FALSE) {
       gchar *cmdline = g_strdup_printf("\"%s\" \"register?app-sig=app/Sylpheed&title=%s&icon=%s\"",
                                        "C:\\Program Files (x86)\\full phat\\Snarl\\tools\\heysnarl.exe",
                                        "Sylpheed",
@@ -472,80 +472,80 @@ static void exec_sylnotify_menu_cb(void)
     
   /* load settings */
   if (g_key_file_load_from_file(g_opt.rcfile, g_opt.rcpath, G_KEY_FILE_KEEP_COMMENTS, NULL)){
-    g_opt.startup_flg = GET_RC_BOOLEAN(SYLNOTIFY, "startup");
-    debug_print("startup:%s\n", g_opt.startup_flg ? "true" : "false");
-    if (g_opt.startup_flg){
+    g_opt.startup_flag = GET_RC_BOOLEAN(SYLNOTIFY, "startup");
+    debug_print("startup:%s\n", g_opt.startup_flag ? "true" : "false");
+    if (g_opt.startup_flag){
       gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.startup), TRUE);
     }
 
-    g_opt.snarl_flg = GET_RC_BOOLEAN(SYLNOTIFY, "snarl");
-    debug_print("use snarl:%s\n", g_opt.snarl_flg ? "true" : "false");
-    if (g_opt.snarl_flg != FALSE){
+    g_opt.snarl_flag = GET_RC_BOOLEAN(SYLNOTIFY, "snarl");
+    debug_print("use snarl:%s\n", g_opt.snarl_flag ? "true" : "false");
+    if (g_opt.snarl_flag != FALSE){
       gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.snarl), TRUE);
     }
 
-    g_opt.growl_flg = GET_RC_BOOLEAN(SYLNOTIFY, "growl");
-    debug_print("use growl:%s\n", g_opt.growl_flg ? "true" : "false");
-    if (g_opt.growl_flg != FALSE){
+    g_opt.growl_flag = GET_RC_BOOLEAN(SYLNOTIFY, "growl");
+    debug_print("use growl:%s\n", g_opt.growl_flag ? "true" : "false");
+    if (g_opt.growl_flag != FALSE){
       gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.growl), TRUE);
     }
 
-    g_opt.snarl_snp_flg = GET_RC_BOOLEAN(SYLNOTIFY_SNARL, "snp");
-    debug_print("use snp:%s\n", g_opt.snarl_snp_flg ? "true" : "false");
-    if (g_opt.snarl_snp_flg){
+    g_opt.snarl_snp_flag = GET_RC_BOOLEAN(SYLNOTIFY_SNARL, "snp");
+    debug_print("use snp:%s\n", g_opt.snarl_snp_flag ? "true" : "false");
+    if (g_opt.snarl_snp_flag){
       gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.snarl_snp), TRUE);
     }
 
-    g_opt.snarl_gntp_flg = GET_RC_BOOLEAN(SYLNOTIFY_SNARL, "gntp");
-    debug_print("use gntp:%s\n", g_opt.snarl_gntp_flg ? "true" : "false");
-    if (g_opt.snarl_gntp_flg){
+    g_opt.snarl_gntp_flag = GET_RC_BOOLEAN(SYLNOTIFY_SNARL, "gntp");
+    debug_print("use gntp:%s\n", g_opt.snarl_gntp_flag ? "true" : "false");
+    if (g_opt.snarl_gntp_flag){
       gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.snarl_gntp), TRUE);
     }
 
-    g_opt.snarl_heysnarl_flg = GET_RC_BOOLEAN(SYLNOTIFY_SNARL, "heysnarl");
-    debug_print("use heysnarl:%s\n", g_opt.snarl_heysnarl_flg ? "true" : "false");
-    if (g_opt.snarl_heysnarl_flg != FALSE){
+    g_opt.snarl_heysnarl_flag = GET_RC_BOOLEAN(SYLNOTIFY_SNARL, "heysnarl");
+    debug_print("use heysnarl:%s\n", g_opt.snarl_heysnarl_flag ? "true" : "false");
+    if (g_opt.snarl_heysnarl_flag != FALSE){
       gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.snarl_heysnarl), TRUE);
     }
 
     gchar *buf = g_key_file_get_string(g_opt.rcfile, SYLNOTIFY_SNARL, "heysnarl_path", NULL);
-    if (g_opt.snarl_heysnarl_flg != FALSE && buf != NULL){
+    if (g_opt.snarl_heysnarl_flag != FALSE && buf != NULL){
       debug_print("use heysnarl path:%s\n", buf);
       gtk_entry_set_text(GTK_ENTRY(g_opt.snarl_heysnarl_path), buf);
     }
 
-    g_opt.snarl_snarlcmd_flg = GET_RC_BOOLEAN(SYLNOTIFY_SNARL, "snarlcmd");
-    debug_print("use snarlcmd:%s\n", g_opt.snarl_snarlcmd_flg ? "true" : "false");
-    if (g_opt.snarl_snarlcmd_flg != FALSE){
+    g_opt.snarl_snarlcmd_flag = GET_RC_BOOLEAN(SYLNOTIFY_SNARL, "snarlcmd");
+    debug_print("use snarlcmd:%s\n", g_opt.snarl_snarlcmd_flag ? "true" : "false");
+    if (g_opt.snarl_snarlcmd_flag != FALSE){
       gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.snarl_snarlcmd), TRUE);
     }
 
     buf = g_key_file_get_string(g_opt.rcfile, SYLNOTIFY_SNARL, "snarlcmd_path", NULL);
-    if (g_opt.snarl_snarlcmd_flg != FALSE && buf != NULL){
+    if (g_opt.snarl_snarlcmd_flag != FALSE && buf != NULL){
       debug_print("use snarl_cmd path:%s\n", buf);
       gtk_entry_set_text(GTK_ENTRY(g_opt.snarl_snarlcmd_path), buf);
     }
 
-    g_opt.growl_gntp_flg = GET_RC_BOOLEAN(SYLNOTIFY_GROWL, "gntp");
-    debug_print("use growl gntp:%s\n", g_opt.growl_gntp_flg ? "true" : "false");
-    if (g_opt.growl_gntp_flg != FALSE){
+    g_opt.growl_gntp_flag = GET_RC_BOOLEAN(SYLNOTIFY_GROWL, "gntp");
+    debug_print("use growl gntp:%s\n", g_opt.growl_gntp_flag ? "true" : "false");
+    if (g_opt.growl_gntp_flag != FALSE){
       gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.growl_gntp), TRUE);
     }
 
-    g_opt.growl_growlnotify_flg = GET_RC_BOOLEAN(SYLNOTIFY_GROWL, "growlnotify");
-    debug_print("use growlnotify:%s\n", g_opt.growl_growlnotify_flg ? "true" : "false");
-    if (g_opt.growl_growlnotify_flg != FALSE){
+    g_opt.growl_growlnotify_flag = GET_RC_BOOLEAN(SYLNOTIFY_GROWL, "growlnotify");
+    debug_print("use growlnotify:%s\n", g_opt.growl_growlnotify_flag ? "true" : "false");
+    if (g_opt.growl_growlnotify_flag != FALSE){
       gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.growl_growlnotify), TRUE);
     }
 
     buf = g_key_file_get_string(g_opt.rcfile, SYLNOTIFY_GROWL, "growlnotify_path", NULL);
-    if (g_opt.growl_growlnotify_flg != FALSE && buf != NULL){
+    if (g_opt.growl_growlnotify_flag != FALSE && buf != NULL){
       debug_print("use growlnotify path:%s\n", buf);
       gtk_entry_set_text(GTK_ENTRY(g_opt.growl_growlnotify_path), buf);
     }
   }else{
     /* default settings */
-    g_opt.startup_flg = FALSE;
+    g_opt.startup_flag = FALSE;
   }
  
   gtk_widget_show(window);
@@ -598,8 +598,8 @@ static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
   gtk_container_add(GTK_CONTAINER(app_align), app_frm);
 
   /* disable snarl */
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.growl), g_opt.growl_flg);
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.snarl), g_opt.snarl_flg);
+  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.growl), g_opt.growl_flag);
+  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_opt.snarl), g_opt.snarl_flag);
 
   /* Notification */
   GtkWidget *pattern_align = gtk_alignment_new(0, 0, 1, 1);
@@ -863,7 +863,7 @@ void exec_sylnotify_cb(GObject *obj, FolderItem *item, const gchar *file, guint 
     return;
   }
 
-  if (g_opt.pattern_all_flg != TRUE || g_opt.pattern_summary_flg != FALSE) {
+  if (g_opt.pattern_all_flag != TRUE || g_opt.pattern_summary_flag != FALSE) {
     debug_print("[DEBUG] notify summary only.\n");
     return;
   }
@@ -887,8 +887,8 @@ void exec_sylnotify_cb(GObject *obj, FolderItem *item, const gchar *file, guint 
 #endif
 
   gint ret = -1;
-  if (g_opt.snarl_flg != FALSE) {
-    if (g_opt.snarl_snp_flg != FALSE) {
+  if (g_opt.snarl_flag != FALSE) {
+    if (g_opt.snarl_snp_flag != FALSE) {
       debug_print("[DEBUG] snarl snp mode\n");
       gint sock = fd_connect_inet(SYLSNARL_PORT);
       debug_print("[DEBUG] sock:%d\n", sock);
@@ -910,12 +910,12 @@ void exec_sylnotify_cb(GObject *obj, FolderItem *item, const gchar *file, guint 
       fd_write_all(sock, buf, strlen(buf));
       g_free(buf);
       fd_close(sock);
-    } else if (g_opt.snarl_gntp_flg != FALSE) {
+    } else if (g_opt.snarl_gntp_flag != FALSE) {
       debug_print("[DEBUG] snarl gntp mode\n");
-    } else if (g_opt.snarl_heysnarl_flg != FALSE) {
+    } else if (g_opt.snarl_heysnarl_flag != FALSE) {
       debug_print("[DEBUG] snarl heysnarl mode\n");
       /**/
-    } else if (g_opt.snarl_snarlcmd_flg != FALSE) {
+    } else if (g_opt.snarl_snarlcmd_flag != FALSE) {
       debug_print("[DEBUG] snarl snarlcmd mode\n");
       gchar *path = g_key_file_get_string(g_opt.rcfile, SYLNOTIFY_SNARL, "snarlcmd_path", NULL);
       if (path != NULL) {
@@ -928,8 +928,8 @@ void exec_sylnotify_cb(GObject *obj, FolderItem *item, const gchar *file, guint 
         ret = execute_command_line(cmdline, FALSE);
       }
     }
-  } else if (g_opt.growl_flg != FALSE) {
-    if (g_opt.growl_growlnotify_flg != FALSE) {
+  } else if (g_opt.growl_flag != FALSE) {
+    if (g_opt.growl_growlnotify_flag != FALSE) {
       gchar *path = g_key_file_get_string(g_opt.rcfile, SYLNOTIFY_GROWL, "growlnotify_path", NULL);
       if (path != NULL) {
         gchar *cmdline = g_strdup_printf("\"%s\" /a:%s /ai:%s /r:\"%s\" \"%s\"",
@@ -979,8 +979,8 @@ static void inc_start_cb(GObject *obj, PrefsAccount *ac)
     g_print("test: receive start: all accounts\n");
 #else
   gint ret;
-  if (g_opt.snarl_flg != FALSE) {
-    if (g_opt.snarl_snarlcmd_flg != FALSE) {
+  if (g_opt.snarl_flag != FALSE) {
+    if (g_opt.snarl_snarlcmd_flag != FALSE) {
       debug_print("[DEBUG] snarl snarlcmd mode\n");
       gchar *path = g_key_file_get_string(g_opt.rcfile, SYLNOTIFY_SNARL, "snarlcmd_path", NULL);
       if (path != NULL) {
@@ -993,8 +993,8 @@ static void inc_start_cb(GObject *obj, PrefsAccount *ac)
         ret = execute_command_line(cmdline, FALSE);
       }
     } 
-  } else if (g_opt.growl_flg != FALSE) {
-    if (g_opt.growl_growlnotify_flg != FALSE) {
+  } else if (g_opt.growl_flag != FALSE) {
+    if (g_opt.growl_growlnotify_flag != FALSE) {
       gchar *path = g_key_file_get_string(g_opt.rcfile, SYLNOTIFY_GROWL, "growlnotify_path", NULL);
       if (path != NULL) {
         gchar *cmdline = g_strdup_printf("\"%s\" /a:%s /ai:%s /r:\"%s\" \"%s\"",
@@ -1029,8 +1029,8 @@ static void inc_finished_cb(GObject *obj, gint new_messages)
   g_print("test: received %d new messages\n", new_messages);
 #if 0
   gint ret = 0;
-  if (g_opt.snarl_flg != FALSE) {
-    if (g_opt.snarl_snarlcmd_flg != FALSE) {
+  if (g_opt.snarl_flag != FALSE) {
+    if (g_opt.snarl_snarlcmd_flag != FALSE) {
       debug_print("[DEBUG] snarl snarlcmd mode\n");
       gchar *path = g_key_file_get_string(g_opt.rcfile, SYLNOTIFY_SNARL, "snarlcmd_path", NULL);
       if (path != NULL) {
@@ -1044,8 +1044,8 @@ static void inc_finished_cb(GObject *obj, gint new_messages)
         g_free(cmdline);
       }
     } 
-  } else if (g_opt.growl_flg != FALSE) {
-    if (g_opt.growl_growlnotify_flg != FALSE) {
+  } else if (g_opt.growl_flag != FALSE) {
+    if (g_opt.growl_growlnotify_flag != FALSE) {
       gchar *path = g_key_file_get_string(g_opt.rcfile, SYLNOTIFY_GROWL, "growlnotify_path", NULL);
       if (path != NULL) {
         gchar *cmdline = g_strdup_printf("\"%s\" /a:%s /ai:%s /r:\"%s\" \"%s\"",
