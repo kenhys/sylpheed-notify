@@ -19,6 +19,10 @@ AC_PROG_LIBTOOL
 # Checks for libraries.
 AM_PATH_GLIB_2_0(2.8.0,, AC_MSG_ERROR(Test for GLib failed. See the 'INSTALL' for help.))
 AM_PATH_GTK_2_0(2.8.0,, AC_MSG_ERROR(Test for Gtk failed. See the 'INSTALL' for help.))
+GETTEXT_PACKAGE=sylnotify
+AC_SUBST(GETTEXT_PACKAGE)
+AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [Define text domain.])
+AM_GLIB_GNU_GETTEXT
 
 AC_SUBST(GTK_CFLAGS)
 AC_SUBST(GTK_LIBS)
