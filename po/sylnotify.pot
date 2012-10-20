@@ -8,25 +8,18 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-05 04:57+0900\n"
+"POT-Creation-Date: 2012-10-21 00:47+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: sylnotify.h:36
-msgid "SylNotify - notifier plug-in for Sylpheed"
-msgstr ""
-
-#: sylnotify.h:37
-msgid "notifier plug-in for Sylpheed"
-msgstr ""
-
-#: sylnotify.c:52
+#: src/sylnotify.c:62
 msgid ""
-"SylNotify is distributed under GPL license.\n"
+"SylNotify is distributed under 2-clause BSD license.\n"
 "\n"
 "Copyright (C) 2011-2012 HAYASHI Kentaro <kenhys@gmail.com>\n"
 "sylnotify contains following resource.\n"
@@ -37,94 +30,126 @@ msgid ""
 "\n"
 msgstr ""
 
-#: sylnotify.c:77
+#: src/sylnotify.c:87
 msgid "SylNotify notify support Plug-in"
 msgstr ""
 
-#: sylnotify.c:78
+#: src/sylnotify.c:88
 msgid "Notify support Plug-in"
 msgstr ""
 
-#: sylnotify.c:81 sylnotify.c:425
+#: src/sylnotify.c:91 src/sylnotify.c:469
 msgid "SylNotify Settings [SylNotify]"
 msgstr ""
 
-#: sylnotify.c:131 sylnotify.c:768
+#: src/sylnotify.c:144 src/sylnotify.c:837
 msgid "SylNotify is enabled. Click the icon to disable plugin."
 msgstr ""
 
-#: sylnotify.c:138
+#: src/sylnotify.c:151
 msgid "SylNotify is disalbed. Click the icon to enable plugin."
 msgstr ""
 
-#: sylnotify.c:532
+#: src/sylnotify.c:576
 msgid "Startup Option"
 msgstr ""
 
-#: sylnotify.c:537
+#: src/sylnotify.c:581
 msgid "Enable plugin on startup."
 msgstr ""
 
-#: sylnotify.c:548
+#: src/sylnotify.c:592
 msgid "Application"
 msgstr ""
 
-#: sylnotify.c:552 sylnotify.c:716
+#: src/sylnotify.c:596 src/sylnotify.c:784
 msgid "Growl"
 msgstr ""
 
-#: sylnotify.c:553 sylnotify.c:656
+#: src/sylnotify.c:597 src/sylnotify.c:724
 msgid "Snarl"
 msgstr ""
 
-#: sylnotify.c:570
+#: src/sylnotify.c:614
+msgid "Notification"
+msgstr ""
+
+#: src/sylnotify.c:618
+msgid "Summary only (when receiving mail and finished)"
+msgstr ""
+
+#: src/sylnotify.c:620
+msgid "All (1 notification per new mail)"
+msgstr ""
+
+#: src/sylnotify.c:621
+msgid "Note: IMAP4 is not supported yet."
+msgstr ""
+
+#: src/sylnotify.c:637
 msgid "General"
 msgstr ""
 
-#: sylnotify.c:584 sylnotify.c:673
+#: src/sylnotify.c:652 src/sylnotify.c:741
 msgid "Notification Method"
 msgstr ""
 
-#: sylnotify.c:589
+#: src/sylnotify.c:657
 msgid "SNP (Snarl Network Protocol)"
 msgstr ""
 
-#: sylnotify.c:591 sylnotify.c:679
+#: src/sylnotify.c:659 src/sylnotify.c:747
 msgid "GNTP (Growl Notification Transport Protocol)"
 msgstr ""
 
-#: sylnotify.c:593
+#: src/sylnotify.c:661
 msgid "HeySnarl (Command line tool)"
 msgstr ""
 
-#: sylnotify.c:595
+#: src/sylnotify.c:663
 msgid "Snarl_CMD (Command line tool)"
 msgstr ""
 
-#: sylnotify.c:599 sylnotify.c:611 sylnotify.c:688
+#: src/sylnotify.c:667 src/sylnotify.c:679 src/sylnotify.c:756
 msgid "Command Path:"
 msgstr ""
 
-#: sylnotify.c:681
+#: src/sylnotify.c:749
 msgid "growlnotify (Command line tool)"
 msgstr ""
 
-#: sylnotify.c:732 sylnotify.c:762 sylnotify.c:771
+#: src/sylnotify.c:801 src/sylnotify.c:831 src/sylnotify.c:840
 msgid "SylNotify"
 msgstr ""
 
-#: sylnotify.c:752
+#: src/sylnotify.c:821
 msgid "About"
 msgstr ""
 
-#: sylnotify.c:762
+#: src/sylnotify.c:831
 msgid "SylNotify plugin is enabled."
 msgstr ""
 
-#: sylnotify.c:771
+#: src/sylnotify.c:840
 msgid "SylNotify plugin is disabled."
 msgstr ""
 
-#: sylnotify.c:777
+#: src/sylnotify.c:846
 msgid "SylNotify is disabled. Click the icon to enable plugin."
+msgstr ""
+
+#: src/sylnotify.c:998 src/sylnotify.c:1021
+msgid "receive start"
+msgstr ""
+
+#: src/sylnotify.c:1047 src/sylnotify.c:1072
+msgid "receive finished"
+msgstr ""
+
+#: src/sylnotify.h:49
+msgid "SylNotify - notifier plug-in for Sylpheed"
+msgstr ""
+
+#: src/sylnotify.h:50
+msgid "notifier plug-in for Sylpheed"
 msgstr ""
