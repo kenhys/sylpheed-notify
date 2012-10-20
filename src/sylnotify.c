@@ -1153,9 +1153,6 @@ static void inc_finished_cb(GObject *obj, gint new_messages)
       send_notifycation_by_snarl(SYLPF_OPTION.rcfile,
                                  _("receive finished"),
                                  g_sprintf("%d new messages", new_messages));
-                                 
-
-
       }
     } 
   } else if (SYLPF_OPTION.growl_flag != FALSE) {
