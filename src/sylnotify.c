@@ -1047,24 +1047,8 @@ void exec_sylnotify_cb(GObject *obj, FolderItem *item, const gchar *file, guint 
     }
   } else if (SYLPF_OPTION.growl_flag != FALSE) {
     if (SYLPF_OPTION.growl_growlnotify_flag != FALSE) {
-      path = g_key_file_get_string(SYLPF_OPTION.rcfile, SYLNOTIFY_GROWL, "growlnotify_path", NULL);
-      if (path != NULL) {
-        cmdline = g_strdup_printf("\"%s\" /a:%s /ai:%s /r:\"%s\" \"%s\"",
-                                         path,
-                                         "Sylpheed",
-                                         "http://sylpheed.sraoss.jp/images/sylpheed.png",
-                                         "New Mail",
-                                         "dummy"
-                                         );
-        ret = execute_command_line(cmdline, FALSE);
-        cmdline = g_strdup_printf("\"%s\" /a:%s /n:\"%s\" /t:\"%s\" \"%s\"",
-                                  path,
-                                  "Sylpheed",
-                                  "New Mail",
-                                  msginfo->from,
-                                  msginfo->subject);
-        ret = execute_command_line(cmdline, FALSE);
-      }
+      send_notifycation_by_growlnotify(SYLPF_OPTION.rcfile,
+                                       msginfo->from, msginfo->subject);
     }
   } else {
     /* nop */
@@ -1208,4 +1192,33 @@ static void inc_finished_cb(GObject *obj, gint new_messages)
   SYLPF_END_FUNC;
 #undef SYLPF_FUNC_NAME
 #endif
+}
+
+static gint send_notifycation_by_growlnotify(GKeyFile *rcfile,
+                                             gchar *from,
+                                             gchar *subject)
+{
+  gchar *path;
+  gchar *cmdline;
+  gint ret;
+
+  path = g_key_file_get_string(rcfile, SYLNOTIFY_GROWL,
+                               "growlnotify_path", NULL);
+  if (path != NULL) {
+    cmdline = g_strdup_printf("\"%s\" /a:%s /ai:%s /r:\"%s\" \"%s\"",
+                              path,
+                              "Sylpheed",
+                              "http://sylpheed.sraoss.jp/images/sylpheed.png",
+                              "New Mail",
+                              "dummy");
+    ret = execute_command_line(cmdline, FALSE);
+    cmdline = g_strdup_printf("\"%s\" /a:%s /n:\"%s\" /t:\"%s\" \"%s\"",
+                              path,
+                              "Sylpheed",
+                              "New Mail",
+                              from,
+                              subject);
+    ret = execute_command_line(cmdline, FALSE);
+  }
+  return ret;
 }
