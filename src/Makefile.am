@@ -1,4 +1,3 @@
-libdir = $(plugindir)
 
 lib_LTLIBRARIES = sylnotify.la
 
