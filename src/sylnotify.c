@@ -950,11 +950,11 @@ void exec_sylnotify_cb(GObject *obj, FolderItem *item, const gchar *file, guint 
 #define SYLPF_FUNC_NAME "plugin_load"
   SYLPF_START_FUNC;
 
-  if (g_enable!=TRUE){
+  if (g_enable != TRUE) {
     debug_print("[DEBUG] disabled sylnotify plugin\n");
     return;
   }
-  if (item->stype != F_NORMAL && item->stype != F_INBOX){
+  if (item->stype != F_NORMAL && item->stype != F_INBOX) {
     debug_print("[DEBUG] not F_NORMAL and F_INBOX %d\n", item->stype);
     if (item->folder) {
       if (item->folder->klass) {
@@ -965,12 +965,13 @@ void exec_sylnotify_cb(GObject *obj, FolderItem *item, const gchar *file, guint 
   }
 
   PrefsCommon *prefs_common = prefs_common_get();
-  if (prefs_common->online_mode != TRUE){
+  if (prefs_common->online_mode != TRUE) {
     debug_print("[DEBUG] not online\n");
     return;
   }
 
-  if (SYLPF_OPTION.pattern_all_flag != TRUE || SYLPF_OPTION.pattern_summary_flag != FALSE) {
+  if (SYLPF_OPTION.pattern_all_flag != TRUE ||
+      SYLPF_OPTION.pattern_summary_flag != FALSE) {
     debug_print("[DEBUG] notify summary only.\n");
     return;
   }
@@ -983,11 +984,13 @@ void exec_sylnotify_cb(GObject *obj, FolderItem *item, const gchar *file, guint 
   g_print("%s\n", item->path);
 
   MsgInfo *msginfo = folder_item_get_msginfo(item, num);
-  debug_print("[DEBUG] flags:%08x UNREAD:%08x NEW:%08x MARKED:%08x ", msginfo->flags, MSG_UNREAD, MSG_NEW, MSG_MARKED);
+  debug_print("[DEBUG] flags:%08x UNREAD:%08x NEW:%08x MARKED:%08x ",
+              msginfo->flags, MSG_UNREAD, MSG_NEW, MSG_MARKED);
   debug_print("[DEBUG] perm_flags:%08x \n", msginfo->flags.perm_flags);
   debug_print("[DEBUG] tmp_flags:%08x \n", msginfo->flags.tmp_flags);
 
-  g_key_file_load_from_file(SYLPF_OPTION.rcfile, SYLPF_OPTION.rcpath, G_KEY_FILE_KEEP_COMMENTS, NULL);
+  g_key_file_load_from_file(SYLPF_OPTION.rcfile,
+                            SYLPF_OPTION.rcpath, G_KEY_FILE_KEEP_COMMENTS, NULL);
 
 #ifdef DEBUG
   debug_print("[DEBUG] item->path:%s\n", item->path);
@@ -1052,8 +1055,7 @@ void exec_sylnotify_cb(GObject *obj, FolderItem *item, const gchar *file, guint 
                                   "Sylpheed",
                                   "New Mail",
                                   msginfo->from,
-                                  msginfo->subject
-                                  );
+                                  msginfo->subject);
         ret = execute_command_line(cmdline, FALSE);
       }
     }
