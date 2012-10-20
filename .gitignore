@@ -7,4 +7,10 @@ private_build.h
 .compile
 .deps
 .libs
+config.*
+config/*
+m4/lib*
+m4/lt*
+autom4te.*
 Makefile
+configure
