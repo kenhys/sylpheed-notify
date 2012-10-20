@@ -126,6 +126,10 @@ static void inc_finished_cb(GObject *obj, gint new_messages);
 static gint send_notifycation_by_growlnotify(GKeyFile *rcfile,
                                              gchar *from,
                                              gchar *subject);
+static gint send_notification_by_snarl(GKeyFile *rcfile,
+                                       const gchar *title,
+                                       const gchar *message);
+
 
 #define GET_RC_BOOLEAN(section, keyarg) g_key_file_get_boolean(SYLPF_OPTION.rcfile, section, keyarg, NULL)
 #define SET_RC_BOOLEAN(section, keyarg,valarg) g_key_file_set_boolean(SYLPF_OPTION.rcfile, section, keyarg, valarg)

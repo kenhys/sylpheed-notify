@@ -1150,16 +1150,12 @@ static void inc_finished_cb(GObject *obj, gint new_messages)
   if (SYLPF_OPTION.snarl_flag != FALSE) {
     if (SYLPF_OPTION.snarl_snarlcmd_flag != FALSE) {
       debug_print("[DEBUG] snarl snarlcmd mode\n");
-      gchar *path = g_key_file_get_string(SYLPF_OPTION.rcfile, SYLNOTIFY_SNARL, "snarlcmd_path", NULL);
-      if (path != NULL) {
-        gchar *cmdline = g_strdup_printf("\"%s\" snShowMessage %d \"%s\" \"%s\" \"%s\"",
-                                         path,
-                                         5,
-                                         _("receive finished"),
-                                         g_sprintf("%d new messages", new_messages),
-                                         "http://sylpheed.sraoss.jp/images/sylpheed.png");
-        ret = execute_command_line(cmdline, FALSE);
-        g_free(cmdline);
+      send_notifycation_by_snarl(SYLPF_OPTION.rcfile,
+                                 _("receive finished"),
+                                 g_sprintf("%d new messages", new_messages));
+                                 
+
+
       }
     } 
   } else if (SYLPF_OPTION.growl_flag != FALSE) {
@@ -1207,3 +1203,27 @@ static gint send_notifycation_by_growlnotify(GKeyFile *rcfile,
   }
   return ret;
 }
+
+static gint send_notification_by_snarl(GKeyFile *rcfile,
+                                       const gchar *title,
+                                       const gchar *message)
+{
+  gchar *path;
+  gchar *cmdline;
+  gint ret;
+
+  path = g_key_file_get_string(rcfile, SYLNOTIFY_SNARL,
+                               "snarlcmd_path", NULL);
+  if (path != NULL) {
+    cmdline = g_strdup_printf("\"%s\" snShowMessage %d \"%s\" \"%s\" \"%s\"",
+                              path,
+                              5,
+                              title,
+                              message,
+                              "http://sylpheed.sraoss.jp/images/sylpheed.png");
+    ret = execute_command_line(cmdline, FALSE);
+    g_free(cmdline);
+  }
+  return ret;
+}
+  
