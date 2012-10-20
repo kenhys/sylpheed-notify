@@ -948,6 +948,13 @@ static void exec_sylnotify_onoff_cb(void)
 void exec_sylnotify_cb(GObject *obj, FolderItem *item, const gchar *file, guint num)
 {
 #define SYLPF_FUNC_NAME "plugin_load"
+  
+  PrefsCommon *prefs_common;
+  PrefsAccount *ac;
+  MsgInfo *msginfo;
+  gint ret, sock;
+  gchar *buf, *path, *cmdline;
+
   SYLPF_START_FUNC;
 
   if (g_enable != TRUE) {
@@ -964,7 +971,7 @@ void exec_sylnotify_cb(GObject *obj, FolderItem *item, const gchar *file, guint 
     return;
   }
 
-  PrefsCommon *prefs_common = prefs_common_get();
+  prefs_common = prefs_common_get();
   if (prefs_common->online_mode != TRUE) {
     debug_print("[DEBUG] not online\n");
     return;
@@ -976,14 +983,14 @@ void exec_sylnotify_cb(GObject *obj, FolderItem *item, const gchar *file, guint 
     return;
   }
     
-  PrefsAccount *ac = (PrefsAccount*)account_get_default();
+  ac = (PrefsAccount*)account_get_default();
   g_return_if_fail(ac != NULL);
 
   /* check item->path for filter */
   g_print("%s\n", item->name);
   g_print("%s\n", item->path);
 
-  MsgInfo *msginfo = folder_item_get_msginfo(item, num);
+  msginfo = folder_item_get_msginfo(item, num);
   debug_print("[DEBUG] flags:%08x UNREAD:%08x NEW:%08x MARKED:%08x ",
               msginfo->flags, MSG_UNREAD, MSG_NEW, MSG_MARKED);
   debug_print("[DEBUG] perm_flags:%08x \n", msginfo->flags.perm_flags);
@@ -996,18 +1003,18 @@ void exec_sylnotify_cb(GObject *obj, FolderItem *item, const gchar *file, guint 
   debug_print("[DEBUG] item->path:%s\n", item->path);
 #endif
 
-  gint ret = -1;
+  ret = -1;
   if (SYLPF_OPTION.snarl_flag != FALSE) {
     if (SYLPF_OPTION.snarl_snp_flag != FALSE) {
       debug_print("[DEBUG] snarl snp mode\n");
-      gint sock = fd_connect_inet(SYLSNARL_PORT);
+      sock = fd_connect_inet(SYLSNARL_PORT);
       debug_print("[DEBUG] sock:%d\n", sock);
       if (sock < 0) {
         debug_print("[DEBUG] sock error:%d\n", sock);
         return;
       }
     
-      gchar *buf = g_strdup_printf("%s\r\n%s\r\n%s&title=%s&text=Date:%s\\nFrom:%s\\nTo:%s\\nSubject:%s\r\nEND\r\n",
+      buf = g_strdup_printf("%s\r\n%s\r\n%s&title=%s&text=Date:%s\\nFrom:%s\\nTo:%s\\nSubject:%s\r\nEND\r\n",
                                    "SNP/3.0",
                                    "register?app-sig=app/Sylpheed&title=Sylpheed",
                                    "notify?app-sig=app/Sylpheed",
@@ -1027,9 +1034,9 @@ void exec_sylnotify_cb(GObject *obj, FolderItem *item, const gchar *file, guint 
       /**/
     } else if (SYLPF_OPTION.snarl_snarlcmd_flag != FALSE) {
       debug_print("[DEBUG] snarl snarlcmd mode\n");
-      gchar *path = g_key_file_get_string(SYLPF_OPTION.rcfile, SYLNOTIFY_SNARL, "snarlcmd_path", NULL);
+      path = g_key_file_get_string(SYLPF_OPTION.rcfile, SYLNOTIFY_SNARL, "snarlcmd_path", NULL);
       if (path != NULL) {
-        gchar *cmdline = g_strdup_printf("\"%s\" snShowMessage %d \"%s\" \"%s\" \"%s\"",
+        cmdline = g_strdup_printf("\"%s\" snShowMessage %d \"%s\" \"%s\" \"%s\"",
                                          path,
                                          5,
                                          msginfo->from,
@@ -1040,9 +1047,9 @@ void exec_sylnotify_cb(GObject *obj, FolderItem *item, const gchar *file, guint 
     }
   } else if (SYLPF_OPTION.growl_flag != FALSE) {
     if (SYLPF_OPTION.growl_growlnotify_flag != FALSE) {
-      gchar *path = g_key_file_get_string(SYLPF_OPTION.rcfile, SYLNOTIFY_GROWL, "growlnotify_path", NULL);
+      path = g_key_file_get_string(SYLPF_OPTION.rcfile, SYLNOTIFY_GROWL, "growlnotify_path", NULL);
       if (path != NULL) {
-        gchar *cmdline = g_strdup_printf("\"%s\" /a:%s /ai:%s /r:\"%s\" \"%s\"",
+        cmdline = g_strdup_printf("\"%s\" /a:%s /ai:%s /r:\"%s\" \"%s\"",
                                          path,
                                          "Sylpheed",
                                          "http://sylpheed.sraoss.jp/images/sylpheed.png",
