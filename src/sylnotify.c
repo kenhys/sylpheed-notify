@@ -637,6 +637,7 @@ static SylNotifyAppEntry notification_applications[] = {
   {SYLNOTIFY_APP_GFW, "Growl for Windows"},
   {SYLNOTIFY_APP_SNARL, "Snarl"},
   {SYLNOTIFY_APP_GFL, "Growl For Linux"},
+  {SYLNOTIFY_APP_LIBNOTIFY, "Libnotify"},
 };
 
 static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)

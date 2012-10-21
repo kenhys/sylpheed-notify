@@ -109,6 +109,7 @@ enum SylNotifyAppType {
   SYLNOTIFY_APP_GFW, /* Growl for Windows */
   SYLNOTIFY_APP_SNARL,
   SYLNOTIFY_APP_GFL, /* Growl For Linux */
+  SYLNOTIFY_APP_LIBNOTIFY,
 };
 
 typedef struct _SylNotifyAppEntry {
