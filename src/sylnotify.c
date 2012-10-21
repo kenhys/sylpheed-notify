@@ -689,37 +689,42 @@ static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
   GtkWidget *vbox_app = gtk_vbox_new(FALSE, BOX_SPACE);
 #if GTK_CHECK_VERSION(2, 24, 0)
   app_combo = gtk_combo_box_text_new();
+#else
+  app_combo = gtk_combo_box_new_text();
+#endif
   for (i = 0; i < sizeof(notification_applications)/sizeof(SylNotifyAppEntry); i++) {
-#if defined(G_OS_WIN32)
     switch (notification_applications[i].app_type) {
+#if defined(G_OS_WIN32)
     case SYLNOTIFY_APP_NONE:
     case SYLNOTIFY_APP_GFW:
     case SYLNOTIFY_APP_SNARL:
+#if GTK_CHECK_VERSION(2, 24, 0)
       gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(app_combo),
                                      notification_applications[i].app_desc);
+#else
+      gtk_combo_box_append_text(app_combo,
+                                notification_applications[i].app_desc);
+#endif
       break;
-    default:
-      break;
-    }
 #endif
 #if defined(G_OS_UNIX)
-    switch (notification_applications[i].app_type) {
     case SYLNOTIFY_APP_NONE:
     case SYLNOTIFY_APP_GFL:
     case SYLNOTIFY_APP_LIBNOTIFY:
+#if GTK_CHECK_VERSION(2, 24, 0)
       gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(app_combo),
                                      notification_applications[i].app_desc);
+#else
+      gtk_combo_box_append_text(app_combo,
+                                notification_applications[i].app_desc);
       break;
+#endif
     default:
       break;
     }
 #endif
   }
   gtk_box_pack_start(GTK_BOX(vbox_app), app_combo, FALSE, FALSE, 0);
-#else
-  gtk_box_pack_start(GTK_BOX(vbox_app), SYLPF_OPTION.growl, FALSE, FALSE, 0);
-  gtk_box_pack_start(GTK_BOX(vbox_app), SYLPF_OPTION.snarl, FALSE, FALSE, 0);
-#endif
 
   gtk_container_add(GTK_CONTAINER(app_frm_align), vbox_app);
   gtk_container_add(GTK_CONTAINER(app_frm), app_frm_align);
