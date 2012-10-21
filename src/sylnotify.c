@@ -692,6 +692,7 @@ static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(app_combo),
                                    notification_applications[i].app_desc);
   }
+  gtk_box_pack_start(GTK_BOX(vbox_app), app_combo, FALSE, FALSE, 0);
 #else
   gtk_box_pack_start(GTK_BOX(vbox_app), SYLPF_OPTION.growl, FALSE, FALSE, 0);
   gtk_box_pack_start(GTK_BOX(vbox_app), SYLPF_OPTION.snarl, FALSE, FALSE, 0);
