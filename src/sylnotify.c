@@ -633,6 +633,7 @@ static void exec_sylnotify_menu_cb(void)
 }
 
 static SylNotifyAppEntry notification_applications[] = {
+  {SYLNOTIFY_APP_NONE, "None"},
   {SYLNOTIFY_APP_GFW, "Growl for Windows"},
   {SYLNOTIFY_APP_SNARL, "Snarl"},
   {SYLNOTIFY_APP_GFL, "Growl For Linux"},

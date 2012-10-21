@@ -105,6 +105,7 @@ struct _SylNotifyOption {
 typedef struct _SylNotifyOption SylNotifyOption;
 
 enum SylNotifyAppType {
+  SYLNOTIFY_APP_NONE,
   SYLNOTIFY_APP_GFW, /* Growl for Windows */
   SYLNOTIFY_APP_SNARL,
   SYLNOTIFY_APP_GFL, /* Growl For Linux */
