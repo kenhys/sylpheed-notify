@@ -632,6 +632,12 @@ static void exec_sylnotify_menu_cb(void)
 #undef SYLPF_FUNC_NAME
 }
 
+static SylNotifyAppEntry notification_applications[] = {
+  {SYLNOTIFY_APP_GFW, "Growl for Windows"},
+  {SYLNOTIFY_APP_SNARL, "Snarl"},
+  {SYLNOTIFY_APP_GFL, "Growl For Linux"},
+};
+
 static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
 {
 #define SYLPF_FUNC_NAME "create_config_main_page"
