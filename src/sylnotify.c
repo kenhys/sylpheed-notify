@@ -690,8 +690,30 @@ static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
 #if GTK_CHECK_VERSION(2, 24, 0)
   app_combo = gtk_combo_box_text_new();
   for (i = 0; i < sizeof(notification_applications)/sizeof(SylNotifyAppEntry); i++) {
-    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(app_combo),
-                                   notification_applications[i].app_desc);
+#if defined(G_OS_WIN32)
+    switch (notification_applications[i].app_type) {
+    case SYLNOTIFY_APP_NONE:
+    case SYLNOTIFY_APP_GFW:
+    case SYLNOTIFY_APP_SNARL:
+      gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(app_combo),
+                                     notification_applications[i].app_desc);
+      break;
+    default:
+      break;
+    }
+#endif
+#if defined(G_OS_UNIX)
+    switch (notification_applications[i].app_type) {
+    case SYLNOTIFY_APP_NONE:
+    case SYLNOTIFY_APP_GFL:
+    case SYLNOTIFY_APP_LIBNOTIFY:
+      gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(app_combo),
+                                     notification_applications[i].app_desc);
+      break;
+    default:
+      break;
+    }
+#endif
   }
   gtk_box_pack_start(GTK_BOX(vbox_app), app_combo, FALSE, FALSE, 0);
 #else
