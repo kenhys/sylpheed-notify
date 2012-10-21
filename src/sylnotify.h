@@ -117,6 +117,7 @@ static void exec_sylnotify_onoff_cb(void);
 static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey);
 static GtkWidget *create_config_snarl_page(GtkWidget *notebook, GKeyFile *pkey);
 static GtkWidget *create_config_growl_page(GtkWidget *notebook, GKeyFile *pkey);
+static void create_config_gol_page(GtkWidget *notebook, GKeyFile *pkey);
 static GtkWidget *create_config_about_page(GtkWidget *notebook, GKeyFile *pkey);
 
 static void command_path_clicked(GtkWidget *widget, gpointer data);

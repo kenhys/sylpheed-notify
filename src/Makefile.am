@@ -3,7 +3,10 @@ lib_LTLIBRARIES = sylnotify.la
 
 sylpf_srcdir = $(top_srcdir)/../sylplugin_factory/src
 
-sylnotify_la_SOURCES = sylnotify.c sylnotify.h
+sylnotify_la_SOURCES = \
+	sylnotify.c \
+	$(sylpf_srcdir)/sylpf_utility.c
+
 sylnotify_la_LDFLAGS = -module -no-undefined -avoid-version
 
 INCLUDES = \

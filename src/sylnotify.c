@@ -493,6 +493,10 @@ static void exec_sylnotify_menu_cb(void)
   /* Snarl option tab */
   create_config_snarl_page(notebook, SYLPF_OPTION.rcfile);
 #endif
+#ifdef G_OS_UNIX
+  create_config_gol_page(notebook, SYLPF_OPTION.rcfile);
+#endif
+
   /* about, copyright tab */
   create_config_about_page(notebook, SYLPF_OPTION.rcfile);
 
@@ -870,6 +874,34 @@ static GtkWidget *create_config_growl_page(GtkWidget *notebook, GKeyFile *pkey)
   return NULL;
 }
 #endif
+
+#ifdef G_OS_UNIX
+static void create_config_gol_page(GtkWidget *notebook, GKeyFile *pkey)
+{
+#define SYLPF_FUNC_NAME "plugin_load"
+
+  SYLPF_START_FUNC;
+
+  GtkWidget *vbox;
+  GtkWidget *page;
+  GtkWidget *command_frame;
+  GtkWidget *label;
+
+  vbox = gtk_vbox_new(FALSE, 0);
+  page = gtk_vbox_new(FALSE, 0);
+
+  command_frame = sylpf_pack_widget_with_aligned_frame(vbox, _("Growl for Linux"));
+  gtk_box_pack_start(GTK_BOX(page), command_frame, FALSE, FALSE, 0);
+
+  label = gtk_label_new(_("Gol"));
+  gtk_notebook_append_page(GTK_NOTEBOOK(notebook), page, label);
+  gtk_widget_show_all(notebook);
+
+  SYLPF_END_FUNC;
+#undef SYLPF_FUNC_NAME
+}
+#endif
+
 
 /* about, copyright tab */
 static GtkWidget *create_config_about_page(GtkWidget *notebook, GKeyFile *pkey)
