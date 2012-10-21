@@ -643,6 +643,8 @@ static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
 #define SYLPF_FUNC_NAME "create_config_main_page"
 
   GtkWidget *vbox, *startup_align, *startup_frm, *startup_frm_align;
+  GtkWidget *app_combo;
+  gint i;
 
   SYLPF_START_FUNC;
 
@@ -683,8 +685,16 @@ static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
   SYLPF_OPTION.snarl = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON (SYLPF_OPTION.growl), _("Snarl"));
 
   GtkWidget *vbox_app = gtk_vbox_new(FALSE, BOX_SPACE);
+#if GTK_CHECK_VERSION(2, 24, 0)
+  app_combo = gtk_combo_box_text_new();
+  for (i = 0; i < sizeof(notification_applications)/sizeof(SylNotifyAppEntry); i++) {
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(app_combo),
+                                   notification_applications[i].app_desc);
+  }
+#else
   gtk_box_pack_start(GTK_BOX(vbox_app), SYLPF_OPTION.growl, FALSE, FALSE, 0);
   gtk_box_pack_start(GTK_BOX(vbox_app), SYLPF_OPTION.snarl, FALSE, FALSE, 0);
+#endif
 
   gtk_container_add(GTK_CONTAINER(app_frm_align), vbox_app);
   gtk_container_add(GTK_CONTAINER(app_frm), app_frm_align);
