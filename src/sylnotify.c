@@ -82,11 +82,12 @@ static SylNotifyOption SYLPF_OPTION;
 
 void plugin_load(void)
 {
+#define SYLPF_FUNC_NAME "plugin_load"
+
   GtkWidget *mainwin, *statusbar, *plugin_box;
   GtkWidget *on_pixbuf, *off_pixbuf;
   gchar *pattern;
 
-#define SYLPF_FUNC_NAME "plugin_load"
   SYLPF_START_FUNC;
 
   syl_init_gettext(SYLNOTIFY, "lib/locale");
@@ -214,7 +215,8 @@ void plugin_load(void)
 void plugin_unload(void)
 {
 #define SYLPF_FUNC_NAME "plugin_unload"
-  SYLPF_END_FUNC;
+
+  SYLPF_START_FUNC;
 
   g_free(SYLPF_OPTION.rcpath);
 
@@ -235,11 +237,12 @@ gint plugin_interface_version(void)
 
 static void init_done_cb(GObject *obj, gpointer data)
 {
+#define SYLPF_FUNC_NAME "init_done_cb"
+
   gchar *cmdline;
   gint ret;
 
-#define SYLPF_FUNC_NAME "plugin_unload"
-  SYLPF_END_FUNC;
+  SYLPF_START_FUNC;
 
   debug_print("[DEBUG init_done_cb");
   if (SYLPF_OPTION.snarl_flag != FALSE) {
@@ -281,12 +284,14 @@ static void app_force_exit_cb(GObject *obj, gpointer data)
  */
 static void prefs_ok_cb(GtkWidget *widget, gpointer data)
 {
+#define SYLPF_FUNC_NAME "prefs_ok_cb"
+
   gboolean flg;
   gchar *buf;
   gsize sz;
 
-#define SYLPF_FUNC_NAME "plugin_unload"
-  SYLPF_END_FUNC;
+  SYLPF_START_FUNC;
+
     g_key_file_load_from_file(SYLPF_OPTION.rcfile, SYLPF_OPTION.rcpath, G_KEY_FILE_KEEP_COMMENTS, NULL);
 
     flg = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(SYLPF_OPTION.startup));
@@ -358,7 +363,7 @@ static void prefs_ok_cb(GtkWidget *widget, gpointer data)
 }
 static void prefs_cancel_cb(GtkWidget *widget, gpointer data)
 {
-#define SYLPF_FUNC_NAME "plugin_load"
+#define SYLPF_FUNC_NAME "prefs_cancel_cb"
   SYLPF_START_FUNC;
 
     gtk_widget_destroy(GTK_WIDGET(data));
@@ -368,10 +373,11 @@ static void prefs_cancel_cb(GtkWidget *widget, gpointer data)
 }
 static void prefs_test_cb(GtkWidget *widget, gpointer data)
 {
+#define SYLPF_FUNC_NAME "prefs_test_cb"
+
   gint ret;
   gchar *cmdline;
 
-#define SYLPF_FUNC_NAME "plugin_load"
   SYLPF_START_FUNC;
 #if 0
     gint sock = fd_connect_inet(SYLSNARL_PORT);
@@ -424,16 +430,16 @@ static void prefs_test_cb(GtkWidget *widget, gpointer data)
         execute_command_line(cmdline, FALSE);
       }
     }
+#endif
   SYLPF_END_FUNC;
 #undef SYLPF_FUNC_NAME
-#endif
 }
 
 static void snp_mail_cb( GtkButton *widget,
                      gpointer   data )
 {
-#define SYLPF_FUNC_NAME "plugin_unload"
-  SYLPF_END_FUNC;
+#define SYLPF_FUNC_NAME "snp_mail_cb"
+  SYLPF_START_FUNC;
 
   gtk_widget_set_sensitive(GTK_WIDGET(SYLPF_OPTION.snarl_gntp), FALSE);
 
@@ -444,8 +450,8 @@ static void snp_mail_cb( GtkButton *widget,
 static void gntp_mail_cb( GtkButton *widget,
                           gpointer   data )
 {
-#define SYLPF_FUNC_NAME "plugin_unload"
-  SYLPF_END_FUNC;
+#define SYLPF_FUNC_NAME "gntp_mail_cb"
+  SYLPF_START_FUNC;
 
   gtk_widget_set_sensitive(GTK_WIDGET(SYLPF_OPTION.snarl_snp), FALSE);
 
@@ -455,6 +461,8 @@ static void gntp_mail_cb( GtkButton *widget,
 
 static void exec_sylnotify_menu_cb(void)
 {
+#define SYLPF_FUNC_NAME "exec_sylnotify_menu_cb"
+
   /* show modal dialog */
   GtkWidget *window;
   GtkWidget *vbox;
@@ -468,7 +476,6 @@ static void exec_sylnotify_menu_cb(void)
   GtkWidget *test_btn;
 #endif
     
-#define SYLPF_FUNC_NAME "plugin_load"
   SYLPF_START_FUNC;
 
   window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -627,9 +634,10 @@ static void exec_sylnotify_menu_cb(void)
 
 static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
 {
+#define SYLPF_FUNC_NAME "create_config_main_page"
+
   GtkWidget *vbox, *startup_align, *startup_frm, *startup_frm_align;
 
-#define SYLPF_FUNC_NAME "plugin_load"
   SYLPF_START_FUNC;
 
   debug_print("create_config_main_page\n");
@@ -719,7 +727,7 @@ static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
 #ifdef G_OS_WIN32
 static GtkWidget *create_config_snarl_page(GtkWidget *notebook, GKeyFile *pkey)
 {
-#define SYLPF_FUNC_NAME "plugin_load"
+#define SYLPF_FUNC_NAME "create_config_snarl_page"
   SYLPF_START_FUNC;
 
   GtkWidget *vbox = gtk_vbox_new(FALSE, 6);
@@ -814,7 +822,7 @@ static GtkWidget *create_config_snarl_page(GtkWidget *notebook, GKeyFile *pkey)
  */
 static GtkWidget *create_config_growl_page(GtkWidget *notebook, GKeyFile *pkey)
 {
-#define SYLPF_FUNC_NAME "plugin_load"
+#define SYLPF_FUNC_NAME "create_config_growl_page"
   SYLPF_START_FUNC;
 
   GtkWidget *vbox = gtk_vbox_new(FALSE, 6);
@@ -878,7 +886,7 @@ static GtkWidget *create_config_growl_page(GtkWidget *notebook, GKeyFile *pkey)
 #ifdef G_OS_UNIX
 static void create_config_gol_page(GtkWidget *notebook, GKeyFile *pkey)
 {
-#define SYLPF_FUNC_NAME "plugin_load"
+#define SYLPF_FUNC_NAME "create_config_gol_page"
 
   SYLPF_START_FUNC;
 
@@ -906,7 +914,7 @@ static void create_config_gol_page(GtkWidget *notebook, GKeyFile *pkey)
 /* about, copyright tab */
 static GtkWidget *create_config_about_page(GtkWidget *notebook, GKeyFile *pkey)
 {
-#define SYLPF_FUNC_NAME "plugin_load"
+#define SYLPF_FUNC_NAME "create_config_about_page"
   SYLPF_START_FUNC;
 
   debug_print("create_config_about_page\n");
@@ -948,7 +956,7 @@ static GtkWidget *create_config_about_page(GtkWidget *notebook, GKeyFile *pkey)
 
 static void exec_sylnotify_onoff_cb(void)
 {
-#define SYLPF_FUNC_NAME "plugin_unload"
+#define SYLPF_FUNC_NAME "exec_sylnotify_onoff_cb"
   SYLPF_END_FUNC;
 
   if (g_enable != TRUE) {
@@ -979,7 +987,7 @@ static void exec_sylnotify_onoff_cb(void)
 
 void exec_sylnotify_cb(GObject *obj, FolderItem *item, const gchar *file, guint num)
 {
-#define SYLPF_FUNC_NAME "plugin_load"
+#define SYLPF_FUNC_NAME "exec_sylnotify_cb"
   
   PrefsCommon *prefs_common;
   PrefsAccount *ac;
@@ -1075,7 +1083,7 @@ static void command_path_clicked(GtkWidget *widget, gpointer data)
   GtkWidget *dialog;
   gchar *filename;
 
-#define SYLPF_FUNC_NAME "plugin_load"
+#define SYLPF_FUNC_NAME "command_path_clicked"
   SYLPF_START_FUNC;
 
   dialog = gtk_file_chooser_dialog_new(NULL, NULL,
@@ -1098,7 +1106,7 @@ static void command_path_clicked(GtkWidget *widget, gpointer data)
 
 static void inc_start_cb(GObject *obj, PrefsAccount *ac)
 {
-#define SYLPF_FUNC_NAME "plugin_load"
+#define SYLPF_FUNC_NAME "inc_start_cb"
   SYLPF_START_FUNC;
 
 #if 1
@@ -1158,9 +1166,13 @@ static gint send_notification_by_growlnotify(GKeyFile *rcfile,
                                              gchar *from,
                                              gchar *subject)
 {
+#define SYLPF_FUNC_NAME "send_notification_by_growlnotify"
+
   gchar *path;
   gchar *cmdline;
   gint ret;
+
+  SYLPF_START_FUNC;
 
   path = g_key_file_get_string(rcfile, SYLNOTIFY_GROWL,
                                "growlnotify_path", NULL);
@@ -1184,6 +1196,9 @@ static gint send_notification_by_growlnotify(GKeyFile *rcfile,
       g_free(cmdline);
     }
   }
+  SYLPF_END_FUNC;
+
+#undef SYLPF_FUNC_NAME
   return ret;
 }
 
@@ -1191,9 +1206,13 @@ static gint send_notification_by_snarl(GKeyFile *rcfile,
                                        const gchar *title,
                                        const gchar *message)
 {
+#define SYLPF_FUNC_NAME "send_notification_by_snarl"
+
   gchar *path;
   gchar *cmdline;
   gint ret;
+
+  SYLPF_START_FUNC;
 
   path = g_key_file_get_string(rcfile, SYLNOTIFY_SNARL,
                                "snarlcmd_path", NULL);
@@ -1207,15 +1226,21 @@ static gint send_notification_by_snarl(GKeyFile *rcfile,
     ret = execute_command_line(cmdline, FALSE);
     g_free(cmdline);
   }
+  SYLPF_END_FUNC;
+#undef SYLPF_FUNC_NAME
   return ret;
 }
   
 static gint send_notification_by_snarl_snp(GKeyFile *rcfile,
                                            const MsgInfo *msginfo)
 {
+#define SYLPF_FUNC_NAME "send_notification_by_snarl_snp"
+
   gint sock;
   gint ret;
   gchar *buf;
+
+  SYLPF_START_FUNC;
 
   sock = fd_connect_inet(SYLSNARL_PORT);
   debug_print("[DEBUG] sock:%d\n", sock);
@@ -1238,5 +1263,7 @@ static gint send_notification_by_snarl_snp(GKeyFile *rcfile,
   g_free(buf);
   fd_close(sock);
 
+  SYLPF_END_FUNC;
+#undef SYLPF_FUNC_NAME
   return ret;
 }
