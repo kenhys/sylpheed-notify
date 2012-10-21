@@ -1007,26 +1007,7 @@ void exec_sylnotify_cb(GObject *obj, FolderItem *item, const gchar *file, guint 
   if (SYLPF_OPTION.snarl_flag != FALSE) {
     if (SYLPF_OPTION.snarl_snp_flag != FALSE) {
       debug_print("[DEBUG] snarl snp mode\n");
-      sock = fd_connect_inet(SYLSNARL_PORT);
-      debug_print("[DEBUG] sock:%d\n", sock);
-      if (sock < 0) {
-        debug_print("[DEBUG] sock error:%d\n", sock);
-        return;
-      }
-    
-      buf = g_strdup_printf("%s\r\n%s\r\n%s&title=%s&text=Date:%s\\nFrom:%s\\nTo:%s\\nSubject:%s\r\nEND\r\n",
-                                   "SNP/3.0",
-                                   "register?app-sig=app/Sylpheed&title=Sylpheed",
-                                   "notify?app-sig=app/Sylpheed",
-                                   conv_unmime_header(msginfo->subject, "UTF-8"),
-                                   msginfo->date,
-                                   msginfo->from,
-                                   msginfo->to,
-                                   conv_unmime_header(msginfo->subject, "UTF-8"));
-      debug_print("[DEBUG] msg:%s\n", buf);
-      fd_write_all(sock, buf, strlen(buf));
-      g_free(buf);
-      fd_close(sock);
+      send_notification_by_snarl_snp(SYLPF_OPTION.rcpath, msginfo);
     } else if (SYLPF_OPTION.snarl_gntp_flag != FALSE) {
       debug_print("[DEBUG] snarl gntp mode\n");
     } else if (SYLPF_OPTION.snarl_heysnarl_flag != FALSE) {
@@ -1197,3 +1178,33 @@ static gint send_notification_by_snarl(GKeyFile *rcfile,
   return ret;
 }
   
+static gint send_notification_by_snarl_snp(GKeyFile *rcfile,
+                                           const MsgInfo *msginfo)
+{
+  gint sock;
+  gint ret;
+  gchar *buf;
+
+  sock = fd_connect_inet(SYLSNARL_PORT);
+  debug_print("[DEBUG] sock:%d\n", sock);
+  if (sock < 0) {
+    debug_print("[DEBUG] sock error:%d\n", sock);
+    return -1;
+  }
+
+  buf = g_strdup_printf("%s\r\n%s\r\n%s&title=%s&text=Date:%s\\nFrom:%s\\nTo:%s\\nSubject:%s\r\nEND\r\n",
+                        "SNP/3.0",
+                        "register?app-sig=app/Sylpheed&title=Sylpheed",
+                        "notify?app-sig=app/Sylpheed",
+                        conv_unmime_header(msginfo->subject, "UTF-8"),
+                        msginfo->date,
+                        msginfo->from,
+                        msginfo->to,
+                        conv_unmime_header(msginfo->subject, "UTF-8"));
+  debug_print("[DEBUG] msg:%s\n", buf);
+  ret = fd_write_all(sock, buf, strlen(buf));
+  g_free(buf);
+  fd_close(sock);
+
+  return ret;
+}

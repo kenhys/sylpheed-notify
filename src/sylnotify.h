@@ -129,6 +129,8 @@ static gint send_notification_by_growlnotify(GKeyFile *rcfile,
 static gint send_notification_by_snarl(GKeyFile *rcfile,
                                        const gchar *title,
                                        const gchar *message);
+static gint send_notification_by_snarl_snp(GKeyFile *rcfile,
+                                           const MsgInfo *msginfo);
 
 
 #define GET_RC_BOOLEAN(section, keyarg) g_key_file_get_boolean(SYLPF_OPTION.rcfile, section, keyarg, NULL)
