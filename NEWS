@@ -1,5 +1,9 @@
 News of sylnotify
 
+* 0.3.0 (2012-XX-XX)
+
+  *
+
 * 0.2.1 (2012-01-05)
 
   * fix bug loading sylnotifyrc in startup process. reported by James.
