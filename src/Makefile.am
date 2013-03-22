@@ -5,7 +5,7 @@ sylpf_srcdir = $(top_srcdir)/../sylplugin_factory/src
 
 sylnotify_la_SOURCES = \
 	sylnotify.c \
-	$(sylpf_srcdir)/sylpf_utility.c
+	$(sylpf_srcdir)/sylplugin_factory.c
 
 sylnotify_la_LDFLAGS = -module -no-undefined -avoid-version
 
