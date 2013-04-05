@@ -1,11 +1,9 @@
 
 lib_LTLIBRARIES = sylnotify.la
 
-sylpf_srcdir = $(top_srcdir)/../sylplugin_factory/src
-
 sylnotify_la_SOURCES = \
 	sylnotify.c \
-	$(sylpf_srcdir)/sylplugin_factory.c
+	$(sylplugin_factory_source_dir)/src/sylplugin_factory.c
 
 sylnotify_la_LDFLAGS = -module -no-undefined -avoid-version
 
@@ -15,7 +13,7 @@ INCLUDES = \
 	-I$(sylpheed_build_dir) \
 	-I$(sylpheed_build_dir)/libsylph \
 	-I$(sylpheed_build_dir)/src \
-	-I$(sylpf_srcdir)
+	-I$(sylplugin_factory_source_dir)/src
 
 sylnotify_la_LIBADD = \
 	$(GTK_LIBS) \
