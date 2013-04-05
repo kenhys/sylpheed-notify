@@ -32,9 +32,6 @@
 #include <glib/gi18n-lib.h>
 #include <locale.h>
 
-#define SYLPF_ID "sylnotify"
-#define SYLPF_OPTION sylnotify_option
-
 #define SYLPF_FUNC(arg) sylnotify ## _ ## arg
 
 #define SYLNOTIFY "sylnotify"
