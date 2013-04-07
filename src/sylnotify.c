@@ -363,9 +363,10 @@ static void prefs_cancel_cb(GtkWidget *widget, gpointer data)
 }
 static void prefs_test_cb(GtkWidget *widget, gpointer data)
 {
-
+#if G_OS_WIN32
   gint ret;
   gchar *cmdline;
+#endif
 
   SYLPF_START_FUNC;
 #if 0
