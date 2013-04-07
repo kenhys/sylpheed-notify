@@ -280,7 +280,7 @@ static void app_force_exit_cb(GObject *obj, gpointer data)
 static void prefs_ok_cb(GtkWidget *widget, gpointer data)
 {
   gboolean flg;
-  gchar *buf;
+  const gchar *buf;
   gsize sz;
 
   SYLPF_START_FUNC;
