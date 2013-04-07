@@ -363,6 +363,8 @@ static void prefs_cancel_cb(GtkWidget *widget, gpointer data)
 
   SYLPF_END_FUNC;
 }
+
+#ifdef DEBUG
 static void prefs_test_cb(GtkWidget *widget, gpointer data)
 {
 #if G_OS_WIN32
@@ -425,7 +427,9 @@ static void prefs_test_cb(GtkWidget *widget, gpointer data)
 #endif
   SYLPF_END_FUNC;
 }
+#endif
 
+#ifdef G_OS_WIN32
 static void snp_mail_cb( GtkButton *widget,
                      gpointer   data )
 {
@@ -445,6 +449,7 @@ static void gntp_mail_cb( GtkButton *widget,
 
   SYLPF_END_FUNC;
 }
+#endif
 
 static void exec_sylnotify_menu_cb(void)
 {
@@ -1119,6 +1124,7 @@ void exec_sylnotify_cb(GObject *obj, FolderItem *item, const gchar *file, guint 
   SYLPF_END_FUNC;
 }
 
+#ifdef G_OS_WIN32
 static void command_path_clicked(GtkWidget *widget, gpointer data)
 {
   GtkWidget *dialog;
@@ -1142,6 +1148,7 @@ static void command_path_clicked(GtkWidget *widget, gpointer data)
 
   SYLPF_END_FUNC;
 }
+#endif
 
 static void inc_start_cb(GObject *obj, PrefsAccount *ac)
 {
