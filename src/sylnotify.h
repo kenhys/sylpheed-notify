@@ -111,7 +111,6 @@ static void init_done_cb(GObject *obj, gpointer data);
 static void app_exit_cb(GObject *obj, gpointer data);
 static void app_force_exit_cb(GObject *obj, gpointer data);
 
-static gchar *myprocmsg_get_message_file_path(MsgInfo *msginfo);
 static void prefs_ok_cb(GtkWidget *widget, gpointer data);
 
 static void exec_sylnotify_cb(GObject *obj, FolderItem *item, const gchar *file, guint num);
