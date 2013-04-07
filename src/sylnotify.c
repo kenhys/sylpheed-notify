@@ -628,6 +628,16 @@ static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
   GtkWidget *vbox, *startup_align, *startup_frm, *startup_frm_align;
   GtkWidget *app_combo;
   gint i;
+  GtkWidget *app_align;
+  GtkWidget *app_frm;
+  GtkWidget *app_frm_align;
+  GtkWidget *vbox_app;
+  GtkWidget *pattern_align;
+  GtkWidget *pattern_frm;
+  GtkWidget *pattern_frm_align;
+  GtkWidget *vbox_pattern;
+  GtkWidget *pattern_lbl;
+  GtkWidget *general_lbl;
 
   SYLPF_START_FUNC;
 
@@ -657,17 +667,17 @@ static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
   gtk_widget_show(SYLPF_OPTION.startup);
 
   /* Application */
-  GtkWidget *app_align = gtk_alignment_new(0, 0, 1, 1);
+  app_align = gtk_alignment_new(0, 0, 1, 1);
   gtk_alignment_set_padding(GTK_ALIGNMENT(app_align), ALIGN_TOP, ALIGN_BOTTOM, ALIGN_LEFT, ALIGN_RIGHT);
 
-  GtkWidget *app_frm = gtk_frame_new(_("Application"));
-  GtkWidget *app_frm_align = gtk_alignment_new(0, 0, 1, 1);
+  app_frm = gtk_frame_new(_("Application"));
+  app_frm_align = gtk_alignment_new(0, 0, 1, 1);
   gtk_alignment_set_padding(GTK_ALIGNMENT(app_frm_align), ALIGN_TOP, ALIGN_BOTTOM, ALIGN_LEFT, ALIGN_RIGHT);
 
   SYLPF_OPTION.growl = gtk_radio_button_new_with_label(NULL, _("Growl"));
   SYLPF_OPTION.snarl = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON (SYLPF_OPTION.growl), _("Snarl"));
 
-  GtkWidget *vbox_app = gtk_vbox_new(FALSE, BOX_SPACE);
+  vbox_app = gtk_vbox_new(FALSE, BOX_SPACE);
 #if GTK_CHECK_VERSION(2, 24, 0)
   app_combo = gtk_combo_box_text_new();
 #else
@@ -716,18 +726,18 @@ static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(SYLPF_OPTION.snarl), SYLPF_OPTION.snarl_flag);
 
   /* Notification */
-  GtkWidget *pattern_align = gtk_alignment_new(0, 0, 1, 1);
+  pattern_align = gtk_alignment_new(0, 0, 1, 1);
   gtk_alignment_set_padding(GTK_ALIGNMENT(pattern_align), ALIGN_TOP, ALIGN_BOTTOM, ALIGN_LEFT, ALIGN_RIGHT);
-  GtkWidget *pattern_frm = gtk_frame_new(_("Notification"));
-  GtkWidget *pattern_frm_align = gtk_alignment_new(0, 0, 1, 1);
+  pattern_frm = gtk_frame_new(_("Notification"));
+  pattern_frm_align = gtk_alignment_new(0, 0, 1, 1);
   gtk_alignment_set_padding(GTK_ALIGNMENT(pattern_frm_align), ALIGN_TOP, ALIGN_BOTTOM, ALIGN_LEFT, ALIGN_RIGHT);
 
   SYLPF_OPTION.pattern_summary = gtk_radio_button_new_with_label(NULL, _("Summary only (when receiving mail and finished)"));
   SYLPF_OPTION.pattern_all = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON (SYLPF_OPTION.pattern_summary),
                                                                   _("All (1 notification per new mail)"));
-  GtkWidget *pattern_lbl = gtk_label_new(_("Note: IMAP4 is not supported yet."));
+  pattern_lbl = gtk_label_new(_("Note: IMAP4 is not supported yet."));
 
-  GtkWidget *vbox_pattern = gtk_vbox_new(TRUE, BOX_SPACE);
+  vbox_pattern = gtk_vbox_new(TRUE, BOX_SPACE);
   gtk_box_pack_start(GTK_BOX(vbox_pattern), SYLPF_OPTION.pattern_summary, FALSE, FALSE, 0);
   gtk_box_pack_start(GTK_BOX(vbox_pattern), SYLPF_OPTION.pattern_all, FALSE, FALSE, 0);
   gtk_box_pack_start(GTK_BOX(vbox_pattern), pattern_lbl, FALSE, FALSE, 0);
@@ -741,7 +751,7 @@ static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
   gtk_box_pack_start(GTK_BOX(vbox), app_align, FALSE, FALSE, 0);
   gtk_box_pack_start(GTK_BOX(vbox), pattern_align, TRUE, TRUE, 0);
 
-  GtkWidget *general_lbl = gtk_label_new(_("General"));
+  general_lbl = gtk_label_new(_("General"));
   gtk_notebook_append_page(GTK_NOTEBOOK(notebook), vbox, general_lbl);
   gtk_widget_show_all(notebook);
 
@@ -908,13 +918,13 @@ static GtkWidget *create_config_growl_page(GtkWidget *notebook, GKeyFile *pkey)
 #ifdef G_OS_UNIX
 static void create_config_gol_page(GtkWidget *notebook, GKeyFile *pkey)
 {
-
-  SYLPF_START_FUNC;
-
   GtkWidget *vbox;
   GtkWidget *page;
   GtkWidget *command_frame;
   GtkWidget *label;
+
+  SYLPF_START_FUNC;
+
 
   vbox = gtk_vbox_new(FALSE, 0);
   page = gtk_vbox_new(FALSE, 0);
@@ -934,36 +944,45 @@ static void create_config_gol_page(GtkWidget *notebook, GKeyFile *pkey)
 /* about, copyright tab */
 static GtkWidget *create_config_about_page(GtkWidget *notebook, GKeyFile *pkey)
 {
+  GtkWidget *hbox;
+  GtkWidget *vbox;
+  GtkWidget *lbl;
+  GtkWidget *desc;
+  GtkWidget *scrolled;
+  GtkTextBuffer *tbuffer;
+  GtkWidget *tview;
+  GtkWidget *general_lbl;
+
   SYLPF_START_FUNC;
 
   debug_print("create_config_about_page\n");
   if (notebook == NULL){
     return NULL;
   }
-  GtkWidget *hbox = gtk_hbox_new(TRUE, 6);
-  GtkWidget *vbox = gtk_vbox_new(FALSE, 6);
+  hbox = gtk_hbox_new(TRUE, 6);
+  vbox = gtk_vbox_new(FALSE, 6);
 
-  GtkWidget *lbl = gtk_label_new(_("SylNotify"));
-  GtkWidget *desc = gtk_label_new(PLUGIN_DESC);
+  lbl = gtk_label_new(_("SylNotify"));
+  desc = gtk_label_new(PLUGIN_DESC);
 
   /* copyright */
-  GtkWidget *scrolled = gtk_scrolled_window_new(NULL, NULL);
+  scrolled = gtk_scrolled_window_new(NULL, NULL);
 
   gtk_box_pack_start(GTK_BOX(vbox), lbl, FALSE, TRUE, 6);
   gtk_box_pack_start(GTK_BOX(vbox), desc, FALSE, TRUE, 6);
   gtk_box_pack_start(GTK_BOX(vbox), scrolled, TRUE, TRUE, 6);
   gtk_box_pack_start(GTK_BOX(hbox), vbox, TRUE, TRUE, 6);
 
-  GtkTextBuffer *tbuffer = gtk_text_buffer_new(NULL);
+  tbuffer = gtk_text_buffer_new(NULL);
   gtk_text_buffer_set_text(tbuffer, _(g_copyright), strlen(g_copyright));
-  GtkWidget *tview = gtk_text_view_new_with_buffer(tbuffer);
+  tview = gtk_text_view_new_with_buffer(tbuffer);
   gtk_text_view_set_editable(GTK_TEXT_VIEW(tview), FALSE);
   gtk_container_add(GTK_CONTAINER(scrolled), tview);
     
   gtk_box_pack_start(GTK_BOX(vbox), scrolled, TRUE, TRUE, 6);
     
   /**/
-  GtkWidget *general_lbl = gtk_label_new(_("About"));
+  general_lbl = gtk_label_new(_("About"));
   gtk_notebook_append_page(GTK_NOTEBOOK(notebook), hbox, general_lbl);
   gtk_widget_show_all(notebook);
 
