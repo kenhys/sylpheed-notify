@@ -44,13 +44,13 @@
 #include "foldersel.h"
 #include "../res/growl.xpm"
 #include "../res/growlx.xpm"
-#include "sylnotify.h"
 
 #include <glib.h>
 #include <glib/gi18n-lib.h>
 #include <locale.h>
 
 #include "sylplugin_factory.h"
+#include "sylnotify.h"
 
 static SylPluginInfo info = {
   N_(PLUGIN_NAME),
