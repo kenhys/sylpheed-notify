@@ -1039,7 +1039,8 @@ void exec_sylnotify_cb(GObject *obj, FolderItem *item, const gchar *file, guint 
     debug_print("[DEBUG] not F_NORMAL and F_INBOX %d\n", item->stype);
     if (item->folder) {
       if (item->folder->klass) {
-        debug_print("[DEBUG] item->name:%s FolderType:%d %d\n", item->name, item->folder->klass->type);
+        SYLPF_DEBUG_STR("item->name", item->name);
+        SYLPF_DEBUG_VAL("FolderType", item->folder->klass->type);
       }
     }
     return;
