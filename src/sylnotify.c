@@ -42,6 +42,7 @@
 #include "alertpanel.h"
 #include "prefs_common.h"
 #include "foldersel.h"
+#include "account.h"
 #include "../res/growl.xpm"
 #include "../res/growlx.xpm"
 
