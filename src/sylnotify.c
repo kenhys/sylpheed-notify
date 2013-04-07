@@ -43,6 +43,7 @@
 #include "prefs_common.h"
 #include "foldersel.h"
 #include "account.h"
+#include "unmime.h"
 #include "../res/growl.xpm"
 #include "../res/growlx.xpm"
 
