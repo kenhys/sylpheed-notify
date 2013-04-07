@@ -1211,6 +1211,7 @@ static void inc_finished_cb(GObject *obj, gint new_messages)
 #endif
 }
 
+#ifdef G_OS_WIN32
 static gint send_notification_by_growlnotify(GKeyFile *rcfile,
                                              gchar *from,
                                              gchar *subject)
@@ -1316,3 +1317,4 @@ static gint send_notification_by_snarl_snp(GKeyFile *rcfile,
 #undef SYLPF_FUNC_NAME
   return ret;
 }
+#endif
