@@ -1067,8 +1067,9 @@ void exec_sylnotify_cb(GObject *obj, FolderItem *item, const gchar *file, guint 
   g_print("%s\n", item->path);
 
   msginfo = folder_item_get_msginfo(item, num);
-  debug_print("[DEBUG] flags:%08x UNREAD:%08x NEW:%08x MARKED:%08x ",
-              msginfo->flags, MSG_UNREAD, MSG_NEW, MSG_MARKED);
+  SYLPF_DEBUG_VAL("UNREAD", MSG_UNREAD);
+  SYLPF_DEBUG_VAL("NEW", MSG_NEW);
+  SYLPF_DEBUG_VAL("MARKED", MSG_MARKED);
   debug_print("[DEBUG] perm_flags:%08x \n", msginfo->flags.perm_flags);
   debug_print("[DEBUG] tmp_flags:%08x \n", msginfo->flags.tmp_flags);
 
