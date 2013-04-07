@@ -1028,8 +1028,8 @@ void exec_sylnotify_cb(GObject *obj, FolderItem *item, const gchar *file, guint 
   PrefsCommon *prefs_common;
   PrefsAccount *ac;
   MsgInfo *msginfo;
-  gint ret, sock;
-  gchar *buf, *path, *cmdline;
+  gint ret;
+  gchar *path, *cmdline;
 
   SYLPF_START_FUNC;
 
