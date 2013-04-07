@@ -39,10 +39,6 @@
 #define SYLNOTIFY_GROWL "growl"
 #define SYLNOTIFYRC "sylnotifyrc"
 
-#define _(String) dgettext("sylnotify", String)
-#define N_(String) gettext_noop(String)
-#define gettext_noop(String) (String)
-
 #define PLUGIN_NAME N_("SylNotify - notifier plug-in for Sylpheed")
 #define PLUGIN_DESC N_("notifier plug-in for Sylpheed")
 
