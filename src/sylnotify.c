@@ -86,7 +86,7 @@ static SylNotifyOption SYLPF_OPTION;
 void plugin_load(void)
 {
   GtkWidget *mainwin, *statusbar, *plugin_box;
-  GtkWidget *on_pixbuf, *off_pixbuf;
+  GdkPixbuf *on_pixbuf, *off_pixbuf;
   gchar *pattern;
 
   SYLPF_START_FUNC;
