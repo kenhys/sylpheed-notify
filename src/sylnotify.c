@@ -1084,7 +1084,9 @@ void exec_sylnotify_cb(GObject *obj, FolderItem *item, const gchar *file, guint 
   if (SYLPF_OPTION.snarl_flag != FALSE) {
     if (SYLPF_OPTION.snarl_snp_flag != FALSE) {
       debug_print("[DEBUG] snarl snp mode\n");
+#ifdef G_OS_WIN32
       send_notification_by_snarl_snp(SYLPF_OPTION.rcpath, msginfo);
+#endif
     } else if (SYLPF_OPTION.snarl_gntp_flag != FALSE) {
       debug_print("[DEBUG] snarl gntp mode\n");
     } else if (SYLPF_OPTION.snarl_heysnarl_flag != FALSE) {
@@ -1105,8 +1107,10 @@ void exec_sylnotify_cb(GObject *obj, FolderItem *item, const gchar *file, guint 
     }
   } else if (SYLPF_OPTION.growl_flag != FALSE) {
     if (SYLPF_OPTION.growl_growlnotify_flag != FALSE) {
+#ifdef G_OS_WIN32
       send_notifycation_by_growlnotify(SYLPF_OPTION.rcfile,
                                        msginfo->from, msginfo->subject);
+#endif
     }
   } else {
     /* nop */
