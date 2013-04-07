@@ -118,8 +118,6 @@ static void exec_sylnotify_cb(GObject *obj, FolderItem *item, const gchar *file,
 static void exec_sylnotify_menu_cb(void);
 static void exec_sylnotify_onoff_cb(void);
 static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey);
-static GtkWidget *create_config_snarl_page(GtkWidget *notebook, GKeyFile *pkey);
-static GtkWidget *create_config_growl_page(GtkWidget *notebook, GKeyFile *pkey);
 static void create_config_gol_page(GtkWidget *notebook, GKeyFile *pkey);
 static GtkWidget *create_config_about_page(GtkWidget *notebook, GKeyFile *pkey);
 
@@ -127,6 +125,9 @@ static void command_path_clicked(GtkWidget *widget, gpointer data);
 static void inc_start_cb(GObject *obj, PrefsAccount *ac);
 static void inc_finished_cb(GObject *obj, gint new_messages);
 
+#ifdef G_OS_WIN32
+static GtkWidget *create_config_snarl_page(GtkWidget *notebook, GKeyFile *pkey);
+static GtkWidget *create_config_growl_page(GtkWidget *notebook, GKeyFile *pkey);
 static gint send_notification_by_growlnotify(GKeyFile *rcfile,
                                              gchar *from,
                                              gchar *subject);
@@ -135,6 +136,7 @@ static gint send_notification_by_snarl(GKeyFile *rcfile,
                                        const gchar *message);
 static gint send_notification_by_snarl_snp(GKeyFile *rcfile,
                                            const MsgInfo *msginfo);
+#endif
 
 
 #define GET_RC_BOOLEAN(section, keyarg) g_key_file_get_boolean(SYLPF_OPTION.rcfile, section, keyarg, NULL)
