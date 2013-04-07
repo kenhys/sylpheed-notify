@@ -39,9 +39,6 @@
 #define SYLNOTIFY_GROWL "growl"
 #define SYLNOTIFYRC "sylnotifyrc"
 
-#define PLUGIN_NAME N_("SylNotify - notifier plug-in for Sylpheed")
-#define PLUGIN_DESC N_("notifier plug-in for Sylpheed")
-
 #define SYLSNARL_PORT  5233
 #define SYLGNTP_PORT  23053
 

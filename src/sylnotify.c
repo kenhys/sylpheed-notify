@@ -52,6 +52,9 @@
 #include "sylplugin_factory.h"
 #include "sylnotify.h"
 
+#define PLUGIN_NAME N_("SylNotify - notifier plug-in for Sylpheed")
+#define PLUGIN_DESC N_("notifier plug-in for Sylpheed")
+
 static SylPluginInfo info = {
   N_(PLUGIN_NAME),
   VERSION,
