@@ -1,7 +1,7 @@
 /*
  * SylNotify notifier Plug-in
  *  -- generate notification when new mail arrive by using external notifier.
- * Copyright (c) 2012, HAYASHI Kentaro <kenhys@gmail.com> 
+ * Copyright (c) 2012-2013, HAYASHI Kentaro <kenhys@gmail.com> 
  * All rights reserved. 
  *
  * Redistribution and use in source and binary forms, with or without modification, 
@@ -51,6 +51,7 @@
 #include <glib/gi18n-lib.h>
 #include <locale.h>
 
+#include "copying.h"
 #include "sylplugin_factory.h"
 #include "sylnotify.h"
 
@@ -64,16 +65,6 @@ static SylPluginInfo info = {
   N_(PLUGIN_DESC)
 };
 
-static gchar* g_copyright = N_("SylNotify is distributed under 2-clause BSD license.\n"
-"\n"
-"Copyright (C) 2011-2012 HAYASHI Kentaro <kenhys@gmail.com>"
-"\n"
-"sylnotify contains following resource.\n"
-"\n"
-"growl.xpm,growlx.xpm: converted from growl.ico.\n"
-"Licensed under New BSD.\n"
-"http://code.google.com/p/growl-for-windows/\n"
-                               "\n");
 
 static gboolean g_enable = FALSE;
 
@@ -375,7 +366,7 @@ static void prefs_test_cb(GtkWidget *widget, gpointer data)
   SYLPF_START_FUNC;
 #if 0
     gint sock = fd_connect_inet(SYLSNARL_PORT);
-    gchar *buf = conv_unmime_header("SNP/3.0\r\nregister?app-sig=app/Sylpheed&title=Sylpheed\r\nnotify?app-sig=app/Sylpheed&title=Fromあああ:&text=From:\nSubject:\ntext...\r\nEND\r\n", "UTF-8");
+    gchar *buf = conv_unmime_header("SNP/3.0\r\nregister?app-sig=app/Sylpheed&title=Sylpheed\r\nnotify?app-sig=app/Sylpheed&title=From:&text=From:\nSubject:\ntext...\r\nEND\r\n", "UTF-8");
     debug_print("buf:%s", buf);
     fd_write_all(sock, buf, strlen(buf));
     fd_close(sock);

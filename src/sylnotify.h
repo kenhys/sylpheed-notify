@@ -1,7 +1,7 @@
 /*
  * SylNotify -- notifier plug-in for Sylpheed
  *
- * Copyright (c) 2012, HAYASHI Kentaro <kenhys@gmail.com> 
+ * Copyright (c) 2012-2013, HAYASHI Kentaro <kenhys@gmail.com> 
  * All rights reserved. 
  *
  * Redistribution and use in source and binary forms, with or without modification, 
