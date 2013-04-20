@@ -973,7 +973,7 @@ static GtkWidget *create_config_about_page(GtkWidget *notebook, GKeyFile *pkey)
   gtk_box_pack_start(GTK_BOX(hbox), vbox, TRUE, TRUE, 6);
 
   tbuffer = gtk_text_buffer_new(NULL);
-  gtk_text_buffer_set_text(tbuffer, _(g_copyright), strlen(g_copyright));
+  gtk_text_buffer_set_text(tbuffer, _(copyright), strlen(copyright));
   tview = gtk_text_view_new_with_buffer(tbuffer);
   gtk_text_view_set_editable(GTK_TEXT_VIEW(tview), FALSE);
   gtk_container_add(GTK_CONTAINER(scrolled), tview);
