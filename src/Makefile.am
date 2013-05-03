@@ -5,10 +5,15 @@ sylnotify_la_SOURCES = \
 	sylnotify.c \
 	$(sylplugin_factory_source_dir)/src/sylplugin_factory.c
 
-sylnotify_la_LDFLAGS = -module -no-undefined -avoid-version
+APPINDICATOR_CFLAGS = `pkg-config --cflags appindicator-0.1`
+APPINDICATOR_LDFLAGS = `pkg-config --libs appindicator-0.1`
+
+sylnotify_la_LDFLAGS = -module -no-undefined -avoid-version \
+	$(APPINDICATOR_LDFLAGS)
 
 INCLUDES = \
 	$(GTK_CFLAGS) \
+	$(APPINDICATOR_CFLAGS) \
 	-I$(includedir) \
 	-I$(sylpheed_build_dir) \
 	-I$(sylpheed_build_dir)/libsylph \

@@ -137,6 +137,7 @@ static gint send_notification_by_snarl_snp(GKeyFile *rcfile,
                                            const MsgInfo *msginfo);
 #endif
 
+static void create_app_indicator(SylNotifyOption *option);
 
 #define GET_RC_BOOLEAN(section, keyarg) g_key_file_get_boolean(SYLPF_OPTION.rcfile, section, keyarg, NULL)
 #define SET_RC_BOOLEAN(section, keyarg,valarg) g_key_file_set_boolean(SYLPF_OPTION.rcfile, section, keyarg, valarg)

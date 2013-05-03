@@ -34,6 +34,8 @@
 #include <stdio.h>
 #include <sys/stat.h>
 
+#include <libappindicator/app-indicator.h>
+
 #include "sylmain.h"
 #include "plugin.h"
 #include "procmsg.h"
@@ -202,6 +204,9 @@ void plugin_load(void)
       SYLPF_OPTION.growl_growlnotify_flag = TRUE;
       SYLPF_OPTION.snarl_snarlcmd_flag = TRUE;
   }
+
+  create_app_indicator(&SYLPF_OPTION);
+
   SYLPF_END_FUNC;
 }
 
@@ -1298,3 +1303,24 @@ static gint send_notification_by_snarl_snp(GKeyFile *rcfile,
   return ret;
 }
 #endif
+
+static void create_app_indicator(SylNotifyOption *option)
+{
+  GtkWidget *tray_menu;
+  GtkWidget *menu_item;
+  AppIndicator *indicator;
+
+  indicator = app_indicator_new(SYLPF_ID,
+                                "orca",
+                                APP_INDICATOR_CATEGORY_APPLICATION_STATUS);
+
+  app_indicator_set_status(indicator, APP_INDICATOR_STATUS_ACTIVE);
+
+  tray_menu = gtk_menu_new();
+  menu_item = gtk_image_menu_item_new_from_stock(GTK_STOCK_ABOUT, NULL);
+  g_signal_connect((GObject*)menu_item, "activate",
+                   (GCallback)exec_sylnotify_menu_cb, NULL);
+  gtk_menu_shell_append((GtkMenuShell*)tray_menu, menu_item);
+  app_indicator_set_menu(indicator, GTK_MENU(tray_menu));
+  gtk_widget_show_all(tray_menu);
+}
