@@ -1,4 +1,6 @@
 
+AUTOMAKE_OPTIONS = subdir-objects
+
 lib_LTLIBRARIES = sylnotify.la
 
 sylnotify_la_SOURCES = \
