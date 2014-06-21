@@ -13,7 +13,7 @@ APPINDICATOR_LDFLAGS = `pkg-config --libs appindicator-0.1`
 sylnotify_la_LDFLAGS = -module -no-undefined -avoid-version \
 	$(APPINDICATOR_LDFLAGS)
 
-INCLUDES = \
+AM_CPPFLAGS = \
 	$(GTK_CFLAGS) \
 	$(APPINDICATOR_CFLAGS) \
 	-I$(includedir) \
