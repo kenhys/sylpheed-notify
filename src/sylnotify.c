@@ -961,7 +961,7 @@ static GtkWidget *create_config_about_page(GtkWidget *notebook, GKeyFile *pkey)
 
 static void exec_sylnotify_onoff_cb(void)
 {
-  SYLPF_END_FUNC;
+  SYLPF_START_FUNC;
 
   if (g_enable != TRUE) {
     syl_plugin_alertpanel_message(_("SylNotify"),
