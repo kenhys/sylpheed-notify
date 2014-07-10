@@ -98,7 +98,7 @@ void plugin_load(void)
 
   mainwin = syl_plugin_main_window_get();
 
-  sylpf_setup_plugin_onoff_switch((SylPluginFactoryOption*)SYLPF_OPTION,
+  sylpf_setup_plugin_onoff_switch((SylPluginFactoryOption*)&SYLPF_OPTION,
                                   G_CALLBACK(exec_sylnotify_onoff_cb),
                                   (const char**)growl,
                                   (const char**)growlx);
