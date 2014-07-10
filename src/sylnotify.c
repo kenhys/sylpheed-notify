@@ -963,26 +963,28 @@ static GtkWidget *create_config_about_page(GtkWidget *notebook, GKeyFile *pkey)
 
 static void exec_sylnotify_onoff_cb(void)
 {
+  SylNotifyOption *option = &sylnotify_option;
+
   SYLPF_START_FUNC;
 
-  if (g_enable != TRUE) {
+  if (option->plugin_enabled != TRUE) {
     syl_plugin_alertpanel_message(_("SylNotify"),
                                   _("SylNotify plugin is enabled."),
                                   ALERT_NOTICE);
-    g_enable=TRUE;
-    gtk_widget_hide(g_plugin_off);
-    gtk_widget_show(g_plugin_on);
-    gtk_tooltips_set_tip(g_tooltip, g_onoff_switch,
+    option->plugin_enabled = TRUE;
+    gtk_widget_hide(option->plugin_off);
+    gtk_widget_show(option->plugin_on);
+    gtk_tooltips_set_tip(option->plugin_tooltip, option->plugin_switch,
                          _("SylNotify is enabled. Click the icon to disable plugin."),
                          NULL);
   } else {
     syl_plugin_alertpanel_message(_("SylNotify"),
                                   _("SylNotify plugin is disabled."),
                                   ALERT_NOTICE);
-    g_enable=FALSE;
-    gtk_widget_hide(g_plugin_on);
-    gtk_widget_show(g_plugin_off);
-    gtk_tooltips_set_tip(g_tooltip, g_onoff_switch,
+    option->plugin_enabled = FALSE;
+    gtk_widget_hide(option->plugin_on);
+    gtk_widget_show(option->plugin_off);
+    gtk_tooltips_set_tip(option->plugin_tooltip, option->plugin_switch,
                          _("SylNotify is disabled. Click the icon to enable plugin."),
                          NULL);
   }
