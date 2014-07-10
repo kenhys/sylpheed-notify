@@ -114,20 +114,11 @@ void plugin_load(void)
     debug_print("startup:%s", SYLPF_OPTION.startup_flag ? "true" : "false");
 
     if (SYLPF_OPTION.startup_flag != FALSE){
-      g_enable=TRUE;
-      gtk_widget_hide(g_plugin_off);
-      gtk_widget_show(g_plugin_on);
-      gtk_tooltips_set_tip(g_tooltip, g_onoff_switch,
-                           _("SylNotify is enabled. Click the icon to disable plugin."),
-                           NULL);
+      sylnotify_option.plugin_enabled = TRUE;
     } else {
-      g_enable=FALSE;
-      gtk_widget_hide(g_plugin_on);
-      gtk_widget_show(g_plugin_off);
-      gtk_tooltips_set_tip(g_tooltip, g_onoff_switch,
-                           _("SylNotify is disalbed. Click the icon to enable plugin."),
-                           NULL);
+      sylnotify_option.plugin_enabled = FALSE;
     }
+    exec_sylnotify_onoff_cb();
 
     SYLPF_OPTION.growl_flag=GET_RC_BOOLEAN(SYLNOTIFY, "growl");
     debug_print("use growl:%s\n", SYLPF_OPTION.growl_flag ? "true" : "false");
