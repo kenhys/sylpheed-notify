@@ -71,17 +71,11 @@ static SylPluginInfo info = {
 static gboolean g_enable = FALSE;
 
 
-static GtkWidget *g_plugin_on = NULL;
-static GtkWidget *g_plugin_off = NULL;
-static GtkWidget *g_onoff_switch = NULL;
-static GtkTooltips *g_tooltip = NULL;
-
 static SylNotifyOption SYLPF_OPTION;
 
 void plugin_load(void)
 {
-  GtkWidget *mainwin, *statusbar, *plugin_box;
-  GdkPixbuf *on_pixbuf, *off_pixbuf;
+  GtkWidget *mainwin;
   gchar *pattern;
 
   SYLPF_START_FUNC;
