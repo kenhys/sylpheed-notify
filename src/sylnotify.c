@@ -77,6 +77,7 @@ void plugin_load(void)
 {
   GtkWidget *mainwin;
   gchar *pattern;
+  void *option;
 
   SYLPF_START_FUNC;
 
@@ -98,7 +99,8 @@ void plugin_load(void)
 
   mainwin = syl_plugin_main_window_get();
 
-  sylpf_setup_plugin_onoff_switch((SylPluginFactoryOption*)&SYLPF_OPTION,
+  option = &sylnotify_option;
+  sylpf_setup_plugin_onoff_switch((SylPluginFactoryOption*)option,
                                   G_CALLBACK(exec_sylnotify_onoff_cb),
                                   (const char**)growl,
                                   (const char**)growlx);
