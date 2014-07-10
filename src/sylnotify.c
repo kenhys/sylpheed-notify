@@ -103,32 +103,11 @@ void plugin_load(void)
   syl_plugin_signal_connect("inc-mail-finished", G_CALLBACK(inc_finished_cb), NULL);
 
   mainwin = syl_plugin_main_window_get();
-  statusbar = syl_plugin_main_window_get_statusbar();
-  plugin_box = gtk_hbox_new(FALSE, 0);
 
-  on_pixbuf = gdk_pixbuf_new_from_xpm_data((const char**)growl);
-  g_plugin_on=gtk_image_new_from_pixbuf(on_pixbuf);
-    
-  off_pixbuf = gdk_pixbuf_new_from_xpm_data((const char**)growlx);
-  g_plugin_off=gtk_image_new_from_pixbuf(off_pixbuf);
-
-  gtk_box_pack_start(GTK_BOX(plugin_box), g_plugin_on, FALSE, FALSE, 0);
-  gtk_box_pack_start(GTK_BOX(plugin_box), g_plugin_off, FALSE, FALSE, 0);
-    
-  g_tooltip = gtk_tooltips_new();
-    
-  g_onoff_switch = gtk_button_new();
-  gtk_button_set_relief(GTK_BUTTON(g_onoff_switch), GTK_RELIEF_NONE);
-  GTK_WIDGET_UNSET_FLAGS(g_onoff_switch, GTK_CAN_FOCUS);
-  gtk_widget_set_size_request(g_onoff_switch, 20, 20);
-
-  gtk_container_add(GTK_CONTAINER(g_onoff_switch), plugin_box);
-  g_signal_connect(G_OBJECT(g_onoff_switch), "clicked",
-                   G_CALLBACK(exec_sylnotify_onoff_cb), mainwin);
-  gtk_box_pack_start(GTK_BOX(statusbar), g_onoff_switch, FALSE, FALSE, 0);
-
-  gtk_widget_show_all(g_onoff_switch);
-  gtk_widget_hide(g_plugin_on);
+  sylpf_setup_plugin_onoff_switch((SylPluginFactoryOption*)SYLPF_OPTION,
+                                  G_CALLBACK(exec_sylnotify_onoff_cb),
+                                  (const char**)growl,
+                                  (const char**)growlx);
 
   info.name = g_strdup(_(PLUGIN_NAME));
   info.description = g_strdup(_(PLUGIN_DESC));
