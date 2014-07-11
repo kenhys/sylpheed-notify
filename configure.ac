@@ -2,13 +2,13 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.68])
-AC_INIT([sylnotify], [0.3.0], [kenhys@gmail.com])
+AC_INIT([sylnotify], [0.3.0])
 AC_CONFIG_SRCDIR([src/sylnotify.c])
 AC_CONFIG_HEADERS([src/config.h])
 AC_CONFIG_AUX_DIR([config])
 AC_CONFIG_MACRO_DIR([m4])
 
-AM_INIT_AUTOMAKE($PACKAGE_NAME, $PACKAGE_VERSION)
+AM_INIT_AUTOMAKE
 
 AC_DEFINE([SYLPF_ID], [PACKAGE_NAME], [""])
 AC_DEFINE([SYLPF_OPTION], [sylnotify_option], [""])
