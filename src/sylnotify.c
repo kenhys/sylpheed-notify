@@ -110,11 +110,8 @@ void plugin_load(void)
     SYLPF_OPTION.startup_flag = GET_RC_BOOLEAN(SYLNOTIFY, "startup");
     debug_print("startup:%s", SYLPF_OPTION.startup_flag ? "true" : "false");
 
-    if (SYLPF_OPTION.startup_flag != FALSE){
-      sylnotify_option.plugin_enabled = TRUE;
-    } else {
-      sylnotify_option.plugin_enabled = FALSE;
-    }
+    sylnotify_option.plugin_enabled = SYLPF_OPTION.startup_flag;
+
     exec_sylnotify_onoff_cb();
 
     SYLPF_OPTION.growl_flag=GET_RC_BOOLEAN(SYLNOTIFY, "growl");
