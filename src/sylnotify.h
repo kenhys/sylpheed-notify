@@ -42,6 +42,31 @@
 #define SYLSNARL_PORT  5233
 #define SYLGNTP_PORT  23053
 
+typedef _SylSnarlOption {
+  gboolean active;
+  gboolean use_snp;
+  gboolean use_gntp;
+  gboolean use_heysnarl;
+  gboolean use_snarlcmd;
+
+  GtkWidget *snp;
+  GtkWidget *gntp;
+  GtkWidget *heysnarl;
+  GtkWidget *heysnarl_path;
+  GtkWidget *snarlcmd;
+  GtkWidget *snarlcmd_path;
+} SylSnarl;
+
+typedef _SylGrowlOption {
+  gboolean active;
+  gboolean use_growlnotify;
+  gboolean use_gntp;
+
+  GtkWidget *gntp;
+  GtkWidget *growlnotify;
+  GtkWidget *growlnotify_path;
+} SylGrowl;
+
 struct _SylNotifyOption {
   /* full path to ghostbiffrc*/
   gchar *rcpath;
@@ -57,17 +82,12 @@ struct _SylNotifyOption {
 
   gboolean startup_flag;
 
+  SylSnarlOption snarl;
+  SylGrowlOption growl;
+
   gboolean snarl_flag;
   gboolean growl_flag;
 
-  gboolean growl_growlnotify_flag;
-  gboolean growl_gntp_flag;
-
-  gboolean snarl_snp_flag;
-  gboolean snarl_gntp_flag;
-  gboolean snarl_heysnarl_flag;
-  gboolean snarl_snarlcmd_flag;
-  
   gboolean pattern_summary_flag;
   gboolean pattern_all_flag;
 
@@ -77,17 +97,6 @@ struct _SylNotifyOption {
   GtkWidget *growl;
   GtkWidget *pattern_summary;
   GtkWidget *pattern_all;
-
-  GtkWidget *snarl_snp;
-  GtkWidget *snarl_gntp;
-  GtkWidget *snarl_heysnarl;
-  GtkWidget *snarl_heysnarl_path;
-  GtkWidget *snarl_snarlcmd;
-  GtkWidget *snarl_snarlcmd_path;
-
-  GtkWidget *growl_gntp;
-  GtkWidget *growl_growlnotify;
-  GtkWidget *growl_growlnotify_path;
 
   GtkWidget *debug;
 };
