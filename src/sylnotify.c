@@ -86,7 +86,6 @@ void plugin_load(void)
   debug_print(gettext("SylNotify notify support Plug-in"));
   debug_print(dgettext("SylNotify", "Notify support Plug-in"));
 
-  syl_plugin_add_menuitem("/Tools", NULL, NULL, NULL);
   syl_plugin_add_menuitem("/Tools", _("SylNotify Settings [SylNotify]"), exec_sylnotify_menu_cb, NULL);
 
   g_signal_connect(syl_app_get(), "add-msg", G_CALLBACK(exec_sylnotify_cb), NULL);
