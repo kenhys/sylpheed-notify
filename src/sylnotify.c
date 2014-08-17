@@ -67,10 +67,6 @@ static SylPluginInfo info = {
   N_(PLUGIN_DESC)
 };
 
-
-static gboolean g_enable = FALSE;
-
-
 static SylNotifyOption SYLPF_OPTION;
 
 void plugin_load(void)
@@ -1005,7 +1001,7 @@ void exec_sylnotify_cb(GObject *obj, FolderItem *item, const gchar *file, guint 
 
   SYLPF_START_FUNC;
 
-  if (g_enable != TRUE) {
+  if (SYLPF_OPTION.plugin_enabled != TRUE) {
     debug_print("[DEBUG] disabled sylnotify plugin\n");
     return;
   }
