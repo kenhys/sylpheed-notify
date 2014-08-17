@@ -968,9 +968,11 @@ static void exec_sylnotify_onoff_cb(void)
   SYLPF_START_FUNC;
 
   if (option->plugin_enabled != TRUE) {
-    syl_plugin_alertpanel_message(_("SylNotify"),
+    if (!option->use_alertpanel) {
+      syl_plugin_alertpanel_message(_("SylNotify"),
                                   _("SylNotify plugin is enabled."),
                                   ALERT_NOTICE);
+    }
     option->plugin_enabled = TRUE;
     gtk_widget_hide(option->plugin_off);
     gtk_widget_show(option->plugin_on);
@@ -978,9 +980,11 @@ static void exec_sylnotify_onoff_cb(void)
                          _("SylNotify is enabled. Click the icon to disable plugin."),
                          NULL);
   } else {
-    syl_plugin_alertpanel_message(_("SylNotify"),
-                                  _("SylNotify plugin is disabled."),
-                                  ALERT_NOTICE);
+    if (option->use_alertpanel) {
+      syl_plugin_alertpanel_message(_("SylNotify"),
+                                    _("SylNotify plugin is disabled."),
+                                    ALERT_NOTICE);
+    }
     option->plugin_enabled = FALSE;
     gtk_widget_hide(option->plugin_on);
     gtk_widget_show(option->plugin_off);

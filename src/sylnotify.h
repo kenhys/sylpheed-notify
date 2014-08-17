@@ -81,6 +81,7 @@ struct _SylNotifyOption {
   GtkTooltips *plugin_tooltip;
 
   gboolean startup_flag;
+  gboolean use_alertpanel;
 
   SylSnarlOption snarl;
   SylGrowlOption growl;
