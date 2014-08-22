@@ -42,7 +42,7 @@
 #define SYLSNARL_PORT  5233
 #define SYLGNTP_PORT  23053
 
-typedef _SylSnarlOption {
+typedef struct _SylSnarlOption {
   gboolean active;
   gboolean use_snp;
   gboolean use_gntp;
@@ -55,9 +55,9 @@ typedef _SylSnarlOption {
   GtkWidget *heysnarl_path;
   GtkWidget *snarlcmd;
   GtkWidget *snarlcmd_path;
-} SylSnarl;
+} SylSnarlOption;
 
-typedef _SylGrowlOption {
+typedef struct _SylGrowlOption {
   gboolean active;
   gboolean use_growlnotify;
   gboolean use_gntp;
@@ -65,9 +65,9 @@ typedef _SylGrowlOption {
   GtkWidget *gntp;
   GtkWidget *growlnotify;
   GtkWidget *growlnotify_path;
-} SylGrowl;
+} SylGrowlOption;
 
-struct _SylNotifyOption {
+typedef struct _SylNotifyOption {
   /* full path to ghostbiffrc*/
   gchar *rcpath;
   /* rcfile */
@@ -100,9 +100,7 @@ struct _SylNotifyOption {
   GtkWidget *pattern_all;
 
   GtkWidget *debug;
-};
-
-typedef struct _SylNotifyOption SylNotifyOption;
+} SylNotifyOption;
 
 enum SylNotifyAppType {
   SYLNOTIFY_APP_NONE,
