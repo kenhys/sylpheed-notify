@@ -83,8 +83,8 @@ typedef struct _SylNotifyOption {
   gboolean startup_flag;
   gboolean use_alertpanel;
 
-  SylSnarlOption snarl;
-  SylGrowlOption growl;
+  SylSnarlOption snarl_option;
+  SylGrowlOption growl_option;
 
   gboolean snarl_flag;
   gboolean growl_flag;
