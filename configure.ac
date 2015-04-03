@@ -65,6 +65,10 @@ AC_SUBST(plugin_debug)
 
 m4_include(macros/sylplugin_factory.m4)
 
+PKG_CHECK_MODULES([GLIB], [glib-2.0])
+PKG_CHECK_MODULES([GTK], [gtk+-2.0])
+PKG_CHECK_MODULES([SYLPF], [sylplugin-factory])
+
 AC_CONFIG_FILES([Makefile
                  src/Makefile])
 AC_OUTPUT
