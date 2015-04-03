@@ -26,5 +26,3 @@ sylnotify_la_LIBADD = \
 	$(sylpheed_build_dir)/libsylph/libsylph-0.la \
 	$(SYLPF_LIBS)
 
-install:
-install-plugin: install-am
