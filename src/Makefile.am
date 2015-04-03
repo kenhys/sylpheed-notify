@@ -2,8 +2,7 @@
 lib_LTLIBRARIES = sylnotify.la
 
 sylnotify_la_SOURCES = \
-	sylnotify.c \
-	$(sylplugin_factory_source_dir)/src/sylplugin_factory.c
+	sylnotify.c
 
 APPINDICATOR_CFLAGS = `pkg-config --cflags appindicator-0.1`
 APPINDICATOR_LDFLAGS = `pkg-config --libs appindicator-0.1`
@@ -17,8 +16,7 @@ AM_CPPFLAGS = \
 	-I$(includedir) \
 	-I$(sylpheed_build_dir) \
 	-I$(sylpheed_build_dir)/libsylph \
-	-I$(sylpheed_build_dir)/src \
-	-I$(sylplugin_factory_source_dir)/src
+	-I$(sylpheed_build_dir)/src
 
 sylnotify_la_LIBADD = \
 	$(GTK_LIBS) \
