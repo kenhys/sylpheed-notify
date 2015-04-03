@@ -1,4 +1,5 @@
 
+libdir = $(sylplugin_dir)
 lib_LTLIBRARIES = sylnotify.la
 
 sylnotify_la_SOURCES = \
