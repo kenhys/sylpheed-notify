@@ -48,6 +48,24 @@ m4_include(lib/sylplugin_factory/m4/sylplugin_factory.m4)
 
 # Checks for library functions.
 
+# Checks for debug
+AC_ARG_ENABLE(debug,
+              [AS_HELP_STRING([--enable-debug],
+                              [use debug flags (default=no)])],
+  [plugin_debug="$enableval"],
+  [plugin_debug="no"])
+if test "x$plugin_debug" != "xno"; then
+  plugin_debug="yes"
+  if test "$CLANG" = "yes"; then
+    CFLAGS="$CFLAGS -O0 -g"
+    CXXFLAGS="$CXXFLAGS -O0 -g"
+  elif test "$GCC" = "yes"; then
+    CFLAGS="$CFLAGS -O0 -g3"
+    CXXFLAGS="$CXXFLAGS -O0 -g3"
+  fi
+fi
+AC_SUBST(plugin_debug)
+
 AC_CONFIG_FILES([Makefile
                  src/Makefile])
 AC_OUTPUT
