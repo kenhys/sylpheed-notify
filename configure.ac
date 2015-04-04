@@ -87,6 +87,7 @@ AC_ARG_ENABLE(appindicator,
   [use_appindicator="no"])
 if test "x$use_appindicator" != "xno"; then
   PKG_CHECK_MODULES([LIBAPPINDICATOR], [appindicator-0.1])
+  AC_DEFINE([WITH_LIBAPPINDICATOR], [1], [Enabled libappindicator])
   AC_SUBST(WITH_LIBAPPINDICATOR)
 fi
 
