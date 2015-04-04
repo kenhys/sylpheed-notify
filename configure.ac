@@ -94,3 +94,9 @@ fi
 AC_CONFIG_FILES([Makefile
                  src/Makefile])
 AC_OUTPUT
+
+echo
+echo "Notifications"
+echo "     libnotify: $use_libnotify"
+echo "  appindicator: $use_appindicator"
+echo
