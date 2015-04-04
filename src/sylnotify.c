@@ -168,7 +168,9 @@ void plugin_load(void)
       SYLPF_OPTION.snarl_option.use_snarlcmd = TRUE;
   }
 
+#if WITH_LIBAPPINDICATOR
   create_app_indicator(&SYLPF_OPTION);
+#endif
 
   SYLPF_END_FUNC;
 }
