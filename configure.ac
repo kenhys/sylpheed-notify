@@ -78,7 +78,7 @@ if test "x$use_libnotify" != "xno"; then
   use_libnotify="yes"
   PKG_CHECK_MODULES([LIBNOTIFY], [libnotify])
   AC_DEFINE([WITH_LIBNOTIFY], [1], [Enabled libnotify])
-  AC_SUBST(WITH_LIBNOTIFY)
+  AM_CONDITIONAL(WITH_LIBNOTIFY, test x$use_libnotify != xno)
 fi
 
 AC_ARG_ENABLE(appindicator,
@@ -89,7 +89,7 @@ AC_ARG_ENABLE(appindicator,
 if test "x$use_appindicator" != "xno"; then
   PKG_CHECK_MODULES([LIBAPPINDICATOR], [appindicator-0.1])
   AC_DEFINE([WITH_LIBAPPINDICATOR], [1], [Enabled libappindicator])
-  AC_SUBST(WITH_LIBAPPINDICATOR)
+  AM_CONDITIONAL(WITH_LIBAPPINDICATOR, test x$use_appindicator != xno)
 fi
 
 AC_CONFIG_FILES([Makefile
