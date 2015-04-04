@@ -108,6 +108,7 @@ enum SylNotifyAppType {
   SYLNOTIFY_APP_SNARL,
   SYLNOTIFY_APP_GFL, /* Growl For Linux */
   SYLNOTIFY_APP_LIBNOTIFY,
+  SYLNOTIFY_APP_LIBAPPINDICATOR,
 };
 
 typedef struct _SylNotifyAppEntry {
