@@ -34,7 +34,9 @@
 #include <stdio.h>
 #include <sys/stat.h>
 
-#include <libappindicator/app-indicator.h>
+#if WITH_LIBAPPINDICATOR
+  #include <libappindicator/app-indicator.h>
+#endif
 
 #include "sylmain.h"
 #include "plugin.h"
