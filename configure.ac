@@ -95,6 +95,7 @@ fi
 AC_CONFIG_FILES([Makefile
                  src/Makefile
                  test/Makefile
+                 res/version.rc
 ])
 AC_OUTPUT
 
