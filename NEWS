@@ -1,5 +1,11 @@
 News of sylnotify
 
+* 0.3.0 (2015-XX-XX)
+
+  * support Travis-CI.
+  * change license from GPL to 2-Clause BSD.
+  * support AppIndicator.
+
 * 0.2.1 (2012-01-05)
 
   * fix bug loading sylnotifyrc in startup process. reported by James.

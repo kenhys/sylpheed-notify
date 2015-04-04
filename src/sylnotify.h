@@ -1,7 +1,7 @@
 /*
  * SylNotify -- notifier plug-in for Sylpheed
  *
- * Copyright (c) 2012, HAYASHI Kentaro <kenhys@gmail.com> 
+ * Copyright (c) 2012-2013, HAYASHI Kentaro <kenhys@gmail.com> 
  * All rights reserved. 
  *
  * Redistribution and use in source and binary forms, with or without modification, 
@@ -32,9 +32,6 @@
 #include <glib/gi18n-lib.h>
 #include <locale.h>
 
-#define SYLPF_ID "sylnotify"
-#define SYLPF_OPTION sylnotify_option
-
 #define SYLPF_FUNC(arg) sylnotify ## _ ## arg
 
 #define SYLNOTIFY "sylnotify"
@@ -42,17 +39,35 @@
 #define SYLNOTIFY_GROWL "growl"
 #define SYLNOTIFYRC "sylnotifyrc"
 
-#define _(String) dgettext("sylnotify", String)
-#define N_(String) gettext_noop(String)
-#define gettext_noop(String) (String)
-
-#define PLUGIN_NAME N_("SylNotify - notifier plug-in for Sylpheed")
-#define PLUGIN_DESC N_("notifier plug-in for Sylpheed")
-
 #define SYLSNARL_PORT  5233
 #define SYLGNTP_PORT  23053
 
-struct _SylNotifyOption {
+typedef struct _SylSnarlOption {
+  gboolean active;
+  gboolean use_snp;
+  gboolean use_gntp;
+  gboolean use_heysnarl;
+  gboolean use_snarlcmd;
+
+  GtkWidget *snp;
+  GtkWidget *gntp;
+  GtkWidget *heysnarl;
+  GtkWidget *heysnarl_path;
+  GtkWidget *snarlcmd;
+  GtkWidget *snarlcmd_path;
+} SylSnarlOption;
+
+typedef struct _SylGrowlOption {
+  gboolean active;
+  gboolean use_growlnotify;
+  gboolean use_gntp;
+
+  GtkWidget *gntp;
+  GtkWidget *growlnotify;
+  GtkWidget *growlnotify_path;
+} SylGrowlOption;
+
+typedef struct _SylNotifyOption {
   /* full path to ghostbiffrc*/
   gchar *rcpath;
   /* rcfile */
@@ -66,18 +81,14 @@ struct _SylNotifyOption {
   GtkTooltips *plugin_tooltip;
 
   gboolean startup_flag;
+  gboolean use_alertpanel;
+
+  SylSnarlOption snarl_option;
+  SylGrowlOption growl_option;
 
   gboolean snarl_flag;
   gboolean growl_flag;
 
-  gboolean growl_growlnotify_flag;
-  gboolean growl_gntp_flag;
-
-  gboolean snarl_snp_flag;
-  gboolean snarl_gntp_flag;
-  gboolean snarl_heysnarl_flag;
-  gboolean snarl_snarlcmd_flag;
-  
   gboolean pattern_summary_flag;
   gboolean pattern_all_flag;
 
@@ -88,21 +99,8 @@ struct _SylNotifyOption {
   GtkWidget *pattern_summary;
   GtkWidget *pattern_all;
 
-  GtkWidget *snarl_snp;
-  GtkWidget *snarl_gntp;
-  GtkWidget *snarl_heysnarl;
-  GtkWidget *snarl_heysnarl_path;
-  GtkWidget *snarl_snarlcmd;
-  GtkWidget *snarl_snarlcmd_path;
-
-  GtkWidget *growl_gntp;
-  GtkWidget *growl_growlnotify;
-  GtkWidget *growl_growlnotify_path;
-
   GtkWidget *debug;
-};
-
-typedef struct _SylNotifyOption SylNotifyOption;
+} SylNotifyOption;
 
 enum SylNotifyAppType {
   SYLNOTIFY_APP_NONE,
@@ -110,6 +108,7 @@ enum SylNotifyAppType {
   SYLNOTIFY_APP_SNARL,
   SYLNOTIFY_APP_GFL, /* Growl For Linux */
   SYLNOTIFY_APP_LIBNOTIFY,
+  SYLNOTIFY_APP_LIBAPPINDICATOR,
 };
 
 typedef struct _SylNotifyAppEntry {
@@ -121,22 +120,22 @@ static void init_done_cb(GObject *obj, gpointer data);
 static void app_exit_cb(GObject *obj, gpointer data);
 static void app_force_exit_cb(GObject *obj, gpointer data);
 
-static gchar *myprocmsg_get_message_file_path(MsgInfo *msginfo);
 static void prefs_ok_cb(GtkWidget *widget, gpointer data);
 
 static void exec_sylnotify_cb(GObject *obj, FolderItem *item, const gchar *file, guint num);
 static void exec_sylnotify_menu_cb(void);
 static void exec_sylnotify_onoff_cb(void);
 static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey);
-static GtkWidget *create_config_snarl_page(GtkWidget *notebook, GKeyFile *pkey);
-static GtkWidget *create_config_growl_page(GtkWidget *notebook, GKeyFile *pkey);
 static void create_config_gol_page(GtkWidget *notebook, GKeyFile *pkey);
 static GtkWidget *create_config_about_page(GtkWidget *notebook, GKeyFile *pkey);
 
-static void command_path_clicked(GtkWidget *widget, gpointer data);
 static void inc_start_cb(GObject *obj, PrefsAccount *ac);
 static void inc_finished_cb(GObject *obj, gint new_messages);
 
+#ifdef G_OS_WIN32
+static void command_path_clicked(GtkWidget *widget, gpointer data);
+static GtkWidget *create_config_snarl_page(GtkWidget *notebook, GKeyFile *pkey);
+static GtkWidget *create_config_growl_page(GtkWidget *notebook, GKeyFile *pkey);
 static gint send_notification_by_growlnotify(GKeyFile *rcfile,
                                              gchar *from,
                                              gchar *subject);
@@ -145,7 +144,9 @@ static gint send_notification_by_snarl(GKeyFile *rcfile,
                                        const gchar *message);
 static gint send_notification_by_snarl_snp(GKeyFile *rcfile,
                                            const MsgInfo *msginfo);
+#endif
 
+static void create_app_indicator(SylNotifyOption *option);
 
 #define GET_RC_BOOLEAN(section, keyarg) g_key_file_get_boolean(SYLPF_OPTION.rcfile, section, keyarg, NULL)
 #define SET_RC_BOOLEAN(section, keyarg,valarg) g_key_file_set_boolean(SYLPF_OPTION.rcfile, section, keyarg, valarg)

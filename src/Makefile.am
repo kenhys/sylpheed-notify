@@ -1,26 +1,28 @@
 
+libdir = $(sylplugin_dir)
 lib_LTLIBRARIES = sylnotify.la
 
-sylpf_srcdir = $(top_srcdir)/../sylplugin_factory/src
-
 sylnotify_la_SOURCES = \
-	sylnotify.c \
-	$(sylpf_srcdir)/sylpf_utility.c
+	sylnotify.c
 
-sylnotify_la_LDFLAGS = -module -no-undefined -avoid-version
+sylnotify_la_LDFLAGS = -module -no-undefined -avoid-version \
+	$(APPINDICATOR_LDFLAGS)
 
-INCLUDES = \
+AM_CPPFLAGS = \
 	$(GTK_CFLAGS) \
+	$(LIBNOTIFY_CFLAGS) \
+	$(LIBAPPINDICATOR_CFLAGS) \
 	-I$(includedir) \
 	-I$(sylpheed_build_dir) \
 	-I$(sylpheed_build_dir)/libsylph \
 	-I$(sylpheed_build_dir)/src \
-	-I$(sylpf_srcdir)
+	$(SYLPF_CFLAGS)
 
 sylnotify_la_LIBADD = \
 	$(GTK_LIBS) \
+	$(LIBNOTIFY_LIBS) \
+	$(LIBAPPINDICATOR_LIBS) \
 	$(sylpheed_build_dir)/src/libsylpheed-plugin-0.la \
-	$(sylpheed_build_dir)/libsylph/libsylph-0.la
+	$(sylpheed_build_dir)/libsylph/libsylph-0.la \
+	$(SYLPF_LIBS)
 
-install:
-install-plugin: install-am

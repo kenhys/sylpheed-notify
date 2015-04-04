@@ -14,3 +14,6 @@ m4/lt*
 autom4te.*
 Makefile
 configure
+test/test-libnotify
+test/test-libappindicator
+test/test-notification
