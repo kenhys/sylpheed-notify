@@ -77,6 +77,7 @@ AC_ARG_ENABLE(libnotify,
 if test "x$use_libnotify" != "xno"; then
   use_libnotify="yes"
   PKG_CHECK_MODULES([LIBNOTIFY], [libnotify])
+  AC_SUBST(WITH_LIBNOTIFY)
 fi
 
 AC_CONFIG_FILES([Makefile
