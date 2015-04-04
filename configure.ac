@@ -69,6 +69,16 @@ PKG_CHECK_MODULES([GLIB], [glib-2.0])
 PKG_CHECK_MODULES([GTK], [gtk+-2.0])
 PKG_CHECK_MODULES([SYLPF], [sylplugin-factory])
 
+AC_ARG_ENABLE(libnotify,
+              [AS_HELP_STRING([--enable-libnotify],
+                              [Enable libnotify for notification (default=no)])],
+  [use_libnotify="$enableval"],
+  [use_libnotify="no"])
+if test "x$use_libnotify" != "xno"; then
+  use_libnotify="yes"
+  PKG_CHECK_MODULES([LIBNOTIFY], [libnotify])
+fi
+
 AC_CONFIG_FILES([Makefile
                  src/Makefile])
 AC_OUTPUT
