@@ -93,7 +93,9 @@ if test "x$use_appindicator" != "xno"; then
 fi
 
 AC_CONFIG_FILES([Makefile
-                 src/Makefile])
+                 src/Makefile
+                 test/Makefile
+])
 AC_OUTPUT
 
 echo
