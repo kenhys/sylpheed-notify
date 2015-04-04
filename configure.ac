@@ -80,6 +80,16 @@ if test "x$use_libnotify" != "xno"; then
   AC_SUBST(WITH_LIBNOTIFY)
 fi
 
+AC_ARG_ENABLE(appindicator,
+              [AS_HELP_STRING([--enable-appindicator],
+                              [Enable libappindicator for notification (default=no)])],
+  [use_appindicator="$enableval"],
+  [use_appindicator="no"])
+if test "x$use_appindicator" != "xno"; then
+  PKG_CHECK_MODULES([LIBAPPINDICATOR], [appindicator-0.1])
+  AC_SUBST(WITH_LIBAPPINDICATOR)
+fi
+
 AC_CONFIG_FILES([Makefile
                  src/Makefile])
 AC_OUTPUT
