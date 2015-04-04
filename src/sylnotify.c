@@ -37,6 +37,9 @@
 #if WITH_LIBAPPINDICATOR
   #include <libappindicator/app-indicator.h>
 #endif
+#if WITH_LIBNOTIFY
+  #include <libnotify/notify.h>
+#endif
 
 #include "sylmain.h"
 #include "plugin.h"
