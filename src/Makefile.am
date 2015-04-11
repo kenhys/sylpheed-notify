@@ -13,7 +13,7 @@ AM_CPPFLAGS = \
 	$(LIBNOTIFY_CFLAGS) \
 	$(LIBAPPINDICATOR_CFLAGS) \
 	-I$(includedir) \
-	$(SYLPHEED_CFLAGS)
+	$(SYLPHEED_CFLAGS) \
 	$(SYLPF_CFLAGS)
 
 sylnotify_la_LIBADD = \
