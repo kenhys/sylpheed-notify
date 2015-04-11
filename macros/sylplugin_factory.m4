@@ -27,6 +27,9 @@ fi
 AC_SUBST(sylpheed_build_dir)
 AM_CONDITIONAL([WITH_SYLPHEED], [test "$syldir_available" = "yes"])
 
+SYLPHEED_CFLAGS="-I${sylpheed_build_dir}/libsylph -I$sylpheed_build_dir/src"
+AC_SUBST(SYLPHEED_CFLAGS)
+
 #
 # --with-sylplugin-factory-source-dir
 #
@@ -99,3 +102,16 @@ else
 fi
 AC_SUBST(libsylpheed_impl)
 AM_CONDITIONAL([WITH_LIBSYLPHEED_IMPL], [test "$libsylpheed_impl_available" = "yes"])
+
+if test "x$libsylph_impl" != "x"; then
+  LIBSYLPH_IMPL="$libsylph_impl"
+else
+  LIBSYLPH_IMPL="${sylpheed_build_dir}/libsylph/libsylph-0.la"
+fi
+if test "x$libsylpheed_impl" = "x"; then
+  LIBSYLPHEED_IMPL="$libslpheed_impl"
+else
+  LIBSYLPHEED_IMPL="${sylpheed_build_dir}/src/libsylpheed-plugin-0.la"
+fi
+SYLPHEED_LIBS="$LIBSYLPH_IMPL $LIBSYLPHEED_IMPL"
+AC_SUBST(SYLPHEED_LIBS)
