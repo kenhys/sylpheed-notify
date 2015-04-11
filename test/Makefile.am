@@ -17,7 +17,6 @@ AM_CPPFLAGS = \
 	$(LIBNOTIFY_CFLAGS) \
 	$(LIBAPPINDICATOR_CFLAGS) \
 	-I$(includedir) \
-	-I$(sylpheed_build_dir) \
 	-I$(sylpheed_build_dir)/libsylph \
 	-I$(sylpheed_build_dir)/src \
 	$(SYLPF_CFLAGS)
