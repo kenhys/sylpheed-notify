@@ -18,6 +18,6 @@ before_script:
   - sudo apt-get install libappindicator-dev
   - ./autogen.sh
 script:
-  - ./configure --with-sylpheed-build-dir=`pwd`/sylpheed
+  - curl --location https://raw.githubusercontent.com/kenhys/sylpheed-plugin-factory/master/misc/travis/configure.sh | sh
   - make
 
