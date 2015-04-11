@@ -14,7 +14,6 @@ env:
   - SYLPHEED_STAGE=3.5
   - SYLPHEED_STAGE=3.4
 before_script:
-  - curl --location https://github.com/kenhys/sylpheed-plugin-factory/raw/master/misc/travis/sylpheed.sh | sh
   - curl --location https://github.com/kenhys/sylpheed-plugin-factory/raw/master/misc/travis/sylplugin-factory.sh | sh
   - sudo apt-get install libappindicator-dev
   - ./autogen.sh
