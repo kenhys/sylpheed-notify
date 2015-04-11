@@ -10,7 +10,7 @@ endif
 
 test_libnotify_SOURCES = test-libnotify.c
 
-test_appindicator_SOURCES = test-libappindicator.c
+test_libappindicator_SOURCES = test-libappindicator.c
 
 AM_CPPFLAGS = \
 	$(GTK_CFLAGS) \
