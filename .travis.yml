@@ -15,6 +15,7 @@ env:
   - SYLPHEED_STAGE=3.4 USE_LIBNOTIFY=yes USE_LIBAPPINDICATOR=yes
 before_script:
   - curl --location https://raw.githubusercontent.com/kenhys/sylpheed-plugin-factory/master/misc/travis/sylplugin-factory.sh | sh
+  - sudo apt-get install libnotify-dev
   - sudo apt-get install libappindicator-dev
   - ./autogen.sh
 script:
